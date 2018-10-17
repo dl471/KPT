@@ -48,7 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActiveEncodings.cs" />
     <Compile Include="DebugSettings.cs" />
+    <Compile Include="DirectoryGuard.cs" />
     <Compile Include="Dumper.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

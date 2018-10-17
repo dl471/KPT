@@ -25,11 +25,12 @@ namespace LibCPK
 
         public bool ReadCPK(string sPath, Encoding encoding = null)
         {
+            
             if (File.Exists(sPath))
             {
                 uint Files;
                 ushort Align;
-
+                
                 EndianReader br = new EndianReader(File.OpenRead(sPath), true);
                 MemoryStream ms;
                 EndianReader utfr;
@@ -62,9 +63,10 @@ namespace LibCPK
                 if (!utf.ReadUTF(utfr, encoding))
                 {
                     br.Close();
+                    
                     return false;
                 }
-
+                
                 utfr.Close();
                 ms.Close();
 

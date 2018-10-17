@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
+using Microsoft.VisualBasic;
 
 namespace KPT
 {
@@ -76,26 +77,62 @@ namespace KPT
         /// <summary>
         /// Go through a directory and split it into an "Original" directory with a copy of the original files and an "Editble" directory with processed files that can be edited by users
         /// </summary>
-        /// <param name="targetDirectoryPath">The path of the directory to be processed</param>
+        /// <param name="sourceDirectoryPath">The path of the directory to be processed</param>
+        /// <param name="targetDirectoryPath">The path of the directory to store the processed contents</param>
         /// <returns>True is succesfully processed, false if processing failed</returns>
-        public bool ProcessDirectory(string targetDirectoryPath)
+        public bool ProcessDirectory(string sourceDirectoryPath, string targetDirectoryPath)
         {
             
-            if (!CheckDirectoryValidity(targetDirectoryPath))
+            if (!CheckDirectoryValidity(sourceDirectoryPath))
             {
                 return false;
             }
 
             List<FileLocationMeta> fileList = new List<FileLocationMeta>();
 
-            if (!PopulateFileList(targetDirectoryPath, fileList))
+            if (!PopulateFileList(sourceDirectoryPath, fileList))
             {
                 return false;
             }
 
+            string originalFilesDirectory = Path.Combine(targetDirectoryPath, originalDirectory);
+            string editableFilesDirectory = Path.Combine(targetDirectoryPath, editableDirectory);
 
+            if (!DebugSettings.IGNORE_DIRECTORY_ALREADY_EXISTS_WARNING && Directory.Exists(originalFilesDirectory))
+            {
+                string errorMessage = string.Format("Directory {0} was specified as a target directory but it already has files in it.\r\n\r\nSelecting it as the target direcotry would destroy all files in the directory.\r\n\r\nIf this is your intention, please confirm by deleting the directory yourself and trying again.", targetDirectoryPath);
+                MessageBox.Show(errorMessage, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
+                //Directory.Delete(originalFilesDirectory, true); // there needs to be some "type in that you actually want to over write these files" prompt before this can be allowed in live versions - actually see above 
+            }
+
+            if (!DebugSettings.IGNORE_DIRECTORY_ALREADY_EXISTS_WARNING && Directory.Exists(editableFilesDirectory))
+            {
+                string errorMessage = string.Format("Directory {0} was specified as a target directory but it already has files in it.\r\n\r\nSelecting it as the target direcotry would destroy all files in the directory.\r\n\r\nIf this is your intention, please confirm by deleting the directory yourself and trying again.", targetDirectoryPath);
+                MessageBox.Show(errorMessage, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
+            }
+
+            if (!DebugSettings.SKIP_ORIGINAL_DIRECTORY_COPYING)
+            {
+                Microsoft.VisualBasic.FileIO.FileSystem.CopyDirectory(sourceDirectoryPath, originalFilesDirectory);
+            }
+
+            
+
+            foreach (var file in fileList)
+            {
+                HandleFile(file);
+            }
 
             return true;
+        }
+
+        
+
+        private void HandleFile(FileLocationMeta file)
+        {
+            
         }
 
         /// <summary>

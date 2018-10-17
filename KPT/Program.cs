@@ -27,10 +27,11 @@ namespace KPT
             string testInLocation = Path.Combine(testFileDirectory, "test_in");
             string testOutLocation = Path.Combine(testFileDirectory, "test_out");
 
-            string testDirectory = @"C:\Sandbox\kay\desubox\drive\H\kpt_test\test_in";
+            string testSourceDirectory = @"C:\Sandbox\kay\desubox\drive\H\kpt_test\test_in";
+            string testTargetDirectory = @"C:\Sandbox\kay\desubox\drive\H\kpt_test\test_out";
 
             var dumpTest = new Dumper();
-            dumpTest.ProcessDirectory(testDirectory);
+            dumpTest.ProcessDirectory(testSourceDirectory, testTargetDirectory);
                 
 
 

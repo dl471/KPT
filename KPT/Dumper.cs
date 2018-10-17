@@ -14,6 +14,11 @@ namespace KPT
         private const string originalDirectory = "Original";
         private const string editableDirectory = "Editable";
 
+        /// <summary>
+        /// Used by recursive function PopulateFileList to signal early termination should happpen
+        /// </summary>
+        private bool fileListPopulateFailed = false;
+
         struct FileLocationMeta
         {
             public string leadingPath;
@@ -83,49 +88,79 @@ namespace KPT
 
             List<FileLocationMeta> fileList = new List<FileLocationMeta>();
 
-            PopulateFileList(targetDirectoryPath, fileList);
+            if (!PopulateFileList(targetDirectoryPath, fileList))
+            {
+                return false;
+            }
+
+
 
             return true;
         }
 
         /// <summary>
-        /// Iterate recursively through a given directory and subdirectory and fill the provided list with information on all files contained within
+        /// Iterate recursively through a given directory and its subdirectories and fill the provided list with information on all files contained within
         /// </summary>
         /// <param name="leadingPath">The directory to start from</param>
         /// <param name="fileList">The file list which should be populated</param>
-        private void PopulateFileList(string leadingPath, List<FileLocationMeta> fileList)
+        private bool PopulateFileList(string leadingPath, List<FileLocationMeta> fileList)
         {
-            PopulateFileList(leadingPath, "", fileList);
+            return PopulateFileList(leadingPath, "", fileList);
         }
 
         /// <summary>
-        /// Iterate recursively through a given directory and subdirectory and fill the provided list with information on all files contained within
+        /// Iterate recursively through a given directory and its subdirectories and fill the provided list with information on all files contained within
         /// </summary>
         /// <param name="leadingPath">The directory to start from</param>
         /// <param name="subPath">Used to keep track of the current subdirectory that is being iterated though (usually set to "" initially)</param>
         /// <param name="fileList">The file list which should be populated</param>
-        private void PopulateFileList(string leadingPath, string subPath, List<FileLocationMeta> fileList)
+        private bool PopulateFileList(string leadingPath, string subPath, List<FileLocationMeta> fileList)
         {
-            string currentAbsolutePath = Path.Combine(leadingPath, subPath);
-            var subdirectories = Directory.GetDirectories(currentAbsolutePath);
-            
-            foreach (var subdirectory in subdirectories)
+
+            if (fileListPopulateFailed) // try to quit as fast as possible if there has been an exception
             {
-                string dirWithoutPath = Path.GetFileName(subdirectory);
-                string newSubPath = Path.Combine(subPath, dirWithoutPath);
-                PopulateFileList(leadingPath, newSubPath, fileList);
+                return false;
             }
 
-            var currentDirectoryFiles = Directory.GetFiles(currentAbsolutePath);
+            string currentAbsolutePath = Path.Combine(leadingPath, subPath);
 
-            foreach (var file in currentDirectoryFiles)
-            {
-                string filenameWithoutPath = Path.GetFileName(file);
-                FileLocationMeta newFileData = new FileLocationMeta();
-                newFileData.leadingPath = leadingPath;
-                newFileData.subPath = subPath;
-                newFileData.fileName = filenameWithoutPath;
-                fileList.Add(newFileData);
+            try
+            {               
+                var subdirectories = Directory.GetDirectories(currentAbsolutePath);
+
+                foreach (var subdirectory in subdirectories)
+                {
+                    string dirWithoutPath = Path.GetFileName(subdirectory);
+                    string newSubPath = Path.Combine(subPath, dirWithoutPath);
+                    PopulateFileList(leadingPath, newSubPath, fileList);
+                }
+
+                var currentDirectoryFiles = Directory.GetFiles(currentAbsolutePath);
+
+                foreach (var file in currentDirectoryFiles)
+                {
+                    string filenameWithoutPath = Path.GetFileName(file);
+                    FileLocationMeta newFileData = new FileLocationMeta();
+                    newFileData.leadingPath = leadingPath;
+                    newFileData.subPath = subPath;
+                    newFileData.fileName = filenameWithoutPath;
+                    fileList.Add(newFileData);
+                }
+
+                return true;
+
+            }
+            catch (Exception e) {
+
+                if (fileListPopulateFailed) // don't bother showing more than one exception message
+                {
+                    fileListPopulateFailed = true;
+                    string errorMessage = string.Format("There was an error while looking for files in {0}.\r\n\r\n{1}", currentAbsolutePath, e.Message);
+                    MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                return false;
+
             }
 
         }

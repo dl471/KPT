@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KPT", "KPT\KPT.csproj", "{BB714D8F-EEED-4CA7-B0B5-B3CEF5A0D989}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BA3A00E4-4F51-4AB4-A8FB-F4B64A874449} = {BA3A00E4-4F51-4AB4-A8FB-F4B64A874449}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibCPK", "LibCPK\LibCPK.csproj", "{BA3A00E4-4F51-4AB4-A8FB-F4B64A874449}"
 EndProject

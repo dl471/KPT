@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
-using LibCRIComp;
 
 namespace LibCPK
 {
@@ -727,19 +726,8 @@ namespace LibCPK
         // 目前将CRICompress方法移动到了CLR类库中使用。
         unsafe public byte[] CompressCRILAYLA(byte[] input)
         {
-            unsafe
-            {
-                fixed (byte* src = input, dst = new byte[input.Length])
-                {
-                    //Move cricompress to CLR
-                    int destLength = (int)input.Length;
-
-                    int result = LibCRIComp.CriCompression.CRIcompress(dst, &destLength, src, input.Length);
-                    byte[] arr = new byte[destLength];
-                    Marshal.Copy((IntPtr)dst, arr, 0, destLength);
-                    return arr;
-                } 
-            }
+            throw new NotImplementedException();
+        
             
             /*unsafe
             {

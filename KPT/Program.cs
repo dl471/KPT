@@ -21,6 +21,8 @@ namespace KPT
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            ActiveEncodings.Initalize();
+            DirectoryGuard.Initalize();
 
             const string testFileDirectory = @"C:\Sandbox\kay\desubox\drive\H\kpt_test\test files";
             string testFileLocation = Path.Combine(testFileDirectory, "test_file_1.cpk");
@@ -32,8 +34,6 @@ namespace KPT
 
             var dumpTest = new Dumper();
             dumpTest.ProcessDirectory(testSourceDirectory, testTargetDirectory);
-                
-
 
             var test = new CPK(new Tools());
 
@@ -58,3 +58,4 @@ namespace KPT
         }
     }
 }
+;

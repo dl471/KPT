@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
+using LibCPK;
 
 namespace KPT
 {
@@ -14,11 +15,17 @@ namespace KPT
 
         private const string originalDirectory = "Original";
         private const string editableDirectory = "Editable";
+        private Tools tools;
 
         /// <summary>
         /// Used by recursive function PopulateFileList to signal early termination should happpen
         /// </summary>
         private bool fileListPopulateFailed = false;
+
+        public Dumper()
+        {
+            tools = new Tools();
+        }
 
         struct FileLocationMeta
         {
@@ -115,24 +122,93 @@ namespace KPT
 
             if (!DebugSettings.SKIP_ORIGINAL_DIRECTORY_COPYING)
             {
-                Microsoft.VisualBasic.FileIO.FileSystem.CopyDirectory(sourceDirectoryPath, originalFilesDirectory);
-            }
-
-            
+                Microsoft.VisualBasic.FileIO.FileSystem.CopyDirectory(sourceDirectoryPath, originalFilesDirectory); // i would like "the program has not crashed" progress box but i'm not sure it can be done if things are done this way. hmm. perhaps writing a recursive copying function would be best after all.
+            }            
 
             foreach (var file in fileList)
             {
-                HandleFile(file);
+                string fileExtension = Path.GetExtension(file.fileName);
+                fileExtension = fileExtension.ToLower();
+                switch (fileExtension)
+                {
+                    case ".cpk":
+                        FilterCPKFile(file, sourceDirectoryPath, targetDirectoryPath);
+                        break;
+                    default:
+                        break;
+                }               
             }
 
             return true;
         }
 
-        
-
-        private void HandleFile(FileLocationMeta file)
+        private void FilterCPKFile(FileLocationMeta file, string sourceDirectoryPath, string targetDirectoryPath)
         {
-            
+
+            file.switchPath = editableDirectory;
+
+            var cpkFile = new CPK(new Tools());
+            var filePath = Path.Combine(sourceDirectoryPath, file.subPath, file.fileName);
+
+            if (!cpkFile.ReadCPK(filePath, ActiveEncodings.currentEncoding))
+            {
+                string errorMessage = string.Format("Unknown error while attempting to open {0}.", filePath);
+                MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); // this could be replaced with a custom form that allows the user to skip all errors or a simple "errors while opening X files" after the files are done being read. though, the later option would require a small restructuring of the code.
+                return;
+            }
+
+            int binCount = 0;
+            FileEntry foundBin = null;
+
+            foreach (var embeddedFile in cpkFile.FileTable)
+            {
+                if (embeddedFile.FileName.ToString().EndsWith(".bin"))
+                {
+                    foundBin = embeddedFile;
+                    binCount++;
+                    if (binCount > 1)
+                    {
+                        break; 
+                    }
+                }
+            }
+
+            if (binCount != 1) // // skipping multiple bin files for the moment since the most important files of immediate interest are all single bin - files no bin are also not of apparent immediate relevance
+            {
+                return;
+            }
+
+            string targetFileAbsolutePath = Path.Combine(targetDirectoryPath, file.switchPath, file.subPath, foundBin.FileName.ToString());
+
+            DirectoryGuard.CheckDirectory(targetFileAbsolutePath);
+
+            byte[] rawFile = GrabCPKData(filePath, foundBin);
+
+            FileStream fs = new FileStream(targetFileAbsolutePath, FileMode.CreateNew);
+            BinaryWriter bw = new BinaryWriter(fs);
+
+            bw.Write(rawFile);
+
+            bw.Close();
+            fs.Close();
+
+        }
+
+        private byte[] GrabCPKData(string filePath, FileEntry fileInfo)
+        {
+
+            long offset = Convert.ToInt64(fileInfo.FileOffset);
+            int size = Convert.ToInt32(fileInfo.FileSize);
+
+            FileStream fs = new FileStream(filePath, FileMode.Open); // i dislike opening a steam a second time but my cursory reading of LibCPK shows no direct interface like this that i can see
+            BinaryReader br = new BinaryReader(fs);
+
+            byte[] rawData = tools.GetData(br, offset, size);
+
+            br.Close();
+            fs.Close();
+
+            return rawData;
         }
 
         /// <summary>

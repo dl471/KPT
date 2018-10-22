@@ -58,6 +58,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Parser\Instruction Parsers\Box.cs" />
+    <Compile Include="Parser\Instruction Parsers\ElementReader.cs" />
+    <Compile Include="Parser\Instruction Parsers\IInstructionParser.cs" />
+    <Compile Include="Parser\Instruction Parsers\U_501.cs" />
+    <Compile Include="Parser\Opcodes.cs" />
+    <Compile Include="Parser\FileParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

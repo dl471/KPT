@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KPT.Parser.Instruction_Parsers;
+using System.Windows.Forms;
 
 namespace KPT.Parser
 {
@@ -45,12 +46,37 @@ namespace KPT.Parser
 
         public static int GetInstructionSize(Opcode opcode)
         {
-            return instructionSize[opcode];
+            int size;
+            bool success;
+
+            success = instructionSize.TryGetValue(opcode, out size);
+
+            if (!success)
+            {
+                string errorMessage = string.Format("No instruction size specified for opcode {0}.", opcode.ToString());
+                MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(1);
+            }
+
+            return size;
         }
 
         public static Type GetInstructionParserType(Opcode opcode)
         {
-            return instructionParserMap[opcode];
+
+            Type type;
+            bool success;
+
+            success = instructionParserMap.TryGetValue(opcode, out type);
+
+            if (!success)
+            {
+                string errorMessage = string.Format("No instruction parser type specified for opcode {0}.", opcode.ToString());
+                MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(1);
+            }
+
+            return type;
         }
 
     }

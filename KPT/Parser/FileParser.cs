@@ -25,30 +25,18 @@ namespace KPT.Parser
             return new Box(instructionSize);
         }
 
-        private Opcode ReadOpcode(BinaryReader br)
-        {
-            int opcode = br.ReadInt16();
-
-            if (Enum.IsDefined(typeof(Opcode), opcode))
-            {
-                return (Opcode)opcode;
-            }
-            
-            return Opcode.INVALID;            
-        }
-
         public List<IInstructionParser> ParseFile(BinaryReader br, string fileName)
         {
 
             while (br.BaseStream.Position != br.BaseStream.Length) // will need to check this for accuracy as it has been unreliable in some cases in the past
             {
-                Opcode opcode = ReadOpcode(br);
+                Opcode opcode = ElementReader.ReadOpcode(br);
                 br.BaseStream.Position -= OpcodeInfo.OPCODE_SIZE; // set the position back by 2, the size of the opcodes, as the instruction parsers will expect to given a position starting with an opcode
 
                 if (opcode == Opcode.INVALID)
                 {
-                    string errorMessage = string.Format("There was an unexpected opcode when reading file {0} at position {1}", fileName, br.BaseStream.Position.ToString("X"));
-                    MessageBox.Show(errorMessage);
+                    string errorMessage = string.Format("There was an unexpected opcode when reading file {0} at position {1} after reading {2} instructions", fileName, br.BaseStream.Position.ToString("X"), instructions.Count.ToString());
+                    MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Environment.Exit(1);
                 }
 
@@ -58,16 +46,17 @@ namespace KPT.Parser
                 if (instructionParserType == typeof(Box))
                 {
                     newInstruction = MakeBox(opcode);
+                    newInstruction.Read(br);
                 }
                 else
                 {
-                    newInstruction = (IInstructionParser)Activator.CreateInstance(instructionParserType, br);
+                    newInstruction = (IInstructionParser)Activator.CreateInstance(instructionParserType);
+                    newInstruction.Read(br);
                 }
 
                 instructions.Add(newInstruction);
 
             }
-
 
             return instructions;
             

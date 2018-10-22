@@ -7,9 +7,7 @@ using KPT.Parser.Instruction_Parsers;
 using System.Windows.Forms;
 
 namespace KPT.Parser
-{
-
-    
+{  
 
     enum Opcode
     {

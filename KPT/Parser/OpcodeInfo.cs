@@ -17,6 +17,11 @@ namespace KPT.Parser
         U_303 = 0x303,
         U_501 = 0x501,
         U_504 = 0x504,
+
+        U_214 = 0x214,
+        U_210 = 0x210,
+        U_404 = 0x404,
+        U_402 = 0x402,
     }
 
     static class OpcodeInfo
@@ -31,13 +36,26 @@ namespace KPT.Parser
         {
             { Opcode.U_191, 6 },
             { Opcode.U_303, 2 },
+            { Opcode.U_214, 4 },
+            { Opcode.U_210, 4 },
+            { Opcode.U_404, 7 },
+            { Opcode.U_402, 2 },
         };
 
         static Dictionary<Opcode, Type> instructionParserMap = new Dictionary<Opcode, Type>
         {
             { Opcode.U_191, typeof(Box) },
-            { Opcode.U_303, typeof(Box) },
+
+            { Opcode.U_210, typeof(Box) },
+            { Opcode.U_214, typeof(Box) },
+
+            { Opcode.U_303, typeof(Box) },         
+            
+            { Opcode.U_402, typeof(Box) },
+            { Opcode.U_404, typeof(Box) },
+
             { Opcode.U_501, typeof(U_501) },
+            { Opcode.U_504, typeof(U_504) },
 
         };
 

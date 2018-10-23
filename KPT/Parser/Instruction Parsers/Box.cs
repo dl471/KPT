@@ -26,6 +26,11 @@ namespace KPT.Parser.Instruction_Parsers
             return boxContents;
         }
 
+        public int GetContentsSize()
+        {
+            return contentsSize;
+        }
+
         public bool Read(BinaryReader br)
         {
             boxContents = br.ReadBytes(contentsSize);

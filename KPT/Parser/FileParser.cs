@@ -15,7 +15,10 @@ namespace KPT.Parser
     {
         public IHeader header;
         public List<IInstructionParser> instructions;
+        public Box footer;
     }
+
+
 
     class FileParser
     {
@@ -38,17 +41,13 @@ namespace KPT.Parser
             File workingFile = new File();
             List<IInstructionParser> instructions = new List<IInstructionParser>();
 
-            St_Header header = new St_Header();
-            if (!header.Read(br))
-            {
-                string errorMessage = "Failed to read header of file {0}. Corrupt or invalid header?";
-                MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Environment.Exit(1);
-            }
+            Box footer = ReadFooter(br);
+            workingFile.footer = footer;
+            workingFile.header = ReadHeader(br);
 
-            workingFile.header = header;
+            long streamEnd = br.BaseStream.Length - footer.GetContentsSize();
 
-            while (br.BaseStream.Position != br.BaseStream.Length) // will need to check this for accuracy as it has been unreliable in some cases in the past
+            while (br.BaseStream.Position != streamEnd) // will need to check this for accuracy as it has been unreliable in some cases in the past
             {
                 Opcode opcode = ElementReader.ReadOpcode(br);
                 br.BaseStream.Position -= OpcodeInfo.OPCODE_SIZE; // set the position back by 2, the size of the opcodes, as the instruction parsers will expect to given a position starting with an opcode
@@ -83,6 +82,47 @@ namespace KPT.Parser
             
         }
 
+        private IHeader ReadHeader(BinaryReader br)
+        {
+            St_Header header = new St_Header();
+            if (!header.Read(br))
+            {
+                string errorMessage = "Failed to read header of file {0}. Corrupt or invalid header?";
+                MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(1);
+            }
+            return header;
+        }
+
+        private Box ReadFooter(BinaryReader br)
+        {
+            br.BaseStream.Seek(-1, SeekOrigin.End);
+
+            int footerSize = 0;
+            Box footer;
+
+            if (br.ReadByte() != 0x88)
+            {
+                footer = new Box(0);
+                footer.Read(br);
+                return footer;
+            }
+
+            br.BaseStream.Seek(-1, SeekOrigin.End);
+
+            while (br.ReadByte() == 0x88)
+            {
+                br.BaseStream.Seek(-2, SeekOrigin.Current);
+                footerSize += 1;
+            }
+
+            footer = new Box(footerSize);
+            footer.Read(br);
+
+            br.BaseStream.Seek(0, SeekOrigin.Begin);
+
+            return footer;
+        }
 
     }
 }

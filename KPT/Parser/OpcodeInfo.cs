@@ -53,6 +53,7 @@ namespace KPT.Parser
         U_121 = 0x121,
         U_008 = 0x008,
         LOCATION_CARD = 0x1001,
+        CHOICE_DIALOG = 0x701,
     }
 
 
@@ -145,6 +146,7 @@ namespace KPT.Parser
 
             { Opcode.U_1000, typeof(Box) },
             { Opcode.LOCATION_CARD, typeof(LocationCard) },
+            { Opcode.CHOICE_DIALOG, typeof(ChoiceDialog) },
         };
 
 

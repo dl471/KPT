@@ -25,7 +25,7 @@ namespace KPT.Parser.Instruction_Parsers
             return Opcode.INVALID;
         }
 
-        public static string ReadName(BinaryReader br)
+        public static string ReadName(BinaryReader br) // consider folding this into ReadFixedLengthString(NAME_LENGTH) since that is basically all it is
         {
             byte[] nameAsBytes = br.ReadBytes(NAME_LENGTH);
             return ActiveEncodings.currentEncoding.GetString(nameAsBytes);
@@ -68,5 +68,14 @@ namespace KPT.Parser.Instruction_Parsers
             br.ReadBytes(2); // the strings seem to be followed by 2 nulls - not sure why. first could be a null terminator, second could be some kind of alignnment thing. keep an eye on this if any bugs start happening.
             return readString;
         }
+
+        public static string ReadFixedLengthString(BinaryReader br, int length)
+        {
+            byte[] stringAsBytes = br.ReadBytes(length);
+            string readString = ActiveEncodings.currentEncoding.GetString(stringAsBytes);
+
+            return readString;
+        }
+
     }
 }

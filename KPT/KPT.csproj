@@ -58,13 +58,15 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Parser\Elements\ChoiceBar.cs" />
     <Compile Include="Parser\Instruction Parsers\Box.cs" />
+    <Compile Include="Parser\Instruction Parsers\ChoiceDialog.cs" />
     <Compile Include="Parser\Instruction Parsers\ElementReader.cs" />
-    <Compile Include="Parser\Instruction Parsers\IInstructionParser.cs" />
     <Compile Include="Parser\Instruction Parsers\LocationCard.cs" />
     <Compile Include="Parser\Instruction Parsers\U_500.cs" />
     <Compile Include="Parser\Instruction Parsers\U_501.cs" />
     <Compile Include="Parser\Instruction Parsers\U_504.cs" />
+    <Compile Include="Parser\Interfaces.cs" />
     <Compile Include="Parser\OpcodeInfo.cs" />
     <Compile Include="Parser\FileParser.cs" />
     <Compile Include="Parser\St_Header.cs" />

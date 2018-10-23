@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KPT.Parser.Instruction_Parsers;
+using KPT.Parser.Elements;
 using System.IO;
 
 namespace KPT.Parser
 {
-    class St_Header : IInstructionParser
+    class St_Header : IHeader
     {
 
         int fileNumber;

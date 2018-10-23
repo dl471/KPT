@@ -4,19 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using KPT.Parser.Elements;
 using KPT.Parser.Instruction_Parsers;
 using System.Windows.Forms;
 
 namespace KPT.Parser
 {
+
+    class File
+    {
+        public IHeader header;
+        public List<IInstructionParser> instructions;
+    }
+
     class FileParser
     {
 
-        List<IInstructionParser> instructions;
+        List<IElement> instructions;
 
         public FileParser()
         {
-            instructions = new List<IInstructionParser>();
+            instructions = new List<IElement>();
         }
 
         private Box MakeBox(Opcode opcode)
@@ -25,8 +33,10 @@ namespace KPT.Parser
             return new Box(instructionSize);
         }
 
-        public List<IInstructionParser> ParseFile(BinaryReader br, string fileName)
+        public File ParseFile(BinaryReader br, string fileName)
         {
+            File workingFile = new File();
+            List<IInstructionParser> instructions = new List<IInstructionParser>();
 
             St_Header header = new St_Header();
             if (!header.Read(br))
@@ -36,7 +46,7 @@ namespace KPT.Parser
                 Environment.Exit(1);
             }
 
-            instructions.Add(header);
+            workingFile.header = header;
 
             while (br.BaseStream.Position != br.BaseStream.Length) // will need to check this for accuracy as it has been unreliable in some cases in the past
             {
@@ -68,7 +78,8 @@ namespace KPT.Parser
 
             }
 
-            return instructions;
+            workingFile.instructions = instructions;
+            return workingFile;
             
         }
 

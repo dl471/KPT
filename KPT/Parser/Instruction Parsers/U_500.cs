@@ -7,7 +7,7 @@ using System.IO;
 
 namespace KPT.Parser.Instruction_Parsers
 {
-    class U_500 : IInstructionParser
+    class U_500 : IInstruction
     {
         Opcode opcode;
         Box box1;

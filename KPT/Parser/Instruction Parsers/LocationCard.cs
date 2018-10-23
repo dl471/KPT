@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace KPT.Parser.Instruction_Parsers
 {
-    class LocationCard : IInstructionParser
+    class LocationCard : IInstruction
     {
         Opcode opcode;
         string time;

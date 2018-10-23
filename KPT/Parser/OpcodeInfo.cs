@@ -9,6 +9,9 @@ using System.Windows.Forms;
 namespace KPT.Parser
 {  
 
+    /// <summary>
+    /// A list of opcodes known to the program
+    /// </summary>
     enum Opcode
     {
         INVALID = -1,

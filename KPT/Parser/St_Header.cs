@@ -9,9 +9,11 @@ using System.IO;
 
 namespace KPT.Parser
 {
+    /// <summary>
+    /// Used to read the header of files following the StXXX_CpXXXX naming convention.
+    /// </summary>
     class St_Header : IHeader
     {
-
         int fileNumber;
         Box box1;
 
@@ -27,6 +29,5 @@ namespace KPT.Parser
         {
             return true;
         }
-
     }
 }

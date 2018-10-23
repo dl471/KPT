@@ -10,36 +10,51 @@ using System.Windows.Forms;
 
 namespace KPT.Parser
 {
-
+    /// <summary>
+    /// Represents a processed file
+    /// </summary>
     class KCFile
     {
         public IHeader header;
-        public List<IInstructionParser> instructions;
-        public Box footer;
+        public List<IInstruction> instructions;
+        public Box footer; // The footer appears to be some kind of padding of 0x88, so it is represented with a Box instead of a specific footer object
     }
-
-
+    // perhaps FileParser and KCFile should be merged?
 
     class FileParser
     {
 
-        List<IElement> instructions;
+        List<IElement> fileElements;
 
         public FileParser()
         {
-            instructions = new List<IElement>();
+            fileElements = new List<IElement>();
         }
 
+        /// <summary>
+        /// A helper function for creating Boxes
+        /// </summary>
+        /// <param name="opcode"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Intended to make Box creating code cleaner by delegating the getting of instruction size and construction of object to a seperate function
+        /// </remarks>
         private Box MakeBox(Opcode opcode)
         {
             int instructionSize = OpcodeInfo.GetInstructionSize(opcode);
             return new Box(instructionSize);
         }
 
+        /// <summary>
+        /// Takes a file and breaks it down into IElements then returns it in a structured format
+        /// </summary>
+        /// <param name="br">The file to process</param>
+        /// <param name="fileName">The name of the file to be processed (used only for displaying error messages)</param>
+        /// <returns>A class containing the processed file data</returns>
         public KCFile ParseFile(BinaryReader br, string fileName)
         {
             KCFile workingFile = new KCFile();
-            List<IInstructionParser> instructions = new List<IInstructionParser>();
+            List<IInstruction> instructions = new List<IInstruction>();
 
             Box footer = ReadFooter(br);
             workingFile.footer = footer;
@@ -59,7 +74,7 @@ namespace KPT.Parser
                     Environment.Exit(1);
                 }
 
-                IInstructionParser newInstruction;
+                IInstruction newInstruction;
                 Type instructionParserType = OpcodeInfo.GetInstructionParserType(opcode);
                 
                 if (instructionParserType == typeof(Box))
@@ -69,13 +84,16 @@ namespace KPT.Parser
                 }
                 else
                 {
-                    newInstruction = (IInstructionParser)Activator.CreateInstance(instructionParserType);
+                    newInstruction = (IInstruction)Activator.CreateInstance(instructionParserType);
                     newInstruction.Read(br);
                 }
 
                 instructions.Add(newInstruction);
 
             }
+
+            string finishMessage = string.Format("Parsed file {0} with {1} instructions", fileName, instructions.Count.ToString());
+            MessageBox.Show(finishMessage);
 
             workingFile.instructions = instructions;
             return workingFile;
@@ -94,6 +112,14 @@ namespace KPT.Parser
             return header;
         }
 
+        /// <summary>
+        /// Reads the footer of a file
+        /// </summary>
+        /// <param name="br">The file to be read</param>
+        /// <returns>A Box containing the file footer</returns>
+        /// <remarks>
+        /// Works backwards from the end of the file to calcuate the footer then returns the stream's position back to the start of the stream. Does not preserve the curren position of any streams passed to it.
+        /// </remarks>
         private Box ReadFooter(BinaryReader br)
         {
             br.BaseStream.Seek(-1, SeekOrigin.End);

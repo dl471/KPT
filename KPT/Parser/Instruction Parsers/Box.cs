@@ -11,7 +11,7 @@ namespace KPT.Parser.Instruction_Parsers
     /// <summary>
     /// Used as a hands off container for parts of instructions that are not understood. Intended to read and write data without modifying it or handling it in any way.
     /// </summary>
-    class Box : IInstructionParser
+    class Box : IInstruction
     {
         byte[] boxContents;
         int contentsSize;

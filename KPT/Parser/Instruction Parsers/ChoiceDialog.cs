@@ -8,7 +8,7 @@ using KPT.Parser.Elements;
 
 namespace KPT.Parser.Instruction_Parsers
 {
-    class ChoiceDialog : IInstructionParser
+    class ChoiceDialog : IInstruction
     {
 
         Opcode opcode;

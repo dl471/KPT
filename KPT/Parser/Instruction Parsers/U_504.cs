@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace KPT.Parser.Instruction_Parsers
 {
-    class U_504 : IInstructionParser
+    class U_504 : IInstruction
     {
 
         Opcode opcode;

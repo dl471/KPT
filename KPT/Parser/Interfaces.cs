@@ -8,9 +8,9 @@ using System.IO;
 namespace KPT.Parser
 {
     /// <summary>
-    /// Public interface for instruction parsers
+    /// Represents an instruction in a file - usually an opcode and arguments
     /// </summary>
-    interface IInstructionParser : IElement
+    interface IInstruction : IElement
     {
         /// <summary>
         /// Read an instruction and its arguments from the given stream
@@ -26,12 +26,18 @@ namespace KPT.Parser
         new bool Write(BinaryWriter bw);
     }
 
+    /// <summary>
+    /// Represents the header of a file
+    /// </summary>
     interface IHeader : IElement
     {
         new bool Read(BinaryReader br);
         new bool Write(BinaryWriter bw);
     }
 
+    /// <summary>
+    /// The base interface for all elements - represents a block of data in a file
+    /// </summary>
     interface IElement
     {
         bool Read(BinaryReader br);

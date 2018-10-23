@@ -44,6 +44,15 @@ namespace KPT.Parser
         U_00C = 0x00C,
         U_1C0 = 0x1C0,
         U_170 = 0x170,
+
+        U_100 = 0x100,
+        U_111 = 0x111,
+        U_190 = 0x190,
+        U_171 = 0x171,
+        U_1000 = 0x1000,
+        U_121 = 0x121,
+        U_008 = 0x008,
+        LOCATION_CARD = 0x1001,
     }
 
 
@@ -77,24 +86,39 @@ namespace KPT.Parser
             { Opcode.U_174, 2 },
             { Opcode.U_160, 2 },
             { Opcode.U_120, 4 },
-            { Opcode.U_30C, 2 },
+            { Opcode.U_30C, 2 }, // only had one example of this so far
             { Opcode.U_00C, 2 },
             { Opcode.U_1C0, 2 },
             { Opcode.U_170, 4 },
+            { Opcode.U_100, 2 }, // educated guess
+            { Opcode.U_111, 4 }, // educated guess
+            { Opcode.U_190, 4 }, // educated guess
+            { Opcode.U_171, 4 },
+            { Opcode.U_1000, 2 },
+            { Opcode.U_121, 6 }, // educated guess, extremely unconfirmed
+            { Opcode.U_008, 2 }, // educated guess
+
+
         };
 
         static Dictionary<Opcode, Type> instructionParserMap = new Dictionary<Opcode, Type>
         {
+            { Opcode.U_008, typeof(Box) },
             { Opcode.U_00C, typeof(Box) },
 
+            { Opcode.U_100, typeof(Box) },
+            { Opcode.U_111, typeof(Box) },
             { Opcode.U_120, typeof(Box) },
+            { Opcode.U_121, typeof(Box) },
             { Opcode.U_130, typeof(Box) },
             { Opcode.U_131, typeof(Box) },
             { Opcode.U_132, typeof(Box) },
             { Opcode.U_160, typeof(Box) },
             { Opcode.U_170, typeof(Box) },
+            { Opcode.U_171, typeof(Box) },
             { Opcode.U_173, typeof(Box) },
             { Opcode.U_174, typeof(Box) },
+            { Opcode.U_190, typeof(Box) },
             { Opcode.U_191, typeof(Box) },
             { Opcode.U_192, typeof(Box) },
             { Opcode.U_1C0, typeof(Box) },
@@ -104,7 +128,7 @@ namespace KPT.Parser
             { Opcode.U_214, typeof(Box) },
 
             { Opcode.U_303, typeof(Box) },
-            { Opcode.U_30C, typeof(Box) },  // only had one example of this so far
+            { Opcode.U_30C, typeof(Box) },  
 
             { Opcode.U_401, typeof(Box) },
             { Opcode.U_402, typeof(Box) },
@@ -119,6 +143,8 @@ namespace KPT.Parser
             { Opcode.U_601, typeof(Box) },
             { Opcode.U_603, typeof(Box) },
 
+            { Opcode.U_1000, typeof(Box) },
+            { Opcode.LOCATION_CARD, typeof(LocationCard) },
         };
 
 

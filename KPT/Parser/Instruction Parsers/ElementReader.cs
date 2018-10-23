@@ -30,6 +30,25 @@ namespace KPT.Parser.Instruction_Parsers
             byte[] nameAsBytes = br.ReadBytes(NAME_LENGTH);
             return ActiveEncodings.currentEncoding.GetString(nameAsBytes);
         }
+
+        public static string ReadNullTerminatedString(BinaryReader br)
+        {
+            long start = br.BaseStream.Position;
+            long end = 0;
+
+            while (br.ReadByte() != 0x00)
+            {
+                end++;
+            }
+
+            br.BaseStream.Position = start;
+
+            byte[] stringAsBytes = br.ReadBytes((int)end);
+            string readString = ActiveEncodings.currentEncoding.GetString(stringAsBytes);
+
+            br.ReadByte(); // consume null terminator
+            return readString;
+        }
         
         public static string ReadDialogue(BinaryReader br)
         {

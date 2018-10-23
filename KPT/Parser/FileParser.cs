@@ -28,6 +28,16 @@ namespace KPT.Parser
         public List<IInstructionParser> ParseFile(BinaryReader br, string fileName)
         {
 
+            St_Header header = new St_Header();
+            if (!header.Read(br))
+            {
+                string errorMessage = "Failed to read header of file {0}. Corrupt or invalid header?";
+                MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(1);
+            }
+
+            instructions.Add(header);
+
             while (br.BaseStream.Position != br.BaseStream.Length) // will need to check this for accuracy as it has been unreliable in some cases in the past
             {
                 Opcode opcode = ElementReader.ReadOpcode(br);

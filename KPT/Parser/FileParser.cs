@@ -11,7 +11,7 @@ using System.Windows.Forms;
 namespace KPT.Parser
 {
 
-    class File
+    class KCFile
     {
         public IHeader header;
         public List<IInstructionParser> instructions;
@@ -36,9 +36,9 @@ namespace KPT.Parser
             return new Box(instructionSize);
         }
 
-        public File ParseFile(BinaryReader br, string fileName)
+        public KCFile ParseFile(BinaryReader br, string fileName)
         {
-            File workingFile = new File();
+            KCFile workingFile = new KCFile();
             List<IInstructionParser> instructions = new List<IInstructionParser>();
 
             Box footer = ReadFooter(br);

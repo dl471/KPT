@@ -54,6 +54,7 @@ namespace KPT.Parser
         U_008 = 0x008,
         LOCATION_CARD = 0x1001,
         CHOICE_DIALOG = 0x701,
+        U_113 = 0x0113,
     }
 
 
@@ -98,6 +99,7 @@ namespace KPT.Parser
             { Opcode.U_1000, 2 },
             { Opcode.U_121, 6 }, // educated guess, extremely unconfirmed
             { Opcode.U_008, 2 }, // educated guess
+            { Opcode.U_113, 10 }, // educated guess, extremely unconfirmed
 
 
         };
@@ -109,6 +111,7 @@ namespace KPT.Parser
 
             { Opcode.U_100, typeof(Box) },
             { Opcode.U_111, typeof(Box) },
+            { Opcode.U_113, typeof(Box) },
             { Opcode.U_120, typeof(Box) },
             { Opcode.U_121, typeof(Box) },
             { Opcode.U_130, typeof(Box) },

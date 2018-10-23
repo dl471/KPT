@@ -11,7 +11,7 @@ namespace KPT.Parser.Instruction_Parsers
     static class ElementReader
     {
 
-        const int NAME_LENGTH = 20;
+        const int NAME_LENGTH = 20; // I am starting to consider that this really should not be part of the element reader and should be more directly attached to the string instructions... if they can be succintly grouped together, that is. Perhaps once there is more complete picture of how things work.
 
         public static Opcode ReadOpcode(BinaryReader br)
         {

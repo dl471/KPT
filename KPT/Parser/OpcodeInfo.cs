@@ -60,6 +60,9 @@ namespace KPT.Parser
         U_113 = 0x0113,
         U_900 = 0x900,
         U_003 = 0x003,
+        
+        U_502 = 0x502,
+        SHOW_IMAGE = 0x600,
     }
 
 
@@ -140,7 +143,7 @@ namespace KPT.Parser
             { Opcode.U_214, typeof(Box) },
 
             { Opcode.U_303, typeof(Box) },
-            { Opcode.U_30C, typeof(Box) },  
+            { Opcode.U_30C, typeof(Box) },
 
             { Opcode.U_401, typeof(Box) },
             { Opcode.U_402, typeof(Box) },
@@ -150,7 +153,10 @@ namespace KPT.Parser
 
             { Opcode.U_500, typeof(U_500) },
             { Opcode.U_501, typeof(U_501) },
-            { Opcode.U_504, typeof(U_504) }, 
+            { Opcode.U_502, typeof(U_502) },
+            { Opcode.U_504, typeof(U_504) },
+
+            { Opcode.SHOW_IMAGE, typeof(ShowImage) }, // a tentative name
 
             { Opcode.U_601, typeof(Box) },
             { Opcode.U_603, typeof(Box) },

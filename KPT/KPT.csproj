@@ -65,6 +65,7 @@
     <Compile Include="Parser\Instruction Parsers\LocationCard.cs" />
     <Compile Include="Parser\Instruction Parsers\U_500.cs" />
     <Compile Include="Parser\Instruction Parsers\U_501.cs" />
+    <Compile Include="Parser\Instruction Parsers\U_502.cs" />
     <Compile Include="Parser\Instruction Parsers\U_504.cs" />
     <Compile Include="Parser\Interfaces.cs" />
     <Compile Include="Parser\OpcodeInfo.cs" />

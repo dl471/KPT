@@ -28,7 +28,7 @@ namespace KPT.Parser.Headers
 
         public bool Write(BinaryWriter bw)
         {
-            return true;
+            throw new NotImplementedException();
         }
     }
 }

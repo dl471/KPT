@@ -25,7 +25,7 @@ namespace KPT.Parser.Elements
 
         public bool Write(BinaryWriter bw)
         {
-            return true;
+            throw new NotImplementedException();
         }
 
     }

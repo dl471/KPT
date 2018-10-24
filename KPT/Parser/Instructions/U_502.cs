@@ -29,7 +29,7 @@ namespace KPT.Parser.Instructions
 
         public bool Write(BinaryWriter bw)
         {
-            return true;
+            throw new NotImplementedException();
         }
 
     }

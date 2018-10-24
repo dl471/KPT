@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using KPT.Parser.Instruction_Parsers;
+using KPT.Parser.Instructions;
 using KPT.Parser.Elements;
 using System.IO;
 
-namespace KPT.Parser
+namespace KPT.Parser.Headers
 {
     /// <summary>
     /// Used to read the header of files following the StXXX_CpXXXX naming convention.

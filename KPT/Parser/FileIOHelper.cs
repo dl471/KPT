@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 
-namespace KPT.Parser.Instruction_Parsers
+namespace KPT.Parser.Instructions
 {
-    static class ElementReader
+    /// <summary>
+    /// Provides a set of functions to make reading and writing files easier for instruction and element classes
+    /// </summary>
+    static class FileIOHelper
     {
-
         const int NAME_LENGTH = 20; // I am starting to consider that this really should not be part of the element reader and should be more directly attached to the string instructions... if they can be succintly grouped together, that is. Perhaps once there is more complete picture of how things work.
 
         public static Opcode ReadOpcode(BinaryReader br)
@@ -22,7 +24,7 @@ namespace KPT.Parser.Instruction_Parsers
                 return (Opcode)opcode;
             }
 
-            return Opcode.INVALID;
+            return Opcode.INVALID; // perhaps there should be a second "Invalid Opcode" error message here?
         }
 
         public static string ReadName(BinaryReader br) // consider folding this into ReadFixedLengthString(NAME_LENGTH) since that is basically all it is
@@ -50,7 +52,7 @@ namespace KPT.Parser.Instruction_Parsers
             return readString;
         }
         
-        public static string ReadDialogue(BinaryReader br)
+        public static string ReadDialogueString(BinaryReader br)
         {
             long start = br.BaseStream.Position;
             long end = 0;

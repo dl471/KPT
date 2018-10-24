@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 
-namespace KPT.Parser.Instruction_Parsers
+namespace KPT.Parser.Instructions
 {
     class U_504 : IInstruction
     {
@@ -16,7 +16,7 @@ namespace KPT.Parser.Instruction_Parsers
 
         public bool Read(BinaryReader br)
         {
-            opcode = ElementReader.ReadOpcode(br);
+            opcode = FileIOHelper.ReadOpcode(br);
             box1 = new Box(0x2);
             box1.Read(br);
             return true;

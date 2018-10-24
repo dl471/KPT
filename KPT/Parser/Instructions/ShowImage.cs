@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace KPT.Parser.Instruction_Parsers
+namespace KPT.Parser.Instructions
 {
     // This appears to be some "fetch X file from Y archive function" based on an initial look at the arguments. Having actually run it, it seems to be an image display. That said, it's still possible it has other functionality yet undiscovered.
     class ShowImage : IInstruction
@@ -16,9 +16,9 @@ namespace KPT.Parser.Instruction_Parsers
 
         public bool Read(BinaryReader br)
         {
-            opcode = ElementReader.ReadOpcode(br);
-            archiveFile = ElementReader.ReadFixedLengthString(br, 0x20);
-            subFile = ElementReader.ReadFixedLengthString(br, 0x20);
+            opcode = FileIOHelper.ReadOpcode(br);
+            archiveFile = FileIOHelper.ReadFixedLengthString(br, 0x20);
+            subFile = FileIOHelper.ReadFixedLengthString(br, 0x20);
             return true;
         }
 

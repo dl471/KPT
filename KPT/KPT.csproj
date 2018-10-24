@@ -59,19 +59,19 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Parser\Elements\ChoiceBar.cs" />
-    <Compile Include="Parser\Instruction Parsers\Box.cs" />
-    <Compile Include="Parser\Instruction Parsers\ChoiceDialog.cs" />
-    <Compile Include="Parser\Instruction Parsers\ElementReader.cs" />
-    <Compile Include="Parser\Instruction Parsers\LocationCard.cs" />
-    <Compile Include="Parser\Instruction Parsers\U_500.cs" />
-    <Compile Include="Parser\Instruction Parsers\U_501.cs" />
-    <Compile Include="Parser\Instruction Parsers\U_502.cs" />
-    <Compile Include="Parser\Instruction Parsers\U_504.cs" />
-    <Compile Include="Parser\Instruction Parsers\ShowImage.cs" />
+    <Compile Include="Parser\Instructions\Box.cs" />
+    <Compile Include="Parser\Instructions\ChoiceDialog.cs" />
+    <Compile Include="Parser\FileIOHelper.cs" />
+    <Compile Include="Parser\Instructions\LocationCard.cs" />
+    <Compile Include="Parser\Instructions\U_500.cs" />
+    <Compile Include="Parser\Instructions\U_501.cs" />
+    <Compile Include="Parser\Instructions\U_502.cs" />
+    <Compile Include="Parser\Instructions\U_504.cs" />
+    <Compile Include="Parser\Instructions\ShowImage.cs" />
     <Compile Include="Parser\Interfaces.cs" />
     <Compile Include="Parser\OpcodeInfo.cs" />
     <Compile Include="Parser\FileParser.cs" />
-    <Compile Include="Parser\St_Header.cs" />
+    <Compile Include="Parser\Headers\St_Header.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

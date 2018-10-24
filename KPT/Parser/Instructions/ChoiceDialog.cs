@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using KPT.Parser.Elements;
 
-namespace KPT.Parser.Instruction_Parsers
+namespace KPT.Parser.Instructions
 {
     class ChoiceDialog : IInstruction
     {
@@ -23,7 +23,7 @@ namespace KPT.Parser.Instruction_Parsers
 
         public bool Read(BinaryReader br)
         {
-            opcode = ElementReader.ReadOpcode(br);
+            opcode = FileIOHelper.ReadOpcode(br);
             unknownInt = br.ReadUInt16();
             numberOfChoices = br.ReadUInt16();
             for (int i = 0; i < numberOfChoices; i++)

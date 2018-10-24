@@ -6,23 +6,19 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 
-namespace KPT.Parser.Instruction_Parsers
+namespace KPT.Parser.Instructions
 {
-    class U_501 : IInstruction
+    class LocationCard : IInstruction
     {
-
         Opcode opcode;
-        Box box1;
-        string name;
-        string dialogue;
+        string time;
+        string location;
 
         public bool Read(BinaryReader br)
         {
-            opcode = ElementReader.ReadOpcode(br);
-            box1 = new Box(0x14);
-            box1.Read(br);
-            name = ElementReader.ReadName(br);
-            dialogue = ElementReader.ReadDialogue(br);
+            opcode = FileIOHelper.ReadOpcode(br);
+            time = FileIOHelper.ReadNullTerminatedString(br);
+            location = FileIOHelper.ReadNullTerminatedString(br);
             return true;
         }
 
@@ -30,6 +26,5 @@ namespace KPT.Parser.Instruction_Parsers
         {
             return true;
         }
-
     }
 }

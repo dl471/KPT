@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using KPT.Parser.Elements;
-using KPT.Parser.Instruction_Parsers;
+using KPT.Parser.Instructions;
+using KPT.Parser.Headers;
 using System.Windows.Forms;
 
 namespace KPT.Parser
@@ -24,11 +25,9 @@ namespace KPT.Parser
     class FileParser
     {
 
-        List<IElement> fileElements;
-
         public FileParser()
         {
-            fileElements = new List<IElement>();
+
         }
 
         /// <summary>
@@ -64,7 +63,7 @@ namespace KPT.Parser
 
             while (br.BaseStream.Position != streamEnd) // will need to check this for accuracy as it has been unreliable in some cases in the past
             {
-                Opcode opcode = ElementReader.ReadOpcode(br);
+                Opcode opcode = FileIOHelper.ReadOpcode(br);
                 br.BaseStream.Position -= OpcodeInfo.OPCODE_SIZE; // set the position back by 2, the size of the opcodes, as the instruction parsers will expect to given a position starting with an opcode
 
                 if (opcode == Opcode.INVALID)

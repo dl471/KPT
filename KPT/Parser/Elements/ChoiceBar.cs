@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using KPT.Parser.Instruction_Parsers;
+using KPT.Parser.Instructions;
 using System.Windows.Forms;
 
 namespace KPT.Parser.Elements
@@ -19,7 +19,7 @@ namespace KPT.Parser.Elements
         public bool Read(BinaryReader br)
         {
             choiceNumber = br.ReadUInt16();
-            choiceText = ElementReader.ReadFixedLengthString(br, CHOICE_STRING_LENGTH);
+            choiceText = FileIOHelper.ReadFixedLengthString(br, CHOICE_STRING_LENGTH);
             return true;
         }
 

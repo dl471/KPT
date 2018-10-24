@@ -5,25 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace KPT.Parser.Instruction_Parsers
+namespace KPT.Parser.Instructions
 {
-    class U_502 : IInstruction
+    class U_500 : IInstruction
     {
         Opcode opcode;
         Box box1;
         string name;
         string dialogue;
-        Box box2;
 
         public bool Read(BinaryReader br)
         {
-            opcode = ElementReader.ReadOpcode(br);
-            box1 = new Box(0x0C);
+            opcode = FileIOHelper.ReadOpcode(br);
+            box1 = new Box(0x8);
             box1.Read(br);
-            name = ElementReader.ReadName(br);
-            dialogue = ElementReader.ReadDialogue(br);
-            box2 = new Box(0x04);
-            box2.Read(br);
+            name = FileIOHelper.ReadName(br);
+            dialogue = FileIOHelper.ReadDialogueString(br);
             return true;
         }
 
@@ -31,6 +28,5 @@ namespace KPT.Parser.Instruction_Parsers
         {
             return true;
         }
-
     }
 }

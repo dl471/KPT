@@ -15,6 +15,7 @@ namespace KPT.Parser
     class St_Header : IHeader
     {
         int fileNumber;
+        int stNumber; // second uint16, not currently handled
         Box box1;
 
         public bool Read(BinaryReader br)

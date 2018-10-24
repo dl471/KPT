@@ -92,8 +92,8 @@ namespace KPT.Parser
 
             }
 
-            string finishMessage = string.Format("Parsed file {0} with {1} instructions", fileName, instructions.Count.ToString());
-            MessageBox.Show(finishMessage);
+            //string finishMessage = string.Format("Parsed file {0} with {1} instructions", fileName, instructions.Count.ToString());
+            //MessageBox.Show(finishMessage);
 
             workingFile.instructions = instructions;
             return workingFile;
@@ -129,6 +129,7 @@ namespace KPT.Parser
 
             if (br.ReadByte() != 0x88)
             {
+                br.BaseStream.Seek(0, SeekOrigin.Begin); // is this control flow convoluted?
                 footer = new Box(0);
                 footer.Read(br);
                 return footer;

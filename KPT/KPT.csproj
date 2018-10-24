@@ -67,6 +67,7 @@
     <Compile Include="Parser\Instruction Parsers\U_501.cs" />
     <Compile Include="Parser\Instruction Parsers\U_502.cs" />
     <Compile Include="Parser\Instruction Parsers\U_504.cs" />
+    <Compile Include="Parser\Instruction Parsers\ShowImage.cs" />
     <Compile Include="Parser\Interfaces.cs" />
     <Compile Include="Parser\OpcodeInfo.cs" />
     <Compile Include="Parser\FileParser.cs" />

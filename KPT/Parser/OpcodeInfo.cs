@@ -63,6 +63,19 @@ namespace KPT.Parser
         
         U_502 = 0x502,
         SHOW_IMAGE = 0x600,
+
+        U_112 = 0x112,
+        U_406 = 0x406,
+        U_1A0 = 0x1A0,
+        U_211 = 0x211,
+        U_30B = 0x30B,
+        U_182 = 0x182,
+        U_101 = 0x101,
+        U_407 = 0x407,
+        U_03C = 0x03C,
+        U_01E = 0x01E,
+        U_302 = 0x302,
+        U_00F = 0x00F,
     }
 
 
@@ -110,8 +123,18 @@ namespace KPT.Parser
             { Opcode.U_113, 10 }, // educated guess, extremely unconfirmed
             { Opcode.U_900, 6 }, // educated guess
             { Opcode.U_003, 2 }, // educated guess, extremely unconfirmed
-
-
+            { Opcode.U_112, 6 },
+            { Opcode.U_406, 4 }, // i should be more confident of this than i actually am
+            { Opcode.U_1A0, 6 },
+            { Opcode.U_211, 4 },
+            { Opcode.U_30B, 2 },
+            { Opcode.U_182, 10 },
+            { Opcode.U_101, 4 }, // i think this is correct but the fact it seems to be such an extreme instruction (see comments on this opcode in instruction parser map) makes it hard to see
+            { Opcode.U_407, 2 },
+            { Opcode.U_03C, 2 },
+            { Opcode.U_01E, 2 }, // educated guess
+            { Opcode.U_302, 2 },
+            { Opcode.U_00F, 2 },
         };
 
         static Dictionary<Opcode, Type> instructionParserMap = new Dictionary<Opcode, Type>
@@ -119,9 +142,14 @@ namespace KPT.Parser
             { Opcode.U_003, typeof(Box) },
             { Opcode.U_008, typeof(Box) },
             { Opcode.U_00C, typeof(Box) },
+            { Opcode.U_00F, typeof(Box) },
+            { Opcode.U_01E, typeof(Box) },
+            { Opcode.U_03C, typeof(Box) },
 
             { Opcode.U_100, typeof(Box) },
+            { Opcode.U_101, typeof(Box) }, // save and exit? huh?
             { Opcode.U_111, typeof(Box) },
+            { Opcode.U_112, typeof(Box) },
             { Opcode.U_113, typeof(Box) },
             { Opcode.U_120, typeof(Box) },
             { Opcode.U_121, typeof(Box) },
@@ -133,16 +161,21 @@ namespace KPT.Parser
             { Opcode.U_171, typeof(Box) },
             { Opcode.U_173, typeof(Box) },
             { Opcode.U_174, typeof(Box) },
+            { Opcode.U_182, typeof(Box) },
             { Opcode.U_190, typeof(Box) },
             { Opcode.U_191, typeof(Box) },
             { Opcode.U_192, typeof(Box) },
+            { Opcode.U_1A0, typeof(Box) }, // view change?
             { Opcode.U_1C0, typeof(Box) },
 
             { Opcode.U_205, typeof(Box) },
             { Opcode.U_210, typeof(Box) },
+            { Opcode.U_211, typeof(Box) },
             { Opcode.U_214, typeof(Box) },
 
+            { Opcode.U_302, typeof(Box) },
             { Opcode.U_303, typeof(Box) },
+            { Opcode.U_30B, typeof(Box) },
             { Opcode.U_30C, typeof(Box) },
 
             { Opcode.U_401, typeof(Box) },
@@ -150,6 +183,8 @@ namespace KPT.Parser
             { Opcode.U_403, typeof(Box) },
             { Opcode.U_404, typeof(Box) },
             { Opcode.U_405, typeof(Box) },
+            { Opcode.U_406, typeof(Box) },
+            { Opcode.U_407, typeof(Box) }, 
 
             { Opcode.U_500, typeof(U_500) },
             { Opcode.U_501, typeof(U_501) },

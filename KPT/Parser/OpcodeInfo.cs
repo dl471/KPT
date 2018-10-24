@@ -58,6 +58,8 @@ namespace KPT.Parser
         LOCATION_CARD = 0x1001,
         CHOICE_DIALOG = 0x701,
         U_113 = 0x0113,
+        U_900 = 0x900,
+        U_003 = 0x003,
     }
 
 
@@ -103,12 +105,15 @@ namespace KPT.Parser
             { Opcode.U_121, 6 }, // educated guess, extremely unconfirmed
             { Opcode.U_008, 2 }, // educated guess
             { Opcode.U_113, 10 }, // educated guess, extremely unconfirmed
+            { Opcode.U_900, 6 }, // educated guess
+            { Opcode.U_003, 2 }, // educated guess, extremely unconfirmed
 
 
         };
 
         static Dictionary<Opcode, Type> instructionParserMap = new Dictionary<Opcode, Type>
         {
+            { Opcode.U_003, typeof(Box) },
             { Opcode.U_008, typeof(Box) },
             { Opcode.U_00C, typeof(Box) },
 
@@ -150,9 +155,13 @@ namespace KPT.Parser
             { Opcode.U_601, typeof(Box) },
             { Opcode.U_603, typeof(Box) },
 
+            { Opcode.CHOICE_DIALOG, typeof(ChoiceDialog) },
+
+            { Opcode.U_900, typeof(Box) },
+
             { Opcode.U_1000, typeof(Box) },
             { Opcode.LOCATION_CARD, typeof(LocationCard) },
-            { Opcode.CHOICE_DIALOG, typeof(ChoiceDialog) },
+            
         };
 
 

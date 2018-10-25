@@ -234,16 +234,16 @@ namespace KPT
 
                 byte[] fileAsBytes = GrabCPKData(filePath, embeddedFile);
 
-                FileStream fs = new FileStream(targetFileAbsolutePath, FileMode.Create);
-                BinaryWriter bw = new BinaryWriter(fs);
-
                 if (DebugSettings.ALLOW_FILE_WRITES)
                 {
-                    bw.Write(fileAsBytes);
-                }
+                    FileStream fs = new FileStream(targetFileAbsolutePath, FileMode.Create);
+                    BinaryWriter bw = new BinaryWriter(fs);
 
-                bw.Close();
-                fs.Close();
+                    bw.Write(fileAsBytes);
+
+                    bw.Close();
+                    fs.Close();
+                }
 
                 string relativeFilePath = Path.Combine(file.subPath, embeddedFile.FileName.ToString());
                 uint fileID = (uint)embeddedFile.ID;

@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActiveEncodings.cs" />
+    <Compile Include="Checksums.cs" />
     <Compile Include="DebugSettings.cs" />
     <Compile Include="DirectoryGuard.cs" />
     <Compile Include="Dumper.cs" />

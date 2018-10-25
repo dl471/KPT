@@ -8,6 +8,7 @@ using KPT.Parser.Elements;
 using KPT.Parser.Instructions;
 using KPT.Parser.Headers;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace KPT.Parser
 {
@@ -24,6 +25,13 @@ namespace KPT.Parser
 
     class FileParser
     {
+
+        public static bool IsParseable(string fileName)
+        {
+            Regex regex = new Regex(@"St[0-9A-F]{3}_Cp[0-9A-F]{4}\.bin"); // search for the StXXX_CpXXXX.bin format. since that's the only file we can parse at the moment there's not much detail to go into to determine whether or not it is parseable.
+            Match match = regex.Match(fileName);
+            return match.Success;
+        }
 
         public FileParser()
         {

@@ -7,14 +7,37 @@ using System.IO;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using LibCPK;
+using KPT.XMLBuild;
+using KPT.Parser;
+using System.Xml;
 
 namespace KPT
 {
+    struct FileLocationMeta
+    {
+        public string leadingPath;
+        public string switchPath;
+        public string subPath;
+        public string fileName;
+
+        public FileLocationMeta(string leadingPath, string switchPath, string subPath, string fileName)
+        {
+            this.leadingPath = leadingPath;
+            this.switchPath = switchPath;
+            this.subPath = subPath;
+            this.fileName = fileName;
+        }
+
+    }
+
+    
+
     class Dumper
     {
 
         private const string originalDirectory = "Original";
         private const string editableDirectory = "Editable";
+        private const string rawDirectory = "Raw";
         private Tools tools;
 
         /// <summary>
@@ -27,22 +50,6 @@ namespace KPT
             tools = new Tools();
         }
 
-        struct FileLocationMeta
-        {
-            public string leadingPath;
-            public string switchPath;
-            public string subPath;
-            public string fileName;       
-            
-            public FileLocationMeta(string leadingPath, string switchPath, string subPath, string fileName)
-            {
-                this.leadingPath = leadingPath;
-                this.switchPath = switchPath;
-                this.subPath = subPath;
-                this.fileName = fileName;
-            }
-                     
-        }
 
         /// <summary>
         /// Check if the directory is valid, that is, that it exists and that it passes any other tests specified in remarks
@@ -123,7 +130,18 @@ namespace KPT
             if (!DebugSettings.SKIP_ORIGINAL_DIRECTORY_COPYING)
             {
                 Microsoft.VisualBasic.FileIO.FileSystem.CopyDirectory(sourceDirectoryPath, originalFilesDirectory); // i would like "the program has not crashed" progress box but i'm not sure it can be done if things are done this way. hmm. perhaps writing a recursive copying function would be best after all.
-            }            
+            }
+
+            FileStream fs = new FileStream("testcpk.xml", FileMode.Create);
+            StreamWriter sw = new StreamWriter(fs);
+
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Indent = true;
+            XmlWriter xw = XmlWriter.Create(sw, settings);
+
+            xw.WriteStartDocument();
+
+            xw.WriteStartElement(Identifiers.GAME_FILE_LIST_TAG);
 
             foreach (var file in fileList)
             {
@@ -132,65 +150,108 @@ namespace KPT
                 switch (fileExtension)
                 {
                     case ".cpk":
-                        FilterCPKFile(file, sourceDirectoryPath, targetDirectoryPath);
+                        var res = FilterCPKFile(file, sourceDirectoryPath, targetDirectoryPath);
+                        res.CommitXML(xw);
                         break;
                     default:
                         break;
                 }               
             }
 
+            xw.WriteEndElement();
+            xw.WriteEndDocument();
+            xw.Close();
+
+            sw.Close();
+            fs.Close();
+
+
             return true;
         }
 
-        private void FilterCPKFile(FileLocationMeta file, string sourceDirectoryPath, string targetDirectoryPath)
+        private CPKBuildObject FilterCPKFile(FileLocationMeta file, string sourceDirectoryPath, string targetDirectoryPath)
         {
 
-            file.switchPath = editableDirectory;
-
-            var cpkFile = new CPK(new Tools());
+            var cpkFile = new CPK(new Tools()); // this function gets a bit confusings since file, cpkFile and embeddedFile are all thrown around - i will need to fix that
             var filePath = Path.Combine(sourceDirectoryPath, file.subPath, file.fileName);
 
             if (!cpkFile.ReadCPK(filePath, ActiveEncodings.currentEncoding))
             {
                 string errorMessage = string.Format("Unknown error while attempting to open {0}.", filePath);
                 MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); // this could be replaced with a custom form that allows the user to skip all errors or a simple "errors while opening X files" after the files are done being read. though, the later option would require a small restructuring of the code.
-                return;
+                Environment.Exit(1);
             }
 
-            int binCount = 0;
-            FileEntry foundBin = null;
+            int realFileCount = 0;
 
             foreach (var embeddedFile in cpkFile.FileTable)
             {
-                if (embeddedFile.FileName.ToString().EndsWith(".bin"))
+                if (embeddedFile.FileType.ToString() == "FILE")
                 {
-                    foundBin = embeddedFile;
-                    binCount++;
-                    if (binCount > 1)
-                    {
-                        break; 
-                    }
+                    realFileCount += 1;
                 }
             }
 
-            if (binCount != 1) // // skipping multiple bin files for the moment since the most important files of immediate interest are all single bin - files no bin are also not of apparent immediate relevance
+            if (realFileCount == 0)
             {
-                return;
+                string errorMessage = string.Format("CPK file {0} was empty.", filePath); // i am not sure this should be a fatal error - i will attempt to come back to it once i have a more complete picture of how the build system works and thus have a better idea of how to handle such an eventuality
+                MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(1);
             }
 
-            string targetFileAbsolutePath = Path.Combine(targetDirectoryPath, file.switchPath, file.subPath, foundBin.FileName.ToString());
+            CPKBuildObject cpkBuildInstructions = new CPKBuildObject();
 
-            DirectoryGuard.CheckDirectory(targetFileAbsolutePath);
+            string originalFileLocation = Path.Combine(file.subPath, file.fileName);
+            cpkBuildInstructions.SetOriginalFileLocation(originalFileLocation);
+            
+            if (realFileCount > 1) // if there is more than one file in the CPK we move the files within it to their own directory
+            {
+                string newSubDir = Path.GetFileNameWithoutExtension(file.fileName);
+                string newSubPath = Path.Combine(file.subPath, newSubDir);
+                file.subPath = newSubPath;
+            }
 
-            byte[] rawFile = GrabCPKData(filePath, foundBin);
+            foreach (var embeddedFile in cpkFile.FileTable)
+            {
 
-            FileStream fs = new FileStream(targetFileAbsolutePath, FileMode.CreateNew);
-            BinaryWriter bw = new BinaryWriter(fs);
+                if (embeddedFile.FileType != "FILE")
+                {
+                    continue; // skip headers etc.
+                }
 
-            bw.Write(rawFile);
+                if (FileParser.IsParseable(embeddedFile.FileName.ToString()))
+                {
+                    file.switchPath = editableDirectory;
+                }
+                else
+                {
+                    file.switchPath = rawDirectory;
+                }
 
-            bw.Close();
-            fs.Close();
+                string targetFileAbsolutePath = Path.Combine(targetDirectoryPath, file.switchPath, file.subPath, embeddedFile.FileName.ToString());
+
+                DirectoryGuard.CheckDirectory(targetFileAbsolutePath);
+
+                byte[] fileAsBytes = GrabCPKData(filePath, embeddedFile);
+
+                FileStream fs = new FileStream(targetFileAbsolutePath, FileMode.Create);
+                BinaryWriter bw = new BinaryWriter(fs);
+
+                if (DebugSettings.ALLOW_FILE_WRITES)
+                {
+                    bw.Write(fileAsBytes);
+                }
+
+                bw.Close();
+                fs.Close();
+
+                string relativeFilePath = Path.Combine(file.subPath, embeddedFile.FileName.ToString());
+                uint fileID = (uint)embeddedFile.ID;
+                cpkBuildInstructions.AddFile(relativeFilePath, fileID);
+
+            }
+
+            return cpkBuildInstructions;
 
         }
 

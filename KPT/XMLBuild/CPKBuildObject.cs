@@ -10,17 +10,32 @@ using System.IO;
 
 namespace KPT.XMLBuild
 {
+
+    
+    /// <summary>
+    /// The necessary data for keeping track of a file within a CPK
+    /// </summary>
+    class CPKFileMeta
+    {
+        public string fileName;
+        public string filePath;
+        public uint ID;
+        public string checksumValue;
+        public Checksum checksumType;
+        
+    }
+
     /// <summary>
     /// Used to create an XML element that describes how a CPK should be rebuilt
     /// </summary>
     class CPKBuildObject
     {
         string originalFileLocation;
-        Dictionary<uint, string> files;
+        Dictionary<uint, CPKFileMeta> files;
         
         public CPKBuildObject()
         {
-            files = new Dictionary<uint, string>();
+            files = new Dictionary<uint, CPKFileMeta>();
         }
 
         public void SetOriginalFileLocation(string filePath)
@@ -28,9 +43,9 @@ namespace KPT.XMLBuild
             originalFileLocation = filePath;
         }
 
-        public void AddFile(string fileName, uint id)
+        public void AddFile(uint id, CPKFileMeta cpk)
         {
-            files[id] = fileName;
+            files[id] = cpk;
         }
 
         public void CommitXML(XmlWriter xmlWriter)
@@ -49,7 +64,16 @@ namespace KPT.XMLBuild
             {
                 xmlWriter.WriteStartElement(Identifiers.FILE_TAG);
                 xmlWriter.WriteAttributeString(Identifiers.FILE_ID_TAG, file.Key.ToString());
-                xmlWriter.WriteString(file.Value);
+
+                xmlWriter.WriteStartElement(Identifiers.FILE_NAME_TAG);
+                xmlWriter.WriteString(file.Value.fileName);
+                xmlWriter.WriteEndElement();
+
+                xmlWriter.WriteStartElement(Identifiers.CHECKSUM_TAG);
+                xmlWriter.WriteAttributeString(Identifiers.CHECKSUM_TYPE_TAG, Identifiers.MD5_TAG);
+                xmlWriter.WriteString(file.Value.checksumValue);
+                xmlWriter.WriteEndElement();
+
                 xmlWriter.WriteEndElement();
             }
 

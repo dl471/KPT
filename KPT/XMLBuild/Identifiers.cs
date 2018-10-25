@@ -16,6 +16,10 @@ namespace KPT.XMLBuild
         public const string ORIGINAL_LOCATION_TAG = "original";
         public const string SHORT_FILE_NAME_TAG = "name";
         public const string GAME_FILE_LIST_TAG = "game";
+        public const string FILE_NAME_TAG = "name";
+        public const string CHECKSUM_TAG = "checksum";
+        public const string CHECKSUM_TYPE_TAG = "type";
+        public const string MD5_TAG = "md5";
 
     }
 }

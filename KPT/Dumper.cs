@@ -247,7 +247,16 @@ namespace KPT
 
                 string relativeFilePath = Path.Combine(file.subPath, embeddedFile.FileName.ToString());
                 uint fileID = (uint)embeddedFile.ID;
-                cpkBuildInstructions.AddFile(relativeFilePath, fileID);
+
+                var cpkMeta = new CPKFileMeta();
+
+                cpkMeta.filePath = relativeFilePath;
+                cpkMeta.fileName = embeddedFile.FileName.ToString();
+                cpkMeta.checksumType = Checksum.MD5;
+                cpkMeta.checksumValue = Checksums.GetMD5(fileAsBytes);
+                cpkMeta.ID = fileID;
+
+                cpkBuildInstructions.AddFile(fileID, cpkMeta);
 
             }
 

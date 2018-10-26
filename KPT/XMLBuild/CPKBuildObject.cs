@@ -15,7 +15,7 @@ namespace KPT.XMLBuild
     /// <summary>
     /// The necessary data for keeping track of a file within a CPK
     /// </summary>
-    class CPKFileMeta
+    class CPKEmbeddedFileMeta
     {
         public string fileName;
         public string filePath;
@@ -31,11 +31,11 @@ namespace KPT.XMLBuild
     class CPKBuildObject
     {
         string originalFileLocation;
-        Dictionary<uint, CPKFileMeta> files;
+        Dictionary<uint, CPKEmbeddedFileMeta> files;
         
         public CPKBuildObject()
         {
-            files = new Dictionary<uint, CPKFileMeta>();
+            files = new Dictionary<uint, CPKEmbeddedFileMeta>();
         }
 
         public void SetOriginalFileLocation(string filePath)
@@ -43,7 +43,7 @@ namespace KPT.XMLBuild
             originalFileLocation = filePath;
         }
 
-        public void AddFile(uint id, CPKFileMeta cpk)
+        public void AddFile(uint id, CPKEmbeddedFileMeta cpk)
         {
             files[id] = cpk;
         }
@@ -67,6 +67,10 @@ namespace KPT.XMLBuild
 
                 xmlWriter.WriteStartElement(Identifiers.FILE_NAME_TAG);
                 xmlWriter.WriteString(file.Value.fileName);
+                xmlWriter.WriteEndElement();
+
+                xmlWriter.WriteStartElement(Identifiers.RELATIVE_PATH_TAG);
+                xmlWriter.WriteString(file.Value.filePath);
                 xmlWriter.WriteEndElement();
 
                 xmlWriter.WriteStartElement(Identifiers.CHECKSUM_TAG);

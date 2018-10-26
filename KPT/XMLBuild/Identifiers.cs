@@ -20,6 +20,6 @@ namespace KPT.XMLBuild
         public const string CHECKSUM_TAG = "checksum";
         public const string CHECKSUM_TYPE_TAG = "type";
         public const string MD5_TAG = "md5";
-
+        public const string RELATIVE_PATH_TAG = "relative_path";
     }
 }

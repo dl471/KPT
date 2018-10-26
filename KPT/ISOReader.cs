@@ -78,7 +78,14 @@ namespace KPT
         {
             foreach (var file in iso.GetFiles(directory))
             {
-                fileList.Add(file);
+                if (file[0] == '\\')
+                {
+                    fileList.Add(file.Substring(1, file.Length - 1)); // ISOs reasonably use \ as their root and derive all paths from it, but this causes problems later on when we try to use the ISO paths to build NTFS paths
+                }
+                else
+                {
+                    fileList.Add(file);
+                }                
             }
 
             foreach (var dir in iso.GetDirectories(directory))

@@ -69,6 +69,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="ISOReader.cs" />
+    <Compile Include="ISOWriter.cs" />
     <Compile Include="Parser\Elements\ChoiceBar.cs" />
     <Compile Include="Parser\Instructions\Box.cs" />
     <Compile Include="Parser\Instructions\ChoiceDialog.cs" />

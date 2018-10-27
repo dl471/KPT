@@ -30,15 +30,45 @@ namespace KPT
 
     }
 
-    
-
     class Dumper
     {
-
+        
+        // Looking to depreceate these
         private const string originalDirectory = "Original";
         private const string editableDirectory = "Editable";
         private const string rawDirectory = "Raw";
         private Tools tools;
+
+        /// <summary>
+        /// Dump of ISO contents - CPKs etc.
+        /// </summary>
+        private const string extractedISODir = "Extracted ISO Files";
+        /// <summary>
+        /// Game files extracted from CPKs in extracted ISO folder or standalone files copied over directly from the extracted ISO folder - bin files etc.
+        /// </summary>
+        private const string extractedGameFilesDir = "Unpacked Game Files";
+        /// <summary>
+        /// Disassembled game files
+        /// </summary>
+        private const string disassemblyDir = "Disassembled Files";
+        /// <summary>
+        /// Files presented in a more readily editable format - spreadsheets of strings etc.
+        /// </summary>
+        private const string editableGameFiesDir = "Editable Game Files";
+        /// <summary>
+        /// Game files that have been reassembled - bins etc.
+        /// </summary>
+        private const string reassembledGameFilesDir = "Reassembled Game Files";
+        /// <summary>
+        /// Game files that have been repacked where necessary - CPKs etc.
+        /// </summary>
+        private const string repackedGameFilesDir = "Repacked Game Files";
+        /// <summary>
+        /// XML files, scripts, etc. used to direct the reassembly or repacking of files
+        /// </summary>
+        private const string buildScriptsDir = "Build Scripts";
+
+
 
         /// <summary>
         /// Used by recursive function PopulateFileList to signal early termination should happpen
@@ -50,27 +80,27 @@ namespace KPT
             tools = new Tools();
         }
 
+        private void InitalizeDirectoryStructure(string targetDirectoryPath)
+        {
+            MessageBox.Show(targetDirectoryPath);
+            Environment.Exit(0);
+        }
 
         /// <summary>
-        /// Check if the directory is valid, that is, that it exists and that it passes any other tests specified in remarks
+        /// Check that the directory exists and it roughly lines up with is expected from the ISO dir (i.e. has a PSP_GAME directory)
         /// </summary>
-        /// <param name="targetDirectoryPath">The path of the directory to be checked</param>
-        /// <returns>True if valid, false if invalid</returns>
-        /// <remarks>
-        /// Current tests are:
-        /// - Directory exists
-        /// - Directory contains a "PSP_GAME" folder
-        /// </remarks>
-        private bool CheckDirectoryValidity(string targetDirectoryPath)
+        /// <param name="directory">The path of the directory to be checked</param>
+        /// <returns>True if passes tests, false if fails tests</returns>
+        private bool IsExpectedISODirectory(string directory)
         {
-            if (!Directory.Exists(targetDirectoryPath))
+            if (!Directory.Exists(directory))
             {
-                string errorMessage = string.Format("Could not find directory {0}. Please check that the path is correct and that the directory exists.", targetDirectoryPath);
+                string errorMessage = string.Format("Could not find directory {0}. Please check that the path is correct and that the directory exists.", directory);
                 MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
-            var initialDirectoryListing = Directory.GetDirectories(targetDirectoryPath);
+            var initialDirectoryListing = Directory.GetDirectories(directory);
             var initialDirectoryContents = new HashSet<string>();
 
             foreach (var dir in initialDirectoryListing)
@@ -80,7 +110,27 @@ namespace KPT
 
             if (!initialDirectoryContents.Contains("PSP_GAME"))
             {
-                string errorMessage = string.Format("Directory {0} did not match the expected format. Expected a directory containing a \"PSP_GAME\" directory.", targetDirectoryPath); // this is to nudge people in the right path and be disabled or customized if necessary should another format come into play
+                string errorMessage = string.Format("Directory {0} did not match the expected format. Expected a directory containing a \"PSP_GAME\" directory.", directory); // this is to nudge people in the right path and be disabled or customized if necessary should another format come into play
+                MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Check that the directory has been initalized to fit the expected working environment of the program
+        /// </summary>
+        /// <param name="directory">The path of the directory to be checked</param>
+        /// <returns>True if passes tests, false if fails tests</returns>
+        /// <remarks>
+        /// At current, the test is a very simple "does this text file exist" - this can be easily faked, but there is no real benefit to doing so
+        /// </remarks>
+        private bool CheckInitedDirectory(string directory)
+        {
+            if (!File.Exists(Path.Combine(directory, "valid.txt")))
+            {
+                string errorMessage = string.Format("Directory {0} is not a valid directory. Please initalize it first.", directory);
                 MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
@@ -96,8 +146,16 @@ namespace KPT
         /// <returns>True is succesfully processed, false if processing failed</returns>
         public bool ProcessDirectory(string sourceDirectoryPath, string targetDirectoryPath)
         {
-            
-            if (!CheckDirectoryValidity(sourceDirectoryPath))
+            string rootDir = sourceDirectoryPath;
+
+            if (!CheckInitedDirectory(rootDir))
+            {
+                return false;
+            }
+
+            sourceDirectoryPath = Path.Combine(rootDir, extractedISODir); // now that we know it is an inited directory we start working with the ISO files
+
+            if (!IsExpectedISODirectory(sourceDirectoryPath)) 
             {
                 return false;
             }
@@ -112,24 +170,11 @@ namespace KPT
             string originalFilesDirectory = Path.Combine(targetDirectoryPath, originalDirectory);
             string editableFilesDirectory = Path.Combine(targetDirectoryPath, editableDirectory);
 
-            if (!DebugSettings.IGNORE_DIRECTORY_ALREADY_EXISTS_WARNING && Directory.Exists(originalFilesDirectory))
-            {
-                string errorMessage = string.Format("Directory {0} was specified as a target directory but it already has files in it.\r\n\r\nSelecting it as the target direcotry would destroy all files in the directory.\r\n\r\nIf this is your intention, please confirm by deleting the directory yourself and trying again.", targetDirectoryPath);
-                MessageBox.Show(errorMessage, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-                //Directory.Delete(originalFilesDirectory, true); // there needs to be some "type in that you actually want to over write these files" prompt before this can be allowed in live versions - actually see above 
-            }
-
-            if (!DebugSettings.IGNORE_DIRECTORY_ALREADY_EXISTS_WARNING && Directory.Exists(editableFilesDirectory))
-            {
-                string errorMessage = string.Format("Directory {0} was specified as a target directory but it already has files in it.\r\n\r\nSelecting it as the target direcotry would destroy all files in the directory.\r\n\r\nIf this is your intention, please confirm by deleting the directory yourself and trying again.", targetDirectoryPath);
-                MessageBox.Show(errorMessage, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
             if (!DebugSettings.SKIP_ORIGINAL_DIRECTORY_COPYING)
             {
-                Microsoft.VisualBasic.FileIO.FileSystem.CopyDirectory(sourceDirectoryPath, originalFilesDirectory); // i would like "the program has not crashed" progress box but i'm not sure it can be done if things are done this way. hmm. perhaps writing a recursive copying function would be best after all.
+                string targetDir = Path.Combine(rootDir, repackedGameFilesDir);
+                DirectoryGuard.CheckDirectory(targetDir);
+                Microsoft.VisualBasic.FileIO.FileSystem.CopyDirectory(sourceDirectoryPath, targetDir); // i would like "the program has not crashed" progress box but i'm not sure it can be done if things are done this way. hmm. perhaps writing a recursive copying function would be best after all.
             }
 
             FileStream fs = new FileStream("testcpk.xml", FileMode.Create);

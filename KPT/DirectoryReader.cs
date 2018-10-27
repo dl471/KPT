@@ -15,6 +15,7 @@ namespace KPT
     {
         private bool initalized = false;
         private List<string> fileList;
+        private string rootDirectory;
 
         public bool OpenDirectoryStream(string directory)
         {
@@ -26,7 +27,9 @@ namespace KPT
             }
 
             fileList = new List<string>();
+            rootDirectory = directory;
             GenerateFileList(directory, fileList);
+            
 
             initalized = true;
 
@@ -37,7 +40,8 @@ namespace KPT
         {
             foreach (var file in Directory.GetFiles(directory))
             {
-                fileList.Add(file);
+                string newFileName = GetSubPath(file, rootDirectory); // since the directory is intended to mimic the ISO reader, it must transform the file names to how they would appear in the ISO
+                fileList.Add(newFileName);
             }
 
             foreach (var dir in Directory.GetDirectories(directory))
@@ -80,6 +84,13 @@ namespace KPT
                 newFileAccessor.dataStream.Close();
 
             }
+        }
+
+        private string GetSubPath(string path, string root)
+        {
+            int rootLen = root.Length + Path.DirectorySeparatorChar.ToString().Length;
+            int subPathLen = path.Length - rootLen;
+            return path.Substring(rootLen, subPathLen);
         }
 
     }

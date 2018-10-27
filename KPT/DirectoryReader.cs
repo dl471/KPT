@@ -67,14 +67,15 @@ namespace KPT
             {
                 var newFileAccessor = new EmbeddedFileAccessor();
                 newFileAccessor.name = file;
+                string filePath = Path.Combine(rootDirectory, file);
 
                 try
                 {
-                    newFileAccessor.dataStream = new FileStream(file, FileMode.Open);
+                    newFileAccessor.dataStream = new FileStream(filePath, FileMode.Open);
                 }
                 catch (Exception e)
                 {
-                    string errorMessage = string.Format("There was an error when attempting to open file {0} in the ISO.\r\n\r\n{1}", file, e.Message);
+                    string errorMessage = string.Format("There was an error when attempting to open file {0}.\r\n\r\n{1}", file, e.Message);
                     MessageBox.Show(errorMessage);
                     Environment.Exit(1);
                 }

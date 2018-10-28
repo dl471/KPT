@@ -7,6 +7,7 @@ using KPT;
 using System.Xml;
 using System.Windows.Forms;
 using System.IO;
+using SharpYaml;
 
 namespace KPT.XMLBuild
 {
@@ -26,12 +27,15 @@ namespace KPT.XMLBuild
     }
 
     /// <summary>
-    /// Used to create an XML element that describes how a CPK should be rebuilt
+    /// Keeps track of the data necessary to build a CPK
     /// </summary>
     class CPKBuildObject
     {
+        [SharpYaml.Serialization.YamlMember] // this makes it write private members
         string originalFileLocation;
+        [SharpYaml.Serialization.YamlMember]
         string targetFileLocation;
+        [SharpYaml.Serialization.YamlMember]
         Dictionary<uint, CPKEmbeddedFileMeta> files;
         
         public CPKBuildObject()
@@ -54,64 +58,21 @@ namespace KPT.XMLBuild
             files[id] = cpk;
         }
 
-        public void CommitXML(string targetFile)
+        public void SerializeToDisk(string targetFile)
         {
-            string targetPath = Path.Combine(targetFile, GenerateCPKID() + ".xml");
+            var yamlSerialzer = new SharpYaml.Serialization.Serializer();
+            var serializedData = yamlSerialzer.Serialize( this);
+
+            string targetPath = Path.Combine(targetFile, GenerateCPKID() + ".yaml");
             DirectoryGuard.CheckDirectory(targetPath);
 
             FileStream fs = new FileStream(targetPath, FileMode.Create);
             StreamWriter sw = new StreamWriter(fs);
 
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
-            XmlWriter xmlWriter = XmlWriter.Create(sw, settings);
+            sw.Write(serializedData);
 
-            xmlWriter.WriteStartDocument();
-
-            xmlWriter.WriteStartElement(Identifiers.CPK_BUILD_TAG);
-            xmlWriter.WriteAttributeString(Identifiers.SHORT_FILE_NAME_TAG, Path.GetFileName(originalFileLocation));
-
-            xmlWriter.WriteStartElement(Identifiers.ORIGINAL_LOCATION_TAG);
-            xmlWriter.WriteString(originalFileLocation);
-            xmlWriter.WriteEndElement();
-
-            xmlWriter.WriteStartElement(Identifiers.TARGET_FILE_PATH_TAG);
-            xmlWriter.WriteString(targetFileLocation);
-            xmlWriter.WriteEndElement();
-
-            xmlWriter.WriteStartElement(Identifiers.FILE_LIST_TAG);
-            xmlWriter.WriteAttributeString(Identifiers.FILE_NUM_TAG, files.Count.ToString());
-
-            foreach (var file in files)
-            {
-                xmlWriter.WriteStartElement(Identifiers.FILE_TAG);
-                xmlWriter.WriteAttributeString(Identifiers.FILE_ID_TAG, file.Key.ToString());
-
-                xmlWriter.WriteStartElement(Identifiers.FILE_NAME_TAG);
-                xmlWriter.WriteString(file.Value.fileName);
-                xmlWriter.WriteEndElement();
-
-                xmlWriter.WriteStartElement(Identifiers.RELATIVE_PATH_TAG);
-                xmlWriter.WriteString(file.Value.filePath);
-                xmlWriter.WriteEndElement();
-
-                xmlWriter.WriteStartElement(Identifiers.CHECKSUM_TAG);
-                xmlWriter.WriteAttributeString(Identifiers.CHECKSUM_TYPE_TAG, Identifiers.MD5_TAG);
-                xmlWriter.WriteString(file.Value.checksumValue);
-                xmlWriter.WriteEndElement();
-
-                xmlWriter.WriteEndElement();
-            }
-
-            xmlWriter.WriteEndElement();
-            xmlWriter.WriteEndElement();
-
-            xmlWriter.WriteEndDocument();
-
-            xmlWriter.Close();
             sw.Close();
             fs.Close();
-
         }
 
         private string GenerateCPKID()
@@ -119,7 +80,7 @@ namespace KPT.XMLBuild
             return originalFileLocation.Replace(Path.DirectorySeparatorChar, '-').ToLowerInvariant();
         }
 
-        public bool BuildFromXML(string targetFile)
+        public bool DeserializeFromDisk(string targetFile)
         {
             if (!File.Exists(targetFile))
             {
@@ -128,14 +89,39 @@ namespace KPT.XMLBuild
                 return false;
             }
 
-            XmlReader xr = XmlReader.Create(targetFile, null);
+            var yamlSerializer = new SharpYaml.Serialization.Serializer();
+            FileStream fs;
 
-            while (xr.Read())
+            try
             {
-                MessageBox.Show(xr.NodeType.ToString());
+                fs = new FileStream(targetFile, FileMode.Open);
+            }
+            catch (Exception e)
+            {
+                string errorMessage = string.Format("There was an error when opening file {0}.\r\n\r\n{1}.", targetFile, e.Message);
+                MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
 
-            xr.Close();
+            StreamReader sr = new StreamReader(fs);
+            string data = sr.ReadToEnd();
+            files = new Dictionary<uint, CPKEmbeddedFileMeta>();
+
+            try
+            {
+                yamlSerializer.DeserializeInto<CPKBuildObject>(data, this);
+            }
+            catch
+            {
+                string errorMessage = string.Format("There was an error when parsing file {0}.\r\n\r\n{1}.", targetFile, e.Message);
+                MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            // might want to specifically check all fields for being null here even if it is a very unlikely edge case
+
+            sr.Close();
+            fs.Close();
 
             return true;
         }

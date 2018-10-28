@@ -301,7 +301,7 @@ namespace KPT
 
             }
 
-            cpkBuildInstructions.CommitXML(Path.Combine(targetDirectoryPath, buildScriptsDir));
+            cpkBuildInstructions.SerializeToDisk(Path.Combine(targetDirectoryPath, buildScriptsDir));
 
             return cpkBuildInstructions;
 

@@ -46,7 +46,7 @@ namespace KPT
         /// <summary>
         /// Game files extracted from CPKs in extracted ISO folder or standalone files copied over directly from the extracted ISO folder - bin files etc.
         /// </summary>
-        private const string extractedGameFilesDir = "Unpacked Game Files";
+        private const string unpackedGameFilesDir = "Unpacked Game Files";
         /// <summary>
         /// Disassembled game files
         /// </summary>
@@ -195,7 +195,7 @@ namespace KPT
                 switch (fileExtension)
                 {
                     case ".cpk":
-                        var res = FilterCPKFile(file, sourceDirectoryPath, targetDirectoryPath);
+                        var res = FilterCPKFile(file, sourceDirectoryPath, rootDir);
                         res.CommitXML(xw);
                         break;
                     default:
@@ -264,7 +264,7 @@ namespace KPT
                     continue; // skip headers etc.
                 }
 
-                if (FileParser.IsParseable(embeddedFile.FileName.ToString()))
+                if (FileParser.IsParseable(embeddedFile.FileName.ToString())) // use this to determine whether to unpack or not, not save location
                 {
                     file.switchPath = editableDirectory;
                 }
@@ -273,8 +273,7 @@ namespace KPT
                     file.switchPath = rawDirectory;
                 }
 
-                string targetFileAbsolutePath = Path.Combine(targetDirectoryPath, file.switchPath, file.subPath, embeddedFile.FileName.ToString());
-
+                string targetFileAbsolutePath = Path.Combine(targetDirectoryPath, unpackedGameFilesDir, file.subPath, embeddedFile.FileName.ToString());
                 DirectoryGuard.CheckDirectory(targetFileAbsolutePath);
 
                 byte[] fileAsBytes = GrabCPKData(filePath, embeddedFile);
@@ -282,6 +281,20 @@ namespace KPT
                 if (DebugSettings.ALLOW_FILE_WRITES)
                 {
                     FileStream fs = new FileStream(targetFileAbsolutePath, FileMode.Create);
+                    BinaryWriter bw = new BinaryWriter(fs);
+
+                    bw.Write(fileAsBytes);
+
+                    bw.Close();
+                    fs.Close();
+                }
+
+                if (DebugSettings.COPY_UNPACKED_FILES)
+                {
+                    string secondTargetPath = Path.Combine(targetDirectoryPath, reassembledGameFilesDir, file.subPath, embeddedFile.FileName.ToString());
+                    DirectoryGuard.CheckDirectory(secondTargetPath);
+                    
+                    FileStream fs = new FileStream(secondTargetPath, FileMode.Create);
                     BinaryWriter bw = new BinaryWriter(fs);
 
                     bw.Write(fileAsBytes);

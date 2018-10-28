@@ -48,8 +48,20 @@ namespace KPT.XMLBuild
             files[id] = cpk;
         }
 
-        public void CommitXML(XmlWriter xmlWriter)
+        public void CommitXML(string targetFile)
         {
+            string targetPath = Path.Combine(targetFile, GenerateCPKID() + ".xml");
+            DirectoryGuard.CheckDirectory(targetPath);
+
+            FileStream fs = new FileStream(targetPath, FileMode.Create);
+            StreamWriter sw = new StreamWriter(fs);
+
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Indent = true;
+            XmlWriter xmlWriter = XmlWriter.Create(sw, settings);
+
+            xmlWriter.WriteStartDocument();
+
             xmlWriter.WriteStartElement(Identifiers.CPK_BUILD_TAG);
             xmlWriter.WriteAttributeString(Identifiers.SHORT_FILE_NAME_TAG, Path.GetFileName(originalFileLocation));
 
@@ -84,6 +96,17 @@ namespace KPT.XMLBuild
             xmlWriter.WriteEndElement();
             xmlWriter.WriteEndElement();
 
+            xmlWriter.WriteEndDocument();
+
+            xmlWriter.Close();
+            sw.Close();
+            fs.Close();
+
+        }
+
+        private string GenerateCPKID()
+        {
+            return originalFileLocation.Replace(Path.DirectorySeparatorChar, '-').ToLowerInvariant();
         }
 
     }

@@ -170,23 +170,12 @@ namespace KPT
             string originalFilesDirectory = Path.Combine(targetDirectoryPath, originalDirectory);
             string editableFilesDirectory = Path.Combine(targetDirectoryPath, editableDirectory);
 
-            if (!DebugSettings.SKIP_ORIGINAL_DIRECTORY_COPYING)
+            if (!DebugSettings.SKIP_ORIGINAL_DIRECTORY_COPYING) // needs to test if dir already exists / handle exception
             {
                 string targetDir = Path.Combine(rootDir, repackedGameFilesDir);
                 DirectoryGuard.CheckDirectory(targetDir);
                 Microsoft.VisualBasic.FileIO.FileSystem.CopyDirectory(sourceDirectoryPath, targetDir); // i would like "the program has not crashed" progress box but i'm not sure it can be done if things are done this way. hmm. perhaps writing a recursive copying function would be best after all.
             }
-
-            FileStream fs = new FileStream("testcpk.xml", FileMode.Create);
-            StreamWriter sw = new StreamWriter(fs);
-
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
-            XmlWriter xw = XmlWriter.Create(sw, settings);
-
-            xw.WriteStartDocument();
-
-            xw.WriteStartElement(Identifiers.GAME_FILE_LIST_TAG);
 
             foreach (var file in fileList)
             {
@@ -195,21 +184,12 @@ namespace KPT
                 switch (fileExtension)
                 {
                     case ".cpk":
-                        var res = FilterCPKFile(file, sourceDirectoryPath, rootDir);
-                        res.CommitXML(xw);
+                        FilterCPKFile(file, sourceDirectoryPath, rootDir);
                         break;
                     default:
                         break;
                 }               
             }
-
-            xw.WriteEndElement();
-            xw.WriteEndDocument();
-            xw.Close();
-
-            sw.Close();
-            fs.Close();
-
 
             return true;
         }
@@ -317,6 +297,8 @@ namespace KPT
                 cpkBuildInstructions.AddFile(fileID, cpkMeta);
 
             }
+
+            cpkBuildInstructions.CommitXML(Path.Combine(targetDirectoryPath, buildScriptsDir));
 
             return cpkBuildInstructions;
 

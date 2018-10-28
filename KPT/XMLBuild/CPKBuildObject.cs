@@ -31,6 +31,7 @@ namespace KPT.XMLBuild
     class CPKBuildObject
     {
         string originalFileLocation;
+        string targetFileLocation;
         Dictionary<uint, CPKEmbeddedFileMeta> files;
         
         public CPKBuildObject()
@@ -41,6 +42,11 @@ namespace KPT.XMLBuild
         public void SetOriginalFileLocation(string filePath)
         {
             originalFileLocation = filePath;
+        }
+
+        public void SetTargetFileLocation(string filePath)
+        {
+            targetFileLocation = filePath;
         }
 
         public void AddFile(uint id, CPKEmbeddedFileMeta cpk)
@@ -67,6 +73,10 @@ namespace KPT.XMLBuild
 
             xmlWriter.WriteStartElement(Identifiers.ORIGINAL_LOCATION_TAG);
             xmlWriter.WriteString(originalFileLocation);
+            xmlWriter.WriteEndElement();
+
+            xmlWriter.WriteStartElement(Identifiers.TARGET_FILE_PATH_TAG);
+            xmlWriter.WriteString(targetFileLocation);
             xmlWriter.WriteEndElement();
 
             xmlWriter.WriteStartElement(Identifiers.FILE_LIST_TAG);
@@ -107,6 +117,27 @@ namespace KPT.XMLBuild
         private string GenerateCPKID()
         {
             return originalFileLocation.Replace(Path.DirectorySeparatorChar, '-').ToLowerInvariant();
+        }
+
+        public bool BuildFromXML(string targetFile)
+        {
+            if (!File.Exists(targetFile))
+            {
+                string errorMessage = string.Format("File {0} did not exist.", targetFile);
+                MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            XmlReader xr = XmlReader.Create(targetFile, null);
+
+            while (xr.Read())
+            {
+                MessageBox.Show(xr.NodeType.ToString());
+            }
+
+            xr.Close();
+
+            return true;
         }
 
     }

@@ -226,9 +226,12 @@ namespace KPT
 
             CPKBuildObject cpkBuildInstructions = new CPKBuildObject();
 
-            string originalFileLocation = Path.Combine(file.subPath, file.fileName);
+            string originalFileLocation = Path.Combine(extractedISODir, file.subPath, file.fileName);
             cpkBuildInstructions.SetOriginalFileLocation(originalFileLocation);
-            
+            string targetFileLocation = Path.Combine(repackedGameFilesDir, file.subPath, file.fileName);
+            cpkBuildInstructions.SetTargetFileLocation(targetFileLocation);
+
+
             if (realFileCount > 1) // if there is more than one file in the CPK we move the files within it to their own directory
             {
                 string newSubDir = Path.GetFileNameWithoutExtension(file.fileName);
@@ -288,7 +291,7 @@ namespace KPT
 
                 var cpkMeta = new CPKEmbeddedFileMeta();
 
-                cpkMeta.filePath = relativeFilePath;
+                cpkMeta.filePath = Path.Combine(reassembledGameFilesDir, relativeFilePath);
                 cpkMeta.fileName = embeddedFile.FileName.ToString();
                 cpkMeta.checksumType = Checksum.MD5;
                 cpkMeta.checksumValue = Checksums.GetMD5(fileAsBytes);

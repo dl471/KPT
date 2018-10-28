@@ -8,6 +8,10 @@ namespace KPT.XMLBuild
 {
     static class Identifiers
     {
+
+        
+
+
         public const string CPK_BUILD_TAG = "CPK";
         public const string FILE_LIST_TAG = "files";
         public const string FILE_NUM_TAG = "num";
@@ -21,5 +25,6 @@ namespace KPT.XMLBuild
         public const string CHECKSUM_TYPE_TAG = "type";
         public const string MD5_TAG = "md5";
         public const string RELATIVE_PATH_TAG = "relative_path";
+        public const string TARGET_FILE_PATH_TAG = "target";
     }
 }

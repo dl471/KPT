@@ -39,34 +39,7 @@ namespace KPT
         private const string rawDirectory = "Raw";
         private Tools tools;
 
-        /// <summary>
-        /// Dump of ISO contents - CPKs etc.
-        /// </summary>
-        private const string extractedISODir = "Extracted ISO Files";
-        /// <summary>
-        /// Game files extracted from CPKs in extracted ISO folder or standalone files copied over directly from the extracted ISO folder - bin files etc.
-        /// </summary>
-        private const string unpackedGameFilesDir = "Unpacked Game Files";
-        /// <summary>
-        /// Disassembled game files
-        /// </summary>
-        private const string disassemblyDir = "Disassembled Files";
-        /// <summary>
-        /// Files presented in a more readily editable format - spreadsheets of strings etc.
-        /// </summary>
-        private const string editableGameFiesDir = "Editable Game Files";
-        /// <summary>
-        /// Game files that have been reassembled - bins etc.
-        /// </summary>
-        private const string reassembledGameFilesDir = "Reassembled Game Files";
-        /// <summary>
-        /// Game files that have been repacked where necessary - CPKs etc.
-        /// </summary>
-        private const string repackedGameFilesDir = "Repacked Game Files";
-        /// <summary>
-        /// XML files, scripts, etc. used to direct the reassembly or repacking of files
-        /// </summary>
-        private const string buildScriptsDir = "Build Scripts";
+
 
 
 
@@ -153,7 +126,7 @@ namespace KPT
                 return false;
             }
 
-            sourceDirectoryPath = Path.Combine(rootDir, extractedISODir); // now that we know it is an inited directory we start working with the ISO files
+            sourceDirectoryPath = Path.Combine(rootDir, ProjectFolder.extractedISODir); // now that we know it is an inited directory we start working with the ISO files
 
             if (!IsExpectedISODirectory(sourceDirectoryPath)) 
             {
@@ -172,7 +145,7 @@ namespace KPT
 
             if (!DebugSettings.SKIP_ORIGINAL_DIRECTORY_COPYING) // needs to test if dir already exists / handle exception
             {
-                string targetDir = Path.Combine(rootDir, repackedGameFilesDir);
+                string targetDir = Path.Combine(rootDir, ProjectFolder.repackedGameFilesDir);
                 DirectoryGuard.CheckDirectory(targetDir);
                 Microsoft.VisualBasic.FileIO.FileSystem.CopyDirectory(sourceDirectoryPath, targetDir); // i would like "the program has not crashed" progress box but i'm not sure it can be done if things are done this way. hmm. perhaps writing a recursive copying function would be best after all.
             }
@@ -226,9 +199,9 @@ namespace KPT
 
             CPKBuildObject cpkBuildInstructions = new CPKBuildObject();
 
-            string originalFileLocation = Path.Combine(extractedISODir, file.subPath, file.fileName);
+            string originalFileLocation = Path.Combine(ProjectFolder.extractedISODir, file.subPath, file.fileName);
             cpkBuildInstructions.SetOriginalFileLocation(originalFileLocation);
-            string targetFileLocation = Path.Combine(repackedGameFilesDir, file.subPath, file.fileName);
+            string targetFileLocation = Path.Combine(ProjectFolder.repackedGameFilesDir, file.subPath, file.fileName);
             cpkBuildInstructions.SetTargetFileLocation(targetFileLocation);
 
 
@@ -256,7 +229,7 @@ namespace KPT
                     file.switchPath = rawDirectory;
                 }
 
-                string targetFileAbsolutePath = Path.Combine(targetDirectoryPath, unpackedGameFilesDir, file.subPath, embeddedFile.FileName.ToString());
+                string targetFileAbsolutePath = Path.Combine(targetDirectoryPath, ProjectFolder.unpackedGameFilesDir, file.subPath, embeddedFile.FileName.ToString());
                 DirectoryGuard.CheckDirectory(targetFileAbsolutePath);
 
                 byte[] fileAsBytes = GrabCPKData(filePath, embeddedFile);
@@ -274,7 +247,7 @@ namespace KPT
 
                 if (DebugSettings.COPY_UNPACKED_FILES)
                 {
-                    string secondTargetPath = Path.Combine(targetDirectoryPath, reassembledGameFilesDir, file.subPath, embeddedFile.FileName.ToString());
+                    string secondTargetPath = Path.Combine(targetDirectoryPath, ProjectFolder.reassembledGameFilesDir, file.subPath, embeddedFile.FileName.ToString());
                     DirectoryGuard.CheckDirectory(secondTargetPath);
                     
                     FileStream fs = new FileStream(secondTargetPath, FileMode.Create);
@@ -291,7 +264,7 @@ namespace KPT
 
                 var cpkMeta = new CPKEmbeddedFileMeta();
 
-                cpkMeta.filePath = Path.Combine(reassembledGameFilesDir, relativeFilePath);
+                cpkMeta.filePath = Path.Combine(ProjectFolder.reassembledGameFilesDir, relativeFilePath);
                 cpkMeta.fileName = embeddedFile.FileName.ToString();
                 cpkMeta.checksumType = Checksum.MD5;
                 cpkMeta.checksumValue = Checksums.GetMD5(fileAsBytes);
@@ -301,7 +274,7 @@ namespace KPT
 
             }
 
-            cpkBuildInstructions.SerializeToDisk(Path.Combine(targetDirectoryPath, buildScriptsDir));
+            cpkBuildInstructions.SerializeToDisk(Path.Combine(targetDirectoryPath, ProjectFolder.buildScriptsDir));
 
             return cpkBuildInstructions;
 

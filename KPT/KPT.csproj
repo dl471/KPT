@@ -89,6 +89,7 @@
     <Compile Include="Parser\FileParser.cs" />
     <Compile Include="Parser\Headers\St_Header.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ProjectFolder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XMLBuild\CPKBuildObject.cs" />
     <Compile Include="XMLBuild\Identifiers.cs" />

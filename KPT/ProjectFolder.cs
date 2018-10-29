@@ -56,7 +56,7 @@ namespace KPT
             return true;
         }
 
-        public static void RebuildCPKs()
+        public static bool RebuildCPKs()
         {
             string buildDir = Path.Combine(rootDir, buildScriptsDir);
             
@@ -64,7 +64,7 @@ namespace KPT
             {
                 string errorMessage = string.Format("Could not find build scripts directory at {0}.", buildDir);
                 MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                return false;
             }
 
             string[] fileList = Directory.GetFiles(buildDir);
@@ -74,9 +74,14 @@ namespace KPT
                 if (file.EndsWith(".cpk.yaml"))
                 {
                     CPKBuildObject cpk = new CPKBuildObject();
-                    cpk.BuildCPK(file);
+                    if (!cpk.BuildCPK(file))
+                    {
+                        return false;
+                    }
                 }
             }
+
+            return true;
         }
 
     }

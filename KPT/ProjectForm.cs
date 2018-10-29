@@ -24,7 +24,15 @@ namespace KPT
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ProjectFolder.RebuildCPKs();
+            if (ProjectFolder.RebuildCPKs())
+            {
+                MessageBox.Show("CPKs rebuilt!");
+            }
+            else
+            {
+                MessageBox.Show("There was an error while rebuilding the CPKs.");
+            }
+            
         }
     }
 }

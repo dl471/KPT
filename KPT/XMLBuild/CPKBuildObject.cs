@@ -208,7 +208,7 @@ namespace KPT.XMLBuild
         }
 
         // Taken from CriPakTools - see adknowledgements
-        private void ReplaceCPKFiles(string sourceCPK, string targetCPK, Dictionary<string, string> batch_file_list)
+        private void ReplaceCPKFiles(string sourceCPK, string targetCPK, Dictionary<string, string> batchFileList)
         {
 
             CPK cpk = new CPK(new Tools());
@@ -251,7 +251,7 @@ namespace KPT.XMLBuild
                         currentName = "/" + currentName;
                     }
 
-                    if (!batch_file_list.Keys.Contains(currentName.ToString()))
+                    if (!batchFileList.Keys.Contains(currentName.ToString()))
                     //如果不在表中，复制原始数据
                     {
                         oldFile.BaseStream.Seek((long)entries[i].FileOffset, SeekOrigin.Begin);
@@ -283,7 +283,7 @@ namespace KPT.XMLBuild
                     }
                     else
                     {
-                        string replace_with = batch_file_list[currentName.ToString()];
+                        string replace_with = batchFileList[currentName.ToString()];
                         //Got patch file name
                         Console.WriteLine("Patching: {0}", currentName.ToString());
 

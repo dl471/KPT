@@ -24,6 +24,8 @@ namespace KPT.Parser.Instructions
                 return (Opcode)opcode;
             }
 
+            throw new Exception("Invalid opcode");
+
             return Opcode.INVALID; // perhaps there should be a second "Invalid Opcode" error message here?
         }
 

@@ -81,5 +81,20 @@ namespace KPT.Parser.Instructions
             return readString;
         }
 
+        public static void WriteStringNullTerminated(BinaryWriter bw, string stringToWrite)
+        {
+            byte[] stringAsBytes = ActiveEncodings.currentEncoding.GetBytes(stringToWrite);
+            bw.Write(stringAsBytes);
+            bw.Write((byte)0x00);
+        }
+
+        public static void WriteDialogueString(BinaryWriter bw, string stringToWrite)
+        {
+            byte[] stringAsBytes = ActiveEncodings.currentEncoding.GetBytes(stringToWrite);
+            bw.Write(stringAsBytes);
+            bw.Write((byte)0x00);
+            bw.Write((byte)0x00);
+        }
+
     }
 }

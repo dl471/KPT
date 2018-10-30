@@ -12,8 +12,8 @@ namespace KPT.Parser.Instructions
     {
 
         Opcode opcode;
-        int numberOfChoices;
         int unknownInt; // possible type of dialog? untested.
+        int numberOfChoices;
         List<ChoiceBar> choices;
 
         public ChoiceDialog()
@@ -37,7 +37,14 @@ namespace KPT.Parser.Instructions
 
         public bool Write(BinaryWriter bw)
         {
-            throw new NotImplementedException();
+            bw.Write((short)opcode);
+            bw.Write((short)unknownInt);
+            bw.Write((short)numberOfChoices);
+            foreach (var choice in choices)
+            {
+                choice.Write(bw);
+            }
+            return true;
         }
 
     }

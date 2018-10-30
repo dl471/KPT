@@ -11,7 +11,7 @@ namespace KPT.Parser.Elements
 {
     class ChoiceBar : IElement
     {
-        const int CHOICE_STRING_LENGTH = 0x38;
+        
 
         int choiceNumber;
         string choiceText;
@@ -19,13 +19,15 @@ namespace KPT.Parser.Elements
         public bool Read(BinaryReader br)
         {
             choiceNumber = br.ReadUInt16();
-            choiceText = FileIOHelper.ReadFixedLengthString(br, CHOICE_STRING_LENGTH);
+            choiceText = FileIOHelper.ReadFixedLengthString(br, Constants.CHOICE_STRING_LENGTH);
             return true;
         }
 
         public bool Write(BinaryWriter bw)
         {
-            throw new NotImplementedException();
+            bw.Write((short)choiceNumber);
+            FileIOHelper.WriteFixedLengthString(bw, choiceText, Constants.CHOICE_STRING_LENGTH);
+            return true;
         }
 
     }

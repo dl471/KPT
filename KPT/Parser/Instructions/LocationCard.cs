@@ -24,7 +24,10 @@ namespace KPT.Parser.Instructions
 
         public bool Write(BinaryWriter bw)
         {
-            throw new NotImplementedException();
+            bw.Write((short)opcode);
+            FileIOHelper.WriteStringNullTerminated(bw, time);
+            FileIOHelper.WriteStringNullTerminated(bw, location);
+            return true;
         }
     }
 }

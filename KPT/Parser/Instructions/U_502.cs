@@ -13,7 +13,7 @@ namespace KPT.Parser.Instructions
         Box box1;
         string name;
         string dialogue;
-        Box box2;
+        Box box2; // in retrospect this seems like a very strange thing to have - i may have to double check it
 
         public bool Read(BinaryReader br)
         {
@@ -29,7 +29,12 @@ namespace KPT.Parser.Instructions
 
         public bool Write(BinaryWriter bw)
         {
-            throw new NotImplementedException();
+            bw.Write((short)opcode);
+            box1.Write(bw);
+            FileIOHelper.WriteFixedLengthString(bw, name, Constants.NAME_LENGTH);
+            FileIOHelper.WriteDialogueString(bw, dialogue);
+            box2.Write(bw);
+            return true;
         }
 
     }

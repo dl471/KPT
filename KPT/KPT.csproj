@@ -74,6 +74,7 @@
     </Compile>
     <Compile Include="ISOReader.cs" />
     <Compile Include="ISOWriter.cs" />
+    <Compile Include="Parser\Constants.cs" />
     <Compile Include="Parser\Elements\ChoiceBar.cs" />
     <Compile Include="Parser\Instructions\Box.cs" />
     <Compile Include="Parser\Instructions\ChoiceDialog.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Parser\OpcodeInfo.cs" />
     <Compile Include="Parser\FileParser.cs" />
     <Compile Include="Parser\Headers\St_Header.cs" />
+    <Compile Include="Parser\Tests\Tester.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectFolder.cs" />
     <Compile Include="ProjectForm.cs">

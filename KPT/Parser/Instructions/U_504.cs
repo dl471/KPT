@@ -24,7 +24,9 @@ namespace KPT.Parser.Instructions
 
         public bool Write(BinaryWriter bw)
         {
-            throw new NotImplementedException();
+            bw.Write((short)opcode);
+            box1.Write(bw);
+            return true;
         }
 
     }

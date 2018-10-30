@@ -13,7 +13,30 @@ namespace KPT.Parser.Instructions
     /// </summary>
     static class FileIOHelper
     {
-        const int NAME_LENGTH = 20; // I am starting to consider that this really should not be part of the element reader and should be more directly attached to the string instructions... if they can be succintly grouped together, that is. Perhaps once there is more complete picture of how things work.
+
+        public static string StripTrailingNulls(string toStrip)
+        {
+            int i;
+
+            for (i = 0; i < toStrip.Length; i++)
+            {
+                char temp = toStrip[i];
+                if (temp == '\0')
+                {
+                    break;
+                }
+            }
+            
+            if (i == toStrip.Length)
+            {
+                return toStrip;
+            }
+            else
+            {
+                return toStrip.Substring(0, i);
+            }
+            
+        }
 
         public static Opcode ReadOpcode(BinaryReader br)
         {
@@ -31,8 +54,9 @@ namespace KPT.Parser.Instructions
 
         public static string ReadName(BinaryReader br) // consider folding this into ReadFixedLengthString(NAME_LENGTH) since that is basically all it is
         {
-            byte[] nameAsBytes = br.ReadBytes(NAME_LENGTH);
-            return ActiveEncodings.currentEncoding.GetString(nameAsBytes);
+            byte[] nameAsBytes = br.ReadBytes(Constants.NAME_LENGTH);
+            string name = ActiveEncodings.currentEncoding.GetString(nameAsBytes);
+            return StripTrailingNulls(name);
         }
 
         public static string ReadNullTerminatedString(BinaryReader br)
@@ -78,7 +102,7 @@ namespace KPT.Parser.Instructions
             byte[] stringAsBytes = br.ReadBytes(length);
             string readString = ActiveEncodings.currentEncoding.GetString(stringAsBytes);
 
-            return readString;
+            return StripTrailingNulls(readString);
         }
 
         public static void WriteStringNullTerminated(BinaryWriter bw, string stringToWrite)
@@ -94,6 +118,18 @@ namespace KPT.Parser.Instructions
             bw.Write(stringAsBytes);
             bw.Write((byte)0x00);
             bw.Write((byte)0x00);
+        }
+
+        public static void WriteFixedLengthString(BinaryWriter bw, string stringToWrite, int length)
+        {
+            byte[] stringAsBytes = ActiveEncodings.currentEncoding.GetBytes(stringToWrite);
+            if (stringAsBytes.Length > length)
+            {
+                throw new Exception(string.Format("String {0} was too long", stringToWrite));
+            }
+            byte[] fixedLengthArray = new byte[length]; // arrays will initalize to null
+            Array.Copy(stringAsBytes, 0, fixedLengthArray, 0, stringAsBytes.Length);
+            bw.Write(fixedLengthArray);
         }
 
     }

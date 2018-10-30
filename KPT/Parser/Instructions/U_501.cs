@@ -28,7 +28,11 @@ namespace KPT.Parser.Instructions
 
         public bool Write(BinaryWriter bw)
         {
-            throw new NotImplementedException();
+            bw.Write((short)opcode);
+            box1.Write(bw);
+            FileIOHelper.WriteFixedLengthString(bw, name, Constants.NAME_LENGTH);
+            FileIOHelper.WriteDialogueString(bw, dialogue);
+            return true;
         }
 
     }

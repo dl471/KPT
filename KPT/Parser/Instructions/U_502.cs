@@ -7,7 +7,7 @@ using System.IO;
 
 namespace KPT.Parser.Instructions
 {
-    class U_502 : IInstruction
+    class U_502 : IInstruction, IHasName
     {
         Opcode opcode;
         Box box1;
@@ -35,6 +35,16 @@ namespace KPT.Parser.Instructions
             FileIOHelper.WriteDialogueString(bw, dialogue);
             box2.Write(bw);
             return true;
+        }
+
+        public string GetName()
+        {
+            return name;
+        }
+
+        public void SetName(string newName)
+        {
+            name = newName;
         }
 
     }

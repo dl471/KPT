@@ -44,4 +44,14 @@ namespace KPT.Parser
         bool Write(BinaryWriter bw);
     }
 
+    /// <summary>
+    /// Given to elements that represent dialogue boxes with a name string to help populate the name list
+    /// </summary>
+    interface IHasName
+    {
+        string GetName();
+        void SetName(string newName);
+    }
+
+
 }

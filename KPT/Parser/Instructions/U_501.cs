@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace KPT.Parser.Instructions
 {
-    class U_501 : IInstruction
+    class U_501 : IInstruction, IHasName
     {
 
         Opcode opcode;
@@ -33,6 +33,16 @@ namespace KPT.Parser.Instructions
             FileIOHelper.WriteFixedLengthString(bw, name, Constants.NAME_LENGTH);
             FileIOHelper.WriteDialogueString(bw, dialogue);
             return true;
+        }
+
+        public string GetName()
+        {
+            return name;
+        }
+
+        public void SetName(string newName)
+        {
+            name = newName;
         }
 
     }

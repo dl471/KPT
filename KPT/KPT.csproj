@@ -89,6 +89,7 @@
     <Compile Include="Parser\OpcodeInfo.cs" />
     <Compile Include="Parser\FileParser.cs" />
     <Compile Include="Parser\Headers\St_Header.cs" />
+    <Compile Include="Parser\StringCollection.cs" />
     <Compile Include="Parser\Tests\Tester.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectFolder.cs" />
@@ -137,6 +138,9 @@
       <Project>{ba3a00e4-4f51-4ab4-a8fb-f4b64a874449}</Project>
       <Name>LibCPK</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Parser\Spreadsheet Interface\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

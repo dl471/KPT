@@ -133,6 +133,63 @@ namespace KPT.Parser.Tests
 
         }
 
+        public static void TestStringCollection()
+        {
+            var testCollection = new StringCollection();
+
+            string testID = "test_id";
+            string testString = "test_string";
+            string testStringTwo = "test_string_two";
+
+            testCollection.AddString(testID, testString);
+            string testNewString = testCollection.GetString(testID);
+
+            Debug.Assert(testString.Equals(testNewString), "Input/output replication test failed for StringCollection");
+
+            bool exceptionCaught;
+
+            try
+            {
+                // Adding same string with same ID
+                testCollection.AddString(testID, testString);
+                exceptionCaught = false;
+            }
+            catch (Exception e)
+            {
+                exceptionCaught = true;
+            }
+
+            Debug.Assert(exceptionCaught == false, "Same ID same string test failed for StringCollection");
+
+            try
+            {
+                // Adding different string with same ID
+                testCollection.AddString(testID, testStringTwo);
+                exceptionCaught = false;
+            }
+            catch (Exception e)
+            {
+                exceptionCaught = true;
+            }
+
+            Debug.Assert(exceptionCaught == true, "Same ID different string test failed for StringCollection");
+
+            try
+            {
+                // Trying to access non-existent string
+                string nonExistentID = "afesrgrt3qr\aefgsgggaftr3qr4q4";
+                string nonExistentString = testCollection.GetString(nonExistentID);
+                exceptionCaught = false;
+            }
+            catch (Exception e)
+            {
+                exceptionCaught = true;
+            }
+
+            Debug.Assert(exceptionCaught == true, "Non-existent ID test failed for StringCollection");
+
+        }
+
         public static void RunTests()
         {
 
@@ -151,6 +208,8 @@ namespace KPT.Parser.Tests
             TestElement(typeof(U_500), "U_500Test.bin");
             TestElement(typeof(U_502), "U_502Test.bin");
             TestElement(typeof(U_504), "U_504Test.bin");
+
+            TestStringCollection();
 
         }
 

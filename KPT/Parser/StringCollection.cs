@@ -11,6 +11,14 @@ namespace KPT.Parser
 
         private Dictionary<string, string> stringMap;
 
+        public int NumberOfKeys
+        {
+            get
+            {
+               return stringMap.Keys.Count;
+            }
+        }
+
         public StringCollection()
         {
             stringMap = new Dictionary<string, string>();

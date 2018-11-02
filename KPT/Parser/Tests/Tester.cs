@@ -188,6 +188,10 @@ namespace KPT.Parser.Tests
 
             Debug.Assert(exceptionCaught == true, "Non-existent ID test failed for StringCollection");
 
+            var testCollectionWithID = new StringCollection("TEST");
+
+            Debug.Assert(testCollectionWithID.GenerateNewID() == "$TEST_0", "ID generation test failed for StringCollection"); // this test does not account for variable idPrefix etc. which are technicallty not supported at the moment
+
         }
 
         public static void RunTests()

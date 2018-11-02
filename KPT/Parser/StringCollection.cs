@@ -11,12 +11,23 @@ namespace KPT.Parser
 
         private Dictionary<string, string> stringMap;
 
+        private string idPrefix = "$";
+        private string idRoot;
+        private string idPostfix = "_";
+        private int idCounter = 0;
+
         public int NumberOfKeys
         {
             get
             {
                return stringMap.Keys.Count;
             }
+        }
+
+        public StringCollection(string idRoot)
+        {
+            stringMap = new Dictionary<string, string>();
+            this.idRoot = idRoot;
         }
 
         public StringCollection()
@@ -43,6 +54,13 @@ namespace KPT.Parser
         public string GetString(string id)
         {
             return stringMap[id];
+        }
+
+        public string GenerateNewID()
+        {
+            string newID = string.Format("{0}{1}{2}{3}", idPrefix, idRoot, idPostfix, idCounter.ToString());
+            idCounter++;
+            return newID;
         }
 
     }

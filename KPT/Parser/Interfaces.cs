@@ -53,5 +53,21 @@ namespace KPT.Parser
         void SetName(string newName);
     }
 
+    /// <summary>
+    /// Given to elements that have strings not explictly tied to existing StringCollection (such as the name collection) 
+    /// </summary>
+    interface IHasStrings
+    {
+        /// <summary>
+        /// Have the element add its strings to the string collection
+        /// </summary>
+        /// <param name="collection"></param>
+        void AddStrings(StringCollection collection);
+        /// <summary>
+        /// Have the element pull its strings form the collection
+        /// </summary>
+        /// <param name="collection"></param>
+        void GetStrings(StringCollection collection);
+    }
 
 }

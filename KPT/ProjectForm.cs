@@ -34,5 +34,17 @@ namespace KPT
             }
             
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (ProjectFolder.DumpStrings())
+            {
+                MessageBox.Show("Strings dumped!");
+            }
+            else
+            {
+                MessageBox.Show("There was an error while dumping strings.");
+            }
+        }
     }
 }

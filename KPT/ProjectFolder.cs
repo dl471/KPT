@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 using System.IO;
 using KPT.XMLBuild;
 using System.Windows.Forms;
+using KPT.Parser;
+using KPT.Parser.Elements;
+using KPT.Parser.Instructions;
+using KPT.Parser.Spreadsheet_Interface;
 
 namespace KPT
 {
@@ -84,5 +88,70 @@ namespace KPT
             return true;
         }
 
+        public static bool DumpStrings()
+        {
+
+            string dialogueFileDir = Path.Combine(rootDir, unpackedGameFilesDir, @"PSP_GAME\USRDIR\St000"); // at the moment there's only one directory with files that have strings and only files with strings in that directory, so this is a quick way of processing. if any non-string files are added to this directory or any string files are found in other directories more advanced filtering will be necessary.
+            string[] fileList = Directory.GetFiles(dialogueFileDir);
+
+            if (!Directory.Exists(dialogueFileDir))
+            {
+                string errorMessage = string.Format("Could not find directory {0}.", dialogueFileDir);
+                MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            var nameCollection = new StringCollection();
+            Dictionary<string, StringCollection> stringFiles = new Dictionary<string, StringCollection>();
+
+            foreach (string file in fileList)
+            {
+                string fileName = Path.Combine(dialogueFileDir, file);
+                var fileStrings = new StringCollection(GetSubPath(file, Path.Combine(rootDir, unpackedGameFilesDir)));                
+
+                FileStream fs = new FileStream(fileName, FileMode.Open);
+                BinaryReader br = new BinaryReader(fs);
+
+                var testParser = new FileParser();
+                var parsedFile = testParser.ParseFile(br, Path.GetFileName(file));
+
+                foreach (IElement element in parsedFile.instructions)
+                {
+                    if (element is IHasName)
+                    {
+                        var name = (element as IHasName).GetName();
+                        nameCollection.AddString(name, name); // using name as ID and value since we want a single entry for each name - saves messing with IDs
+                    }
+                    if (element is IHasStrings)
+                    {
+                        var temp = element as IHasStrings;
+                        temp.AddStrings(fileStrings);                        
+                    }
+                }
+
+                br.Close();
+                fs.Close();
+                
+                if (fileStrings.NumberOfKeys > 0)
+                {
+                    var subPath = GetSubPath(file, Path.Combine(rootDir, unpackedGameFilesDir));
+                    string spreadsheetFileName = Path.Combine(rootDir, editableGameFiesDir, subPath);
+                    var spreadsheet = new CSVFileWriter();
+                    spreadsheet.WriteCSVFile(spreadsheetFileName, parsedFile.instructions, fileStrings);
+                    
+                }
+
+            }
+
+            return true;
+        }
+
+
+        private static string GetSubPath(string path, string root)
+        {
+            int rootLen = root.Length + Path.DirectorySeparatorChar.ToString().Length;
+            int subPathLen = path.Length - rootLen;
+            return path.Substring(rootLen, subPathLen);
+        }
     }
 }

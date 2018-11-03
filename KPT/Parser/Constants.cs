@@ -10,5 +10,6 @@ namespace KPT.Parser
     {
         public const int NAME_LENGTH = 0x14;
         public const int CHOICE_STRING_LENGTH = 0x38;
+        public const int OPCODE_SIZE = 0x02;
     }
 }

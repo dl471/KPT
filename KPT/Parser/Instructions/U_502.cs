@@ -5,25 +5,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using KPT.Parser.Spreadsheet_Interface;
+using KPT.Parser.Elements;
 
 namespace KPT.Parser.Instructions
 {
     class U_502 : IInstruction, IHasName, IHasStrings
     {
         Opcode opcode;
-        Box box1;
+        DataBox box1;
         string name;
         string dialogue;
-        Box box2; // in retrospect this seems like a very strange thing to have - i may have to double check it
+        DataBox box2; // in retrospect this seems like a very strange thing to have - i may have to double check it
 
         public bool Read(BinaryReader br)
         {
             opcode = FileIOHelper.ReadOpcode(br);
-            box1 = new Box(0x0C);
+            box1 = new DataBox(0x0C);
             box1.Read(br);
             name = FileIOHelper.ReadName(br);
             dialogue = FileIOHelper.ReadDialogueString(br);
-            box2 = new Box(0x04);
+            box2 = new DataBox(0x04);
             box2.Read(br);
             return true;
         }

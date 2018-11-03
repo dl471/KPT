@@ -25,13 +25,46 @@ namespace KPT.Parser.Tests
             return testDirectory;
         }
 
-        public static void BoxTest(Type element, string testFileName)
+        public static void DataBoxTest(Type element, string testFileName)
         {
 
             FileInfo boxTestFile = new FileInfo(Path.Combine(GetTestDir(), testFileName));
             int dataSize = (int)boxTestFile.Length;
 
-            Box boxTest = new Box(dataSize);
+            DataBox boxTest = new DataBox(dataSize);
+
+            FileStream fs = boxTestFile.Open(FileMode.Open);
+            BinaryReader br = new BinaryReader(fs);
+
+            byte[] inData = br.ReadBytes(dataSize);
+            br.BaseStream.Seek(0, SeekOrigin.Begin);
+
+            boxTest.Read(br);
+
+            br.Close();
+            fs.Close();
+
+            byte[] outData = new byte[dataSize];
+
+            MemoryStream ms = new MemoryStream(outData);
+            BinaryWriter bw = new BinaryWriter(ms);
+
+            boxTest.Write(bw);
+
+            bw.Close();
+            ms.Close();
+
+            Debug.Assert(inData.SequenceEqual(outData), "Input/output replication test failed for " + element.ToString());
+
+        }
+
+        public static void InstructionBoxTest(Type element, string testFileName)
+        {
+
+            FileInfo boxTestFile = new FileInfo(Path.Combine(GetTestDir(), testFileName));
+            int dataSize = (int)boxTestFile.Length;
+
+            InstructionBox boxTest = new InstructionBox(dataSize);
 
             FileStream fs = boxTestFile.Open(FileMode.Open);
             BinaryReader br = new BinaryReader(fs);
@@ -62,9 +95,14 @@ namespace KPT.Parser.Tests
         {
             
             // Box has a different construction from the other elements and thus needs its own tests
-            if (element == typeof(Box))
+            if (element == typeof(DataBox))
             {
-                BoxTest(element, testFileName);
+                DataBoxTest(element, testFileName);
+                return;
+            }
+            else if (element == typeof(InstructionBox))
+            {
+                InstructionBoxTest(element, testFileName);
                 return;
             }
 
@@ -204,7 +242,8 @@ namespace KPT.Parser.Tests
 
             TestElement(typeof(St_Header), "St_HeaderTest.bin");
 
-            TestElement(typeof(Box), "BoxTest.bin");
+            TestElement(typeof(DataBox), "DataBoxTest.bin");
+            TestElement(typeof(InstructionBox), "InstructionBoxTest.bin");
             TestElement(typeof(ChoiceDialog), "ChoiceDialogTest.bin");
             TestElement(typeof(LocationCard), "LocationCardTest.bin");
             TestElement(typeof(ShowImage), "ShowImageTest.bin");

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 using KPT.Parser.Spreadsheet_Interface;
+using KPT.Parser.Elements;
 
 namespace KPT.Parser.Instructions
 {
@@ -13,14 +14,14 @@ namespace KPT.Parser.Instructions
     {
 
         Opcode opcode;
-        Box box1;
+        DataBox box1;
         string name;
         string dialogue;
 
         public bool Read(BinaryReader br)
         {
             opcode = FileIOHelper.ReadOpcode(br);
-            box1 = new Box(0x14);
+            box1 = new DataBox(0x14);
             box1.Read(br);
             name = FileIOHelper.ReadName(br);
             dialogue = FileIOHelper.ReadDialogueString(br);

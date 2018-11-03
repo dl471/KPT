@@ -139,52 +139,52 @@ namespace KPT.Parser
 
         static Dictionary<Opcode, Type> instructionParserMap = new Dictionary<Opcode, Type>
         {
-            { Opcode.U_003, typeof(Box) },
-            { Opcode.U_008, typeof(Box) },
-            { Opcode.U_00C, typeof(Box) },
-            { Opcode.U_00F, typeof(Box) },
-            { Opcode.U_01E, typeof(Box) },
-            { Opcode.U_03C, typeof(Box) },
+            { Opcode.U_003, typeof(InstructionBox) },
+            { Opcode.U_008, typeof(InstructionBox) },
+            { Opcode.U_00C, typeof(InstructionBox) },
+            { Opcode.U_00F, typeof(InstructionBox) },
+            { Opcode.U_01E, typeof(InstructionBox) },
+            { Opcode.U_03C, typeof(InstructionBox) },
 
-            { Opcode.U_100, typeof(Box) },
-            { Opcode.U_101, typeof(Box) }, // save and exit? huh?
-            { Opcode.U_111, typeof(Box) },
-            { Opcode.U_112, typeof(Box) },
-            { Opcode.U_113, typeof(Box) },
-            { Opcode.U_120, typeof(Box) },
-            { Opcode.U_121, typeof(Box) },
-            { Opcode.U_130, typeof(Box) },
-            { Opcode.U_131, typeof(Box) },
-            { Opcode.U_132, typeof(Box) },
-            { Opcode.U_160, typeof(Box) },
-            { Opcode.U_170, typeof(Box) },
-            { Opcode.U_171, typeof(Box) },
-            { Opcode.U_173, typeof(Box) },
-            { Opcode.U_174, typeof(Box) },
-            { Opcode.U_182, typeof(Box) },
-            { Opcode.U_190, typeof(Box) },
-            { Opcode.U_191, typeof(Box) },
-            { Opcode.U_192, typeof(Box) },
-            { Opcode.U_1A0, typeof(Box) }, // view change?
-            { Opcode.U_1C0, typeof(Box) },
+            { Opcode.U_100, typeof(InstructionBox) },
+            { Opcode.U_101, typeof(InstructionBox) }, // save and exit? huh?
+            { Opcode.U_111, typeof(InstructionBox) },
+            { Opcode.U_112, typeof(InstructionBox) },
+            { Opcode.U_113, typeof(InstructionBox) },
+            { Opcode.U_120, typeof(InstructionBox) },
+            { Opcode.U_121, typeof(InstructionBox) },
+            { Opcode.U_130, typeof(InstructionBox) },
+            { Opcode.U_131, typeof(InstructionBox) },
+            { Opcode.U_132, typeof(InstructionBox) },
+            { Opcode.U_160, typeof(InstructionBox) },
+            { Opcode.U_170, typeof(InstructionBox) },
+            { Opcode.U_171, typeof(InstructionBox) },
+            { Opcode.U_173, typeof(InstructionBox) },
+            { Opcode.U_174, typeof(InstructionBox) },
+            { Opcode.U_182, typeof(InstructionBox) },
+            { Opcode.U_190, typeof(InstructionBox) },
+            { Opcode.U_191, typeof(InstructionBox) },
+            { Opcode.U_192, typeof(InstructionBox) },
+            { Opcode.U_1A0, typeof(InstructionBox) }, // view change?
+            { Opcode.U_1C0, typeof(InstructionBox) },
 
-            { Opcode.U_205, typeof(Box) },
-            { Opcode.U_210, typeof(Box) },
-            { Opcode.U_211, typeof(Box) },
-            { Opcode.U_214, typeof(Box) },
+            { Opcode.U_205, typeof(InstructionBox) },
+            { Opcode.U_210, typeof(InstructionBox) },
+            { Opcode.U_211, typeof(InstructionBox) },
+            { Opcode.U_214, typeof(InstructionBox) },
 
-            { Opcode.U_302, typeof(Box) },
-            { Opcode.U_303, typeof(Box) },
-            { Opcode.U_30B, typeof(Box) },
-            { Opcode.U_30C, typeof(Box) },
+            { Opcode.U_302, typeof(InstructionBox) },
+            { Opcode.U_303, typeof(InstructionBox) },
+            { Opcode.U_30B, typeof(InstructionBox) },
+            { Opcode.U_30C, typeof(InstructionBox) },
 
-            { Opcode.U_401, typeof(Box) },
-            { Opcode.U_402, typeof(Box) },
-            { Opcode.U_403, typeof(Box) },
-            { Opcode.U_404, typeof(Box) },
-            { Opcode.U_405, typeof(Box) },
-            { Opcode.U_406, typeof(Box) },
-            { Opcode.U_407, typeof(Box) }, 
+            { Opcode.U_401, typeof(InstructionBox) },
+            { Opcode.U_402, typeof(InstructionBox) },
+            { Opcode.U_403, typeof(InstructionBox) },
+            { Opcode.U_404, typeof(InstructionBox) },
+            { Opcode.U_405, typeof(InstructionBox) },
+            { Opcode.U_406, typeof(InstructionBox) },
+            { Opcode.U_407, typeof(InstructionBox) },
 
             { Opcode.U_500, typeof(U_500) },
             { Opcode.U_501, typeof(U_501) },
@@ -193,16 +193,16 @@ namespace KPT.Parser
 
             { Opcode.SHOW_IMAGE, typeof(ShowImage) }, // a tentative name
 
-            { Opcode.U_601, typeof(Box) },
-            { Opcode.U_603, typeof(Box) },
+            { Opcode.U_601, typeof(InstructionBox) },
+            { Opcode.U_603, typeof(InstructionBox) },
 
             { Opcode.CHOICE_DIALOG, typeof(ChoiceDialog) },
 
-            { Opcode.U_900, typeof(Box) },
+            { Opcode.U_900, typeof(InstructionBox) },
 
-            { Opcode.U_1000, typeof(Box) },
+            { Opcode.U_1000, typeof(InstructionBox) },
             { Opcode.LOCATION_CARD, typeof(LocationCard) },
-            
+
         };
 
 

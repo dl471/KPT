@@ -19,7 +19,7 @@ namespace KPT.Parser
     {
         public IHeader header;
         public List<IInstruction> instructions;
-        public Box footer; // The footer appears to be some kind of padding of 0x88, so it is represented with a Box instead of a specific footer object
+        public DataBox footer; // The footer appears to be some kind of padding of 0x88, so it is represented with a Box instead of a specific footer object
     }
     // perhaps FileParser and KCFile should be merged?
 
@@ -46,10 +46,10 @@ namespace KPT.Parser
         /// <remarks>
         /// Intended to make Box creating code cleaner by delegating the getting of instruction size and construction of object to a seperate function
         /// </remarks>
-        private Box MakeBox(Opcode opcode)
+        private InstructionBox MakeInstructionBox(Opcode opcode)
         {
             int instructionSize = OpcodeInfo.GetInstructionSize(opcode);
-            return new Box(instructionSize);
+            return new InstructionBox(instructionSize);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace KPT.Parser
             KCFile workingFile = new KCFile();
             List<IInstruction> instructions = new List<IInstruction>();
 
-            Box footer = ReadFooter(br);
+            DataBox footer = ReadFooter(br);
             workingFile.footer = footer;
             workingFile.header = ReadHeader(br);
 
@@ -84,9 +84,9 @@ namespace KPT.Parser
                 IInstruction newInstruction;
                 Type instructionParserType = OpcodeInfo.GetInstructionParserType(opcode);
                 
-                if (instructionParserType == typeof(Box))
+                if (instructionParserType == typeof(InstructionBox))
                 {
-                    newInstruction = MakeBox(opcode);
+                    newInstruction = MakeInstructionBox(opcode);
                     newInstruction.Read(br);
                 }
                 else
@@ -127,17 +127,17 @@ namespace KPT.Parser
         /// <remarks>
         /// Works backwards from the end of the file to calcuate the footer then returns the stream's position back to the start of the stream. Does not preserve the curren position of any streams passed to it.
         /// </remarks>
-        private Box ReadFooter(BinaryReader br)
+        private DataBox ReadFooter(BinaryReader br)
         {
             br.BaseStream.Seek(-1, SeekOrigin.End);
 
             int footerSize = 0;
-            Box footer;
+            DataBox footer;
 
             if (br.ReadByte() != 0x88)
             {
                 br.BaseStream.Seek(0, SeekOrigin.Begin); // is this control flow convoluted?
-                footer = new Box(0);
+                footer = new DataBox(0);
                 footer.Read(br);
                 return footer;
             }
@@ -150,7 +150,7 @@ namespace KPT.Parser
                 footerSize += 1;
             }
 
-            footer = new Box(footerSize);
+            footer = new DataBox(footerSize);
             footer.Read(br);
 
             br.BaseStream.Seek(0, SeekOrigin.Begin);

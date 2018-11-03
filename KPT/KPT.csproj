@@ -79,9 +79,10 @@
     <Compile Include="ISOWriter.cs" />
     <Compile Include="Parser\Constants.cs" />
     <Compile Include="Parser\Elements\ChoiceBar.cs" />
-    <Compile Include="Parser\Instructions\Box.cs" />
+    <Compile Include="Parser\Elements\Box.cs" />
     <Compile Include="Parser\Instructions\ChoiceDialog.cs" />
     <Compile Include="Parser\FileIOHelper.cs" />
+    <Compile Include="Parser\Instructions\InstructionBox.cs" />
     <Compile Include="Parser\Instructions\LocationCard.cs" />
     <Compile Include="Parser\Instructions\U_500.cs" />
     <Compile Include="Parser\Instructions\U_501.cs" />

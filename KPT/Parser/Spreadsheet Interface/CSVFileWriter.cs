@@ -13,6 +13,8 @@ namespace KPT.Parser.Spreadsheet_Interface
         public void WriteCSVFile(string fileName, List<IInstruction> fileContents, StringCollection fileStrings)
         {
 
+            fileName = Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName) + ".csv");
+
             DirectoryGuard.CheckDirectory(fileName);
             FileStream fs = new FileStream(fileName, FileMode.Create);
             StreamWriter sw = new StreamWriter(fs);
@@ -40,7 +42,7 @@ namespace KPT.Parser.Spreadsheet_Interface
                         }
                         else
                         {
-                            record.speaker = "";
+                            record.speaker = ""; // blank out the name of the speaker if it is being repeated to make it easier to note when speaker changes and avoid massive walls of speakers text
                         }
                         csv.WriteRecord(record);
                         csv.NextRecord();
@@ -52,7 +54,7 @@ namespace KPT.Parser.Spreadsheet_Interface
 
             sw.Close();
             fs.Close();
-
+            
         }
     }
 }

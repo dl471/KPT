@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace KPT.Parser.Instructions
 {
-    class LocationCard : IInstruction
+    class LocationCard : IInstruction, IHasStrings
     {
         Opcode opcode;
         string time;
@@ -29,5 +29,26 @@ namespace KPT.Parser.Instructions
             FileIOHelper.WriteStringNullTerminated(bw, location);
             return true;
         }
+
+
+        public void AddStrings(StringCollection collection)
+        {
+            string newID;
+
+            newID = collection.GenerateNewID();
+            collection.AddString(newID, time);
+            time = newID;
+
+            newID = collection.GenerateNewID();
+            collection.AddString(newID, location);
+            location = newID;
+        }
+
+        public void GetStrings(StringCollection collection)
+        {
+            time = collection.GetString(time);
+            location = collection.GetString(location);
+        }
+
     }
 }

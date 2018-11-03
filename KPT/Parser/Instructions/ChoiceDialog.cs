@@ -8,7 +8,7 @@ using KPT.Parser.Elements;
 
 namespace KPT.Parser.Instructions
 {
-    class ChoiceDialog : IInstruction
+    class ChoiceDialog : IInstruction, IHasStrings
     {
 
         Opcode opcode;
@@ -45,6 +45,22 @@ namespace KPT.Parser.Instructions
                 choice.Write(bw);
             }
             return true;
+        }
+
+        public void AddStrings(StringCollection collection)
+        {
+            foreach (var choice in choices)
+            {
+                choice.AddStrings(collection);
+            }
+        }
+
+        public void GetStrings(StringCollection collection)
+        {
+            foreach (var choice in choices)
+            {
+                choice.GetStrings(collection);
+            }
         }
 
     }

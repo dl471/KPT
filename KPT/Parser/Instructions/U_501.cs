@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace KPT.Parser.Instructions
 {
-    class U_501 : IInstruction, IHasName
+    class U_501 : IInstruction, IHasName, IHasStrings
     {
 
         Opcode opcode;
@@ -43,6 +43,18 @@ namespace KPT.Parser.Instructions
         public void SetName(string newName)
         {
             name = newName;
+        }
+
+        public void AddStrings(StringCollection collection)
+        {
+            string newID = collection.GenerateNewID();
+            collection.AddString(newID, dialogue);
+            dialogue = newID;
+        }
+
+        public void GetStrings(StringCollection collection)
+        {
+            dialogue = collection.GetString(dialogue);
         }
 
     }

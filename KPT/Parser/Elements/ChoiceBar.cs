@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace KPT.Parser.Elements
 {
-    class ChoiceBar : IElement
+    class ChoiceBar : IElement, IHasStrings
     {
         
 
@@ -28,6 +28,18 @@ namespace KPT.Parser.Elements
             bw.Write((short)choiceNumber);
             FileIOHelper.WriteFixedLengthString(bw, choiceText, Constants.CHOICE_STRING_LENGTH);
             return true;
+        }
+
+        public void AddStrings(StringCollection collection)
+        {
+            string newID = collection.GenerateNewID();
+            collection.AddString(newID, choiceText);
+            choiceText = newID;
+        }
+
+        public void GetStrings(StringCollection collection)
+        {
+            choiceText = collection.GetString(choiceText);
         }
 
     }

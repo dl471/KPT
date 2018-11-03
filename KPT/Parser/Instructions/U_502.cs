@@ -7,7 +7,7 @@ using System.IO;
 
 namespace KPT.Parser.Instructions
 {
-    class U_502 : IInstruction, IHasName
+    class U_502 : IInstruction, IHasName, IHasStrings
     {
         Opcode opcode;
         Box box1;
@@ -45,6 +45,18 @@ namespace KPT.Parser.Instructions
         public void SetName(string newName)
         {
             name = newName;
+        }
+
+        public void AddStrings(StringCollection collection)
+        {
+            string newID = collection.GenerateNewID();
+            collection.AddString(newID, dialogue);
+            dialogue = newID;
+        }
+
+        public void GetStrings(StringCollection collection)
+        {
+            dialogue = collection.GetString(dialogue);
         }
 
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using KPT.Parser.Spreadsheet_Interface;
 
 namespace KPT.Parser
 {
@@ -68,6 +69,11 @@ namespace KPT.Parser
         /// </summary>
         /// <param name="collection"></param>
         void GetStrings(StringCollection collection);
+        /// <summary>
+        /// Have the element create CSV records for itself
+        /// </summary>
+        /// <returns></returns>
+        List<CSVRecord> GetCSVRecords();
     }
 
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
+using KPT.Parser.Spreadsheet_Interface;
 
 namespace KPT.Parser.Instructions
 {
@@ -48,6 +49,11 @@ namespace KPT.Parser.Instructions
         {
             time = collection.GetString(time);
             location = collection.GetString(location);
+        }
+
+        public List<CSVRecord> GetCSVRecords()
+        {
+            return new List<CSVRecord> { new CSVRecord("Time", time), new CSVRecord("Location", location) };
         }
 
     }

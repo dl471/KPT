@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using KPT.Parser.Elements;
+using KPT.Parser.Spreadsheet_Interface;
 
 namespace KPT.Parser.Instructions
 {
@@ -61,6 +62,19 @@ namespace KPT.Parser.Instructions
             {
                 choice.GetStrings(collection);
             }
+        }
+
+        public List<CSVRecord> GetCSVRecords()
+        {
+            var records = new List<CSVRecord>();
+            foreach (var choice in choices)
+            {
+                foreach (var entry in choice.GetCSVRecords())
+                {
+                    records.Add(entry);
+                }
+            }
+            return records;
         }
 
     }

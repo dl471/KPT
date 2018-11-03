@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
+using KPT.Parser.Spreadsheet_Interface;
 
 namespace KPT.Parser.Instructions
 {
@@ -55,6 +56,11 @@ namespace KPT.Parser.Instructions
         public void GetStrings(StringCollection collection)
         {
             dialogue = collection.GetString(dialogue);
+        }
+
+        public List<CSVRecord> GetCSVRecords()
+        {
+            return new List<CSVRecord> { new CSVRecord(name, dialogue) };
         }
 
     }

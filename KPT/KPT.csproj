@@ -92,6 +92,8 @@
     <Compile Include="Parser\OpcodeInfo.cs" />
     <Compile Include="Parser\FileParser.cs" />
     <Compile Include="Parser\Headers\St_Header.cs" />
+    <Compile Include="Parser\Spreadsheet Interface\CSVFileWriter.cs" />
+    <Compile Include="Parser\Spreadsheet Interface\CSVRecord.cs" />
     <Compile Include="Parser\StringCollection.cs" />
     <Compile Include="Parser\Tests\Tester.cs" />
     <Compile Include="Program.cs" />
@@ -142,9 +144,7 @@
       <Name>LibCPK</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Parser\Spreadsheet Interface\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

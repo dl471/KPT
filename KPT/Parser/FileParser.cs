@@ -107,6 +107,24 @@ namespace KPT.Parser
             
         }
 
+        public void WriteFile(KCFile file, string filename)
+        {
+            FileStream fs = new FileStream(filename, FileMode.Create);
+            BinaryWriter bw = new BinaryWriter(fs);
+
+            file.header.Write(bw);
+
+            foreach (var instruction in file.instructions)
+            {
+                instruction.Write(bw);
+            }
+
+            file.footer.Write(bw);
+
+            bw.Close();
+            fs.Close();
+        }
+
         private IHeader ReadHeader(BinaryReader br)
         {
             St_Header header = new St_Header();

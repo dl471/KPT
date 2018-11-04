@@ -27,6 +27,11 @@ namespace KPT.Parser.Spreadsheet_Interface
             this.stringID = stringID;
         }
 
+        public CSVRecord()
+        {
+
+        }
+
     }
 
     public sealed class CSVRecordMap : ClassMap<CSVRecord>

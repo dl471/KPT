@@ -204,6 +204,37 @@ namespace KPT
             return true;
         }
 
+        public static bool DumpISO(string isoFileName)
+        {
+            var isoReader = new ISOReader();
+            string isoOutputDir = Path.Combine(rootDir, extractedISODir);
+
+            if (!isoReader.OpenISOStream(isoFileName, isoOutputDir))
+            { 
+                return false; // ISOReader itself should take care of showing a detailed error message
+            }
+
+            DirectoryGuard.CheckDirectory(isoOutputDir);
+
+            var isoFiles = isoReader.GetGenerator();
+
+            foreach (var file in isoFiles)
+            {
+                string fileName = Path.Combine(isoOutputDir, file.name);
+
+                DirectoryGuard.CheckDirectory(fileName);
+
+                FileStream fs = new FileStream(fileName, FileMode.Create);
+
+                file.dataStream.CopyTo(fs);
+
+                fs.Close();
+            }
+
+            isoReader.CloseISOStream();
+
+            return true;
+        }
 
         private static StringCollection LoadCSVStrings(string directory)
         {

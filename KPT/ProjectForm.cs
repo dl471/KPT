@@ -46,5 +46,43 @@ namespace KPT
                 MessageBox.Show("There was an error while dumping strings.");
             }
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (ProjectFolder.LoadStrings())
+            {
+                MessageBox.Show("Strings loaded!");
+            }
+            else
+            {
+                MessageBox.Show("There was an error while loading strings.");
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+            openFileDialog1.FileName = "";
+            openFileDialog1.Filter = "ISO|*.iso";
+            openFileDialog1.ShowDialog();
+
+            if (openFileDialog1.FileName == "")
+            {
+                return;
+            }
+
+            if(ProjectFolder.DumpISO(openFileDialog1.FileName))
+            {
+                MessageBox.Show("ISO dumped!");
+            }
+            else
+            {
+                MessageBox.Show("There was an error while dumping the ISO.");
+            }
+
+
+        }
     }
+
+
 }

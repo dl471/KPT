@@ -15,6 +15,7 @@ namespace KPT
         public Form1()
         {
             InitializeComponent();
+            this.Text = "KPT";
         }
 
         private void button2_Click(object sender, EventArgs e)

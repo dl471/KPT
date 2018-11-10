@@ -17,6 +17,11 @@ namespace KPT
     static class ProjectFolder
     {
 
+        class ProjectFile
+        {
+
+        }
+
         /// <summary>
         /// The location of the project / the root directory from which the paths of all other directories will be derived
         /// </summary>
@@ -49,6 +54,14 @@ namespace KPT
         /// XML files, scripts, etc. used to direct the reassembly or repacking of files
         /// </summary>
         public const string buildScriptsDir = "Build Scripts";
+        /// <summary>
+        /// The working project file
+        /// </summary>
+        private static ProjectFile projectFile = new ProjectFile();
+        /// <summary>
+        /// The file name to which the project file will be saved
+        /// </summary>
+        private const string projectFileName = "project.yaml";
 
         public static string GetRootDir()
         {
@@ -259,5 +272,78 @@ namespace KPT
             int subPathLen = path.Length - rootLen;
             return path.Substring(rootLen, subPathLen);
         }
+
+        public static bool InitalizeNewProjectFolder(string directory)
+        {
+
+            rootDir = directory;
+
+            try
+            {
+                Directory.CreateDirectory(Path.Combine(rootDir, extractedISODir));
+                Directory.CreateDirectory(Path.Combine(rootDir, unpackedGameFilesDir));
+                Directory.CreateDirectory(Path.Combine(rootDir, disassemblyDir));
+                Directory.CreateDirectory(Path.Combine(rootDir, editableGameFiesDir));
+                Directory.CreateDirectory(Path.Combine(rootDir, reassembledGameFilesDir));
+                Directory.CreateDirectory(Path.Combine(rootDir, repackedGameFilesDir));
+                Directory.CreateDirectory(Path.Combine(rootDir, buildScriptsDir));
+                WriteProjectFile();
+            }
+            catch (Exception e)
+            {
+                string errorMessage = string.Format("There was an error while initalizing the project directory.\r\n\r\n{0}", e.Message);
+                MessageBox.Show(errorMessage);
+                return false;
+            }
+
+            return true;
+        }
+
+        private static void WriteProjectFile()
+        {
+            string fileName = Path.Combine(rootDir, projectFileName);
+
+            FileStream fs = new FileStream(fileName, FileMode.Create);
+            StreamWriter sw = new StreamWriter(fs);
+
+            var yamlSerialzer = new SharpYaml.Serialization.Serializer();
+
+            var serialzedData = yamlSerialzer.Serialize(projectFile);
+
+            sw.Write(serialzedData);
+
+            sw.Close();
+            fs.Close();
+        }
+
+        public static bool ReadProjectFile(string fileName)
+        {
+            if (!File.Exists(fileName))
+            {
+                return false;
+            }
+
+            FileStream fs = new FileStream(fileName, FileMode.Open);
+            StreamReader sr = new StreamReader(fs);
+
+            var fileData = sr.ReadToEnd();
+
+            sr.Close();
+            fs.Close();
+
+            try
+            {
+                var yamlSerialzer = new SharpYaml.Serialization.Serializer();
+                projectFile = yamlSerialzer.Deserialize<ProjectFile>(fileData);
+            }
+            catch (Exception e)
+            {
+                string errorMessage = string.Format("There was an error while reading the project file.\r\n\r\n{0}", e.Message);
+                MessageBox.Show(errorMessage);
+                return false;
+            }
+            return true;
+        }
+
     }
 }

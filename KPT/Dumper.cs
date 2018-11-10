@@ -92,26 +92,6 @@ namespace KPT
         }
 
         /// <summary>
-        /// Check that the directory has been initalized to fit the expected working environment of the program
-        /// </summary>
-        /// <param name="directory">The path of the directory to be checked</param>
-        /// <returns>True if passes tests, false if fails tests</returns>
-        /// <remarks>
-        /// At current, the test is a very simple "does this text file exist" - this can be easily faked, but there is no real benefit to doing so
-        /// </remarks>
-        private bool CheckInitedDirectory(string directory)
-        {
-            if (!File.Exists(Path.Combine(directory, "valid.txt")))
-            {
-                string errorMessage = string.Format("Directory {0} is not a valid directory. Please initalize it first.", directory);
-                MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
         /// Go through a directory and split it into an "Original" directory with a copy of the original files and an "Editble" directory with processed files that can be edited by users
         /// </summary>
         /// <param name="sourceDirectoryPath">The path of the directory to be processed</param>
@@ -120,11 +100,6 @@ namespace KPT
         public bool ProcessDirectory(string sourceDirectoryPath)
         {
             string rootDir = sourceDirectoryPath; // not compliant with the ProjectFolder structure
-
-            if (!CheckInitedDirectory(rootDir))
-            {
-                return false;
-            }
 
             sourceDirectoryPath = Path.Combine(rootDir, ProjectFolder.extractedISODir); // now that we know it is an inited directory we start working with the ISO files
 

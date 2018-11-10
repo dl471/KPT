@@ -16,6 +16,7 @@ namespace KPT
         public ProjectForm()
         {
             InitializeComponent();
+            this.Text = "Working Project";
         }
 
         public bool CheckFolder(string fileName)

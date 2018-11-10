@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace KPT
 {
@@ -71,7 +72,7 @@ namespace KPT
                 return;
             }
 
-            if(ProjectFolder.DumpISO(openFileDialog1.FileName))
+            if (ProjectFolder.DumpISO(openFileDialog1.FileName))
             {
                 MessageBox.Show("ISO dumped!");
             }
@@ -81,6 +82,20 @@ namespace KPT
             }
 
 
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            var dumper = new Dumper();
+
+            if (dumper.ProcessDirectory(ProjectFolder.GetRootDir()))
+            {
+                MessageBox.Show("Files unpacked!");
+            }
+            else
+            {
+                MessageBox.Show("There was an error while unpacking the files.");
+            }
         }
     }
 

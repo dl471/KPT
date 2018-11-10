@@ -117,9 +117,9 @@ namespace KPT
         /// <param name="sourceDirectoryPath">The path of the directory to be processed</param>
         /// <param name="targetDirectoryPath">The path of the directory to store the processed contents</param>
         /// <returns>True is succesfully processed, false if processing failed</returns>
-        public bool ProcessDirectory(string sourceDirectoryPath, string targetDirectoryPath)
+        public bool ProcessDirectory(string sourceDirectoryPath)
         {
-            string rootDir = sourceDirectoryPath;
+            string rootDir = sourceDirectoryPath; // not compliant with the ProjectFolder structure
 
             if (!CheckInitedDirectory(rootDir))
             {
@@ -140,8 +140,7 @@ namespace KPT
                 return false;
             }
 
-            string originalFilesDirectory = Path.Combine(targetDirectoryPath, originalDirectory);
-            string editableFilesDirectory = Path.Combine(targetDirectoryPath, editableDirectory);
+            string editableFilesDirectory = Path.Combine(ProjectFolder.GetRootDir(), ProjectFolder.editableGameFiesDir);
 
             if (!DebugSettings.SKIP_ORIGINAL_DIRECTORY_COPYING) // needs to test if dir already exists / handle exception
             {

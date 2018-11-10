@@ -121,7 +121,7 @@ namespace KPT
             {
                 string targetDir = Path.Combine(rootDir, ProjectFolder.repackedGameFilesDir);
                 DirectoryGuard.CheckDirectory(targetDir);
-                Microsoft.VisualBasic.FileIO.FileSystem.CopyDirectory(sourceDirectoryPath, targetDir); // i would like "the program has not crashed" progress box but i'm not sure it can be done if things are done this way. hmm. perhaps writing a recursive copying function would be best after all.
+                Microsoft.VisualBasic.FileIO.FileSystem.CopyDirectory(sourceDirectoryPath, targetDir, true); // i would like "the program has not crashed" progress box but i'm not sure it can be done if things are done this way. hmm. perhaps writing a recursive copying function would be best after all.
             }
 
             foreach (var file in fileList)

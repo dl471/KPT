@@ -7,7 +7,7 @@ using System.IO;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using LibCPK;
-using KPT.XMLBuild;
+using KPT.BuildObjects;
 using KPT.Parser;
 using System.Xml;
 

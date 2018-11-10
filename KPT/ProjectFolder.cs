@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using KPT.XMLBuild;
+using KPT.BuildObjects;
 using System.Windows.Forms;
 using KPT.Parser;
 using KPT.Parser.Elements;

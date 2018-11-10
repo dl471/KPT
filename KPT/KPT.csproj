@@ -107,9 +107,7 @@
       <DependentUpon>ProjectForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XMLBuild\CPKBuildObject.cs" />
-    <Compile Include="XMLBuild\Identifiers.cs" />
-    <Compile Include="XMLBuild\Interfaces.cs" />
+    <Compile Include="Build Objects\CPKBuildObject.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

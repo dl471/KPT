@@ -10,7 +10,7 @@ using System.IO;
 using SharpYaml;
 using LibCPK;
 
-namespace KPT.XMLBuild
+namespace KPT.BuildObjects
 {
 
     

@@ -24,7 +24,7 @@ namespace KPT
             return true;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void RebuildCPKs_Click(object sender, EventArgs e)
         {
             if (ProjectFolder.RebuildCPKs())
             {
@@ -37,7 +37,7 @@ namespace KPT
             
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void DumpStrings_Click(object sender, EventArgs e)
         {
             if (ProjectFolder.DumpStrings())
             {
@@ -49,7 +49,7 @@ namespace KPT
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void LoadStrings_Click(object sender, EventArgs e)
         {
             if (ProjectFolder.LoadStrings())
             {
@@ -61,7 +61,7 @@ namespace KPT
             }
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void DumpISO_Click(object sender, EventArgs e)
         {
 
             openFileDialog1.FileName = "";
@@ -85,7 +85,7 @@ namespace KPT
 
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void UnpackFiles_Click(object sender, EventArgs e)
         {
             var dumper = new Dumper();
 
@@ -97,6 +97,11 @@ namespace KPT
             {
                 MessageBox.Show("There was an error while unpacking the files.");
             }
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 

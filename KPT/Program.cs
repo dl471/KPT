@@ -28,6 +28,9 @@ namespace KPT
             ActiveEncodings.Initalize();
             DirectoryGuard.Initalize();
 
+            Application.Run(new Form1());
+            Environment.Exit(0);
+
             //StringBuilder target = new StringBuilder();
             //var xmlTest = XmlWriter.Create(target);
 
@@ -35,7 +38,7 @@ namespace KPT
             //var xmlSettings = new XmlWriterSettings();
             //xmlSettings.Indent = true;
             //XmlWriter xmlTest = XmlWriter.Create(target, xmlSettings);
-            
+
 
             //xmlTest.WriteStartDocument();
 
@@ -122,8 +125,8 @@ namespace KPT
 
             //Environment.Exit(0);
 
-            var dumpTest = new Dumper();
-            dumpTest.ProcessDirectory(testSourceDirectory, testTargetDirectory);
+           // var dumpTest = new Dumper();
+            //dumpTest.ProcessDirectory(testSourceDirectory, testTargetDirectory);
 
             Environment.Exit(0);
 

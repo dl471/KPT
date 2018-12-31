@@ -103,6 +103,12 @@ namespace KPT
         {
 
         }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var about = new About();
+            about.ShowDialog();
+        }
     }
 
 

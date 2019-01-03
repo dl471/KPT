@@ -189,6 +189,8 @@ namespace KPT
             foreach (var embeddedFile in cpkFile.FileTable)
             {
 
+                var cpkMeta = new CPKEmbeddedFileMeta();
+
                 if (embeddedFile.FileType != "FILE")
                 {
                     continue; // skip headers etc.
@@ -207,6 +209,24 @@ namespace KPT
                 DirectoryGuard.CheckDirectory(targetFileAbsolutePath);
 
                 byte[] fileAsBytes = GrabCPKData(filePath, embeddedFile);
+
+                if (DebugSettings.ATTEMPT_DECOMPRESSION)
+                {
+                    if (fileAsBytes.Length >= 8) // 8 = length of "CRILAYLA"
+                    {
+                        byte[] crilaylaCheck = new byte[8];
+                        Array.Copy(fileAsBytes, 0, crilaylaCheck, 0, 8);
+                        string crilaylaString = Encoding.ASCII.GetString(crilaylaCheck);
+
+                        if (crilaylaString == "CRILAYLA")
+                        {
+                            byte[] decompressedBytes = cpkFile.DecompressCRILAYLA(fileAsBytes, fileAsBytes.Length);
+                            fileAsBytes = decompressedBytes;
+                        }
+
+                    }
+
+                }
 
                 if (DebugSettings.ALLOW_FILE_WRITES)
                 {
@@ -234,9 +254,7 @@ namespace KPT
                 }
 
                 string relativeFilePath = Path.Combine(file.subPath, embeddedFile.FileName.ToString());
-                uint fileID = (uint)embeddedFile.ID;
-
-                var cpkMeta = new CPKEmbeddedFileMeta();
+                uint fileID = (uint)embeddedFile.ID;                
 
                 cpkMeta.filePath = Path.Combine(ProjectFolder.reassembledGameFilesDir, relativeFilePath);
                 cpkMeta.fileName = embeddedFile.FileName.ToString();

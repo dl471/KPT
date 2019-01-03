@@ -21,6 +21,7 @@ namespace KPT.BuildObjects
     {
         public string fileName;
         public string filePath;
+        public bool shouldBeCompressed = false;
         public uint ID;
         public string checksumValue;
         public Checksum checksumType;

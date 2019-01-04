@@ -73,6 +73,7 @@
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
     <Compile Include="ActiveEncodings.cs" />
+    <Compile Include="Build Objects\GIMBuildObject.cs" />
     <Compile Include="Checksums.cs" />
     <Compile Include="DebugSettings.cs" />
     <Compile Include="DirectoryGuard.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImageHandler.cs" />
     <Compile Include="ISOReader.cs" />
     <Compile Include="ISOWriter.cs" />
     <Compile Include="Parser\Constants.cs" />

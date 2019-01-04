@@ -28,6 +28,10 @@ namespace KPT
             ActiveEncodings.Initalize();
             DirectoryGuard.Initalize();
 
+            //ImageHandler.GIMToPNG(@"H:\kokoro_connect\ImageTest\input.gim", @"H:\kokoro_connect\ImageTest\output.png");
+            //ImageHandler.GIMToPNG(@"H:\kokoro_connect\ImageTest\Logo_Banpre.gim", @"H:\kokoro_connect\ImageTest\logo_test.png");
+            ImageHandler.ConvertImage(@"H:\kokoro_connect\ImageTest\logo_test.png", @"H:\kokoro_connect\ImageTest\Logo_Banpre.gim");
+
             Application.Run(new Form1());
             Environment.Exit(0);
 

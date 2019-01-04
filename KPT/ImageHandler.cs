@@ -40,12 +40,13 @@ namespace KPT
             // This will most likely get very very annoying if there are multiple failures - not sure how to handle it. Maybe write to a log file and inform the user of the first failure only?
             if (process.ExitCode != 0)
             {
-                string errorMessage =
-                    "Image conversion failed" + Environment.NewLine + Environment.NewLine +
-                    "Exit code: " + process.ExitCode.ToString() + Environment.NewLine +
-                    "GimConv Path: " + startInfo.FileName +  Environment.NewLine +
-                    "Arguments: " + startInfo.Arguments;
-                MessageBox.Show(errorMessage);
+                //string errorMessage =
+                //    "Image conversion failed" + Environment.NewLine + Environment.NewLine +
+                //    "Exit code: " + process.ExitCode.ToString() + Environment.NewLine +
+                //    "GimConv Path: " + startInfo.FileName +  Environment.NewLine +
+                //    "Arguments: " + startInfo.Arguments;
+                //MessageBox.Show(errorMessage);
+                return false;
             }
 
             return true;

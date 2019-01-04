@@ -14,6 +14,10 @@ namespace KPT
 {
     public partial class ProjectForm : Form
     {
+
+        ProgressBar progressBar;
+        BackgroundWorker worker;
+
         public ProjectForm()
         {
             InitializeComponent();
@@ -102,6 +106,24 @@ namespace KPT
 
         private void DumpImages_Click(object sender, EventArgs e)
         {
+            worker = new BackgroundWorker();
+            worker.WorkerReportsProgress = true;
+            worker.DoWork += DumpImages;
+            worker.ProgressChanged += UpdateProgressBar;
+            worker.RunWorkerCompleted += WorkCompleted;
+            worker.WorkerSupportsCancellation = true;
+            worker.RunWorkerAsync();
+
+            progressBar = new ProgressBar(worker);
+            progressBar.ShowDialog();
+
+        }
+
+        public void DumpImages(object sender, EventArgs e)
+        {
+
+            BackgroundWorker worker = sender as BackgroundWorker;
+
             List<string> imageFiles = new List<string>();
             string filter = ".gim";
             int counter = 0; // used to add a number to each image name, just in case disambiguation is required
@@ -110,11 +132,17 @@ namespace KPT
 
             foreach (var file in imageFiles)
             {
+
                 string fileName = Path.GetFileNameWithoutExtension(file);
                 string targetFilePath = Path.Combine(ImageHandler.GetImagesDir(), fileName);
                 string targetFilePathPostFix = string.Format("_{0}.png", counter.ToString());
                 targetFilePath += targetFilePathPostFix;
-                ImageHandler.ConvertImage(file, targetFilePath);
+
+                if (!ImageHandler.ConvertImage(file, targetFilePath))
+                {
+                    continue;
+                }
+
                 counter++;
 
                 var gimBuildInstructions = new GIMBuildObject();
@@ -133,7 +161,18 @@ namespace KPT
 
                 gimBuildInstructions.SerializeToDisk(Path.Combine(ProjectFolder.GetRootDir(), ProjectFolder.buildScriptsDir, Path.GetFileName(targetFilePath)));
 
+                double progress = ((double)counter / (double)imageFiles.Count)*100;
+
+                worker.ReportProgress((int)progress);
+
+                if (worker.WorkerSupportsCancellation && worker.CancellationPending)
+                {
+                    return;
+                }
+
             }
+
+            
 
         }
 
@@ -165,6 +204,20 @@ namespace KPT
             }
         }
 
+        public void UpdateProgressBarText(string text)
+        {
+            progressBar.UpdateProgressBarText(text);
+        }
+
+        public void UpdateProgressBar(object sender, ProgressChangedEventArgs e)
+        {
+            progressBar.UpdateProgressBar(e.ProgressPercentage);
+        }
+
+        public void WorkCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            progressBar.Close();
+        }
 
     }
 

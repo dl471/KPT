@@ -13,13 +13,14 @@ namespace KPT
         /// </summary>
         public enum Versions
         {
-            v0_0_1,
+            beta_0_0_1,
+            beta_1_0_0,
         };
 
         /// <summary>
         /// Current version
         /// </summary>
-        const Versions CURRENT_VERSION = Versions.v0_0_1;
+        const Versions CURRENT_VERSION = Versions.beta_1_0_0;
 
         public static Versions CurrentVersion
         {
@@ -36,7 +37,10 @@ namespace KPT
         /// <returns>Current version as string formatted to current specifications</returns>
         public static string ToFormattedString(this Versions version)
         {
-            return version.ToString().Replace("_", ".");
+            string newVersion = version.ToString();
+            newVersion = newVersion.Replace("_", ".");
+            newVersion = newVersion.Replace("beta.", "beta-");
+            return newVersion;
         }       
 
     }

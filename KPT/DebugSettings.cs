@@ -14,6 +14,7 @@ namespace KPT
         public const bool COPY_UNPACKED_FILES = true;
         public const bool REFRESH_REPACKED_FILES_ON_BUILD = true;
         public const bool ATTEMPT_DECOMPRESSION = true;
+        public const bool USE_BACKGROUND_WORKERS = true;
 
     }
 }

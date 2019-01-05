@@ -346,6 +346,9 @@ namespace KPT
                 MessageBox.Show(errorMessage);
                 return false;
             }
+
+            ImageHandler.initalized = false; // necessary for if the rootDir changes, a bit weird to struture the program this way. think about changing it.
+
             return true;
         }
 

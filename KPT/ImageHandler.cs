@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Linq.Expressions;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
-using System.Diagnostics;
 
 namespace KPT
 {
@@ -17,16 +12,17 @@ namespace KPT
     {
 
         public const string imagesDir = "Images";
-        public static string targetDir = Path.Combine(ProjectFolder.rootDir, ProjectFolder.editableGameFiesDir, imagesDir);
-        public static string gimConvPath = Path.Combine(ProjectFolder.toolsDir, "GimConv\\GimConv.exe");
-        private static bool initalized = false;
+        public static string targetDir;
+        public static string gimConvPath;
+        public static bool initalized = false;
 
         // Direction of conversion (i.e. GIM to PNG or PNG to GIM) is decided by input/output file extensions
         public static bool ConvertImage(string inputFilePath, string outputFilePath)
         {
+
             if (!initalized)
             {
-                CheckGimConv();
+                Initalize();
             }
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
@@ -43,7 +39,7 @@ namespace KPT
                 //string errorMessage =
                 //    "Image conversion failed" + Environment.NewLine + Environment.NewLine +
                 //    "Exit code: " + process.ExitCode.ToString() + Environment.NewLine +
-                //    "GimConv Path: " + startInfo.FileName +  Environment.NewLine +
+                //    "GimConv Path: " + startInfo.FileName + Environment.NewLine +
                 //    "Arguments: " + startInfo.Arguments;
                 //MessageBox.Show(errorMessage);
                 return false;
@@ -57,8 +53,11 @@ namespace KPT
             return targetDir;
         }
 
-        private static void CheckGimConv()
+        private static void Initalize()
         {
+            targetDir = Path.Combine(ProjectFolder.GetRootDir(), ProjectFolder.editableGameFiesDir, imagesDir);
+            gimConvPath = Path.Combine(ProjectFolder.toolsDir, "GimConv\\GimConv.exe");
+
             if (!File.Exists(gimConvPath))
             {
                 string errorMessage = "Could not find GimConv.exe - expected path was " + gimConvPath;
@@ -70,6 +69,8 @@ namespace KPT
             {
                 Directory.CreateDirectory(targetDir);
             }
+
+
 
             initalized = true;
 

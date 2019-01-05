@@ -47,6 +47,8 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.button6 = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
+            this.button7 = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -144,6 +146,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.label7);
+            this.tabPage2.Controls.Add(this.button7);
             this.tabPage2.Controls.Add(this.label5);
             this.tabPage2.Controls.Add(this.label4);
             this.tabPage2.Controls.Add(this.button3);
@@ -238,6 +242,25 @@
             this.label6.TabIndex = 15;
             this.label6.Text = "Extract images from decompressed files";
             // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(237, 245);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(150, 23);
+            this.button7.TabIndex = 14;
+            this.button7.Text = "Load Images";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.LoadImages_Click);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(393, 250);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(227, 13);
+            this.label7.TabIndex = 15;
+            this.label7.Text = "Readd extracted images to decompressed files";
+            // 
             // ProjectForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -280,5 +303,7 @@
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button button7;
     }
 }

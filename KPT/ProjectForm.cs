@@ -258,6 +258,13 @@ namespace KPT
 
                 if (worker != null)
                 {
+                    double progress = ((double)counter / (double)scriptFiles.Count) * 100;
+
+                    worker.ReportProgress((int)progress);
+                }
+
+                if (worker != null)
+                {
                     if (worker.WorkerSupportsCancellation && worker.CancellationPending)
                     {
                         return;
@@ -290,13 +297,6 @@ namespace KPT
                 if (!ImageHandler.ConvertImage(pngFileLocation, targetFileLocation))
                 {
                     continue;
-                }
-
-                if (worker != null)
-                {
-                    double progress = ((double)counter / (double)scriptFiles.Count) * 100;
-
-                    worker.ReportProgress((int)progress);
                 }
 
 

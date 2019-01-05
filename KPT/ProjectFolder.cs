@@ -62,6 +62,10 @@ namespace KPT
         /// The file name to which the project file will be saved
         /// </summary>
         private const string projectFileName = "project.yaml";
+        /// <summary>
+        /// Directory in which tools such as mkisofs or GimConv will be stored
+        /// </summary>
+        public const string toolsDir = "./Tools";
 
         public static string GetRootDir()
         {
@@ -266,7 +270,7 @@ namespace KPT
             return collection;
         }
 
-        private static string GetSubPath(string path, string root)
+        public static string GetSubPath(string path, string root)
         {
             int rootLen = root.Length + Path.DirectorySeparatorChar.ToString().Length;
             int subPathLen = path.Length - rootLen;
@@ -342,6 +346,9 @@ namespace KPT
                 MessageBox.Show(errorMessage);
                 return false;
             }
+
+            ImageHandler.initalized = false; // necessary for if the rootDir changes, a bit weird to struture the program this way. think about changing it.
+
             return true;
         }
 

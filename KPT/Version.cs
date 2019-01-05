@@ -15,12 +15,13 @@ namespace KPT
         {
             beta_0_0_1,
             beta_1_0_0,
+            beta_1_0_1,
         };
 
         /// <summary>
         /// Current version
         /// </summary>
-        const Versions CURRENT_VERSION = Versions.beta_1_0_0;
+        const Versions CURRENT_VERSION = Versions.beta_1_0_1;
 
         public static Versions CurrentVersion
         {

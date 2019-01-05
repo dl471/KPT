@@ -94,6 +94,10 @@ namespace KPT
             {
                 if (file.EndsWith(".cpk.yaml"))
                 {
+                    if (file.EndsWith("movie-movie.cpk.yaml")) // doesn't work for some reason - manually blacklisting
+                    {
+                        continue;
+                    }
                     CPKBuildObject cpk = new CPKBuildObject();
                     if (!cpk.BuildCPK(file))
                     {

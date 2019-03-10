@@ -14,19 +14,40 @@ namespace KPT.Parser.Instructions
     {
 
         Opcode opcode;
-        DataBox box1;
+        byte unknown1;
+        byte unknown2;
+        byte unknown3;
+        byte unknown4;
+        byte unknown5;
+        byte unknown6;
+        byte unknown7;
+        byte unknown8;
+        byte unknown9;
+        byte unknown10;
+        byte unknown11;
+        byte unknown12;
         int voiceClip;
-        int unknown1;
+        int unknown13;
         string name;
         string dialogue;
 
         public bool Read(BinaryReader br)
         {
             opcode = FileIOHelper.ReadOpcode(br);
-            box1 = new DataBox(0xC);
-            box1.Read(br);
+            unknown1 = br.ReadByte();
+            unknown2 = br.ReadByte();
+            unknown3 = br.ReadByte();
+            unknown4 = br.ReadByte();
+            unknown5 = br.ReadByte();
+            unknown6 = br.ReadByte();
+            unknown7 = br.ReadByte();
+            unknown8 = br.ReadByte();
+            unknown9 = br.ReadByte();
+            unknown10 = br.ReadByte();
+            unknown11 = br.ReadByte();
+            unknown12 = br.ReadByte();
             voiceClip = br.ReadInt32();
-            unknown1 = br.ReadInt32();
+            unknown13 = br.ReadInt32();
             name = FileIOHelper.ReadName(br);
             dialogue = FileIOHelper.ReadDialogueString(br);
             return true;
@@ -35,9 +56,20 @@ namespace KPT.Parser.Instructions
         public bool Write(BinaryWriter bw)
         {
             bw.Write((short)opcode);
-            box1.Write(bw);
-            bw.Write(voiceClip);
             bw.Write(unknown1);
+            bw.Write(unknown2);
+            bw.Write(unknown3);
+            bw.Write(unknown4);
+            bw.Write(unknown5);
+            bw.Write(unknown6);
+            bw.Write(unknown7);
+            bw.Write(unknown8);
+            bw.Write(unknown9);
+            bw.Write(unknown10);
+            bw.Write(unknown11);
+            bw.Write(unknown12);
+            bw.Write(voiceClip);
+            bw.Write(unknown13);
             FileIOHelper.WriteFixedLengthString(bw, name, Constants.NAME_LENGTH);
             FileIOHelper.WriteDialogueString(bw, dialogue);
             return true;

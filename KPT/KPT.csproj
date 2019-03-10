@@ -96,7 +96,7 @@
     <Compile Include="Parser\FileIOHelper.cs" />
     <Compile Include="Parser\Instructions\InstructionBox.cs" />
     <Compile Include="Parser\Instructions\LocationCard.cs" />
-    <Compile Include="Parser\Instructions\U_500.cs" />
+    <Compile Include="Parser\Instructions\BasicTextBox.cs" />
     <Compile Include="Parser\Instructions\U_501.cs" />
     <Compile Include="Parser\Instructions\U_502.cs" />
     <Compile Include="Parser\Instructions\U_504.cs" />

@@ -9,7 +9,7 @@ using KPT.Parser.Elements;
 
 namespace KPT.Parser.Instructions
 {
-    class U_500 : IInstruction, IHasName, IHasStrings
+    class BasicTextBox : IInstruction, IHasName, IHasStrings
     {
         Opcode opcode;
         int voiceClip;

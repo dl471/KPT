@@ -242,6 +242,8 @@ namespace KPT.Parser.Tests
 
             TestElement(typeof(St_Header), "St_HeaderTest.bin");
 
+            TestElement(typeof(SpriteInfo), "SpriteInfoTest.bin");
+
             TestElement(typeof(DataBox), "DataBoxTest.bin");
             TestElement(typeof(InstructionBox), "InstructionBoxTest.bin");
             TestElement(typeof(ChoiceDialog), "ChoiceDialogTest.bin");

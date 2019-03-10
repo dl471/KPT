@@ -242,13 +242,15 @@ namespace KPT.Parser.Tests
 
             TestElement(typeof(St_Header), "St_HeaderTest.bin");
 
+            TestElement(typeof(SpriteInfo), "SpriteInfoTest.bin");
+
             TestElement(typeof(DataBox), "DataBoxTest.bin");
             TestElement(typeof(InstructionBox), "InstructionBoxTest.bin");
             TestElement(typeof(ChoiceDialog), "ChoiceDialogTest.bin");
             TestElement(typeof(LocationCard), "LocationCardTest.bin");
             TestElement(typeof(ShowImage), "ShowImageTest.bin");
             TestElement(typeof(U_501), "U_501Test.bin");
-            TestElement(typeof(U_500), "U_500Test.bin");
+            TestElement(typeof(BasicTextBox), "U_500Test.bin");
             TestElement(typeof(U_502), "U_502Test.bin");
             TestElement(typeof(U_504), "U_504Test.bin");
 

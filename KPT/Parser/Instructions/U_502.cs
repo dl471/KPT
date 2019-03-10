@@ -12,30 +12,40 @@ namespace KPT.Parser.Instructions
     class U_502 : IInstruction, IHasName, IHasStrings
     {
         Opcode opcode;
-        DataBox box1;
+        short unknown1;
+        byte unknown2;
+        byte unknown3;
+        int voiceClip;
+        int unknown4;
         string name;
         string dialogue;
-        DataBox box2; // in retrospect this seems like a very strange thing to have - i may have to double check it
+        int unknown5;
 
         public bool Read(BinaryReader br)
         {
             opcode = FileIOHelper.ReadOpcode(br);
-            box1 = new DataBox(0x0C);
-            box1.Read(br);
+            unknown1 = br.ReadInt16();
+            unknown2 = br.ReadByte();
+            unknown3 = br.ReadByte();
+            voiceClip = br.ReadInt32();
+            unknown4 = br.ReadInt32();
             name = FileIOHelper.ReadName(br);
             dialogue = FileIOHelper.ReadDialogueString(br);
-            box2 = new DataBox(0x04);
-            box2.Read(br);
+            unknown5 = br.ReadInt32();
             return true;
         }
 
         public bool Write(BinaryWriter bw)
         {
             bw.Write((short)opcode);
-            box1.Write(bw);
+            bw.Write(unknown1);
+            bw.Write(unknown2);
+            bw.Write(unknown3);
+            bw.Write(voiceClip);
+            bw.Write(unknown4);
             FileIOHelper.WriteFixedLengthString(bw, name, Constants.NAME_LENGTH);
             FileIOHelper.WriteDialogueString(bw, dialogue);
-            box2.Write(bw);
+            bw.Write(unknown5);
             return true;
         }
 

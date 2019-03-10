@@ -32,7 +32,7 @@ namespace KPT.Parser
         U_130 = 0x130,
         U_132 = 0x132,
         U_205 = 0x205,
-        U_500 = 0x500,
+        BASIC_TEXT_BOX = 0x500,
 
         U_603 = 0x603,
         U_192 = 0x192,
@@ -186,7 +186,7 @@ namespace KPT.Parser
             { Opcode.U_406, typeof(InstructionBox) },
             { Opcode.U_407, typeof(InstructionBox) },
 
-            { Opcode.U_500, typeof(U_500) },
+            { Opcode.BASIC_TEXT_BOX, typeof(BasicTextBox) },
             { Opcode.U_501, typeof(U_501) },
             { Opcode.U_502, typeof(U_502) },
             { Opcode.U_504, typeof(U_504) },

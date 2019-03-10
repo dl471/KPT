@@ -9,18 +9,19 @@ using KPT.Parser.Elements;
 
 namespace KPT.Parser.Instructions
 {
-    class U_500 : IInstruction, IHasName, IHasStrings
+    class BasicTextBox : IInstruction, IHasName, IHasStrings
     {
         Opcode opcode;
-        DataBox box1;
+        int voiceClip;
+        int unknown;
         string name;
         string dialogue;
 
         public bool Read(BinaryReader br)
         {
             opcode = FileIOHelper.ReadOpcode(br);
-            box1 = new DataBox(0x8);
-            box1.Read(br);
+            voiceClip = br.ReadInt32();
+            unknown = br.ReadInt32();
             name = FileIOHelper.ReadName(br);
             dialogue = FileIOHelper.ReadDialogueString(br);
             return true;
@@ -29,7 +30,8 @@ namespace KPT.Parser.Instructions
         public bool Write(BinaryWriter bw)
         {
             bw.Write((short)opcode);
-            box1.Write(bw);
+            bw.Write(voiceClip);
+            bw.Write(unknown);
             FileIOHelper.WriteFixedLengthString(bw, name, Constants.NAME_LENGTH);
             FileIOHelper.WriteDialogueString(bw, dialogue);
             return true;

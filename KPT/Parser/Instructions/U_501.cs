@@ -14,40 +14,25 @@ namespace KPT.Parser.Instructions
     {
 
         Opcode opcode;
-        byte unknown1;
-        byte unknown2;
-        byte unknown3;
-        byte unknown4;
-        byte unknown5;
-        byte unknown6;
-        byte unknown7;
-        byte unknown8;
-        byte unknown9;
-        byte unknown10;
-        byte unknown11;
-        byte unknown12;
+        SpriteInfo firstSprite;
+        SpriteInfo secondSprite;
+        SpriteInfo thirdSprite;
         int voiceClip;
-        int unknown13;
+        int unknown;
         string name;
         string dialogue;
 
         public bool Read(BinaryReader br)
         {
             opcode = FileIOHelper.ReadOpcode(br);
-            unknown1 = br.ReadByte();
-            unknown2 = br.ReadByte();
-            unknown3 = br.ReadByte();
-            unknown4 = br.ReadByte();
-            unknown5 = br.ReadByte();
-            unknown6 = br.ReadByte();
-            unknown7 = br.ReadByte();
-            unknown8 = br.ReadByte();
-            unknown9 = br.ReadByte();
-            unknown10 = br.ReadByte();
-            unknown11 = br.ReadByte();
-            unknown12 = br.ReadByte();
+            firstSprite = new SpriteInfo();
+            firstSprite.Read(br);
+            secondSprite = new SpriteInfo();
+            secondSprite.Read(br);
+            thirdSprite = new SpriteInfo();
+            thirdSprite.Read(br);
             voiceClip = br.ReadInt32();
-            unknown13 = br.ReadInt32();
+            unknown = br.ReadInt32();
             name = FileIOHelper.ReadName(br);
             dialogue = FileIOHelper.ReadDialogueString(br);
             return true;
@@ -56,20 +41,11 @@ namespace KPT.Parser.Instructions
         public bool Write(BinaryWriter bw)
         {
             bw.Write((short)opcode);
-            bw.Write(unknown1);
-            bw.Write(unknown2);
-            bw.Write(unknown3);
-            bw.Write(unknown4);
-            bw.Write(unknown5);
-            bw.Write(unknown6);
-            bw.Write(unknown7);
-            bw.Write(unknown8);
-            bw.Write(unknown9);
-            bw.Write(unknown10);
-            bw.Write(unknown11);
-            bw.Write(unknown12);
+            firstSprite.Write(bw);
+            secondSprite.Write(bw);
+            thirdSprite.Write(bw);
             bw.Write(voiceClip);
-            bw.Write(unknown13);
+            bw.Write(unknown);
             FileIOHelper.WriteFixedLengthString(bw, name, Constants.NAME_LENGTH);
             FileIOHelper.WriteDialogueString(bw, dialogue);
             return true;

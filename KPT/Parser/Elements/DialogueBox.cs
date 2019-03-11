@@ -9,10 +9,11 @@ using KPT.Parser.Spreadsheet_Interface;
 
 namespace KPT.Parser.Elements
 {
-    class DialogueBox : IElement, IHasName, IHasStrings
+    class DialogueBox : IElement, IHasName, IHasStrings, IDialogueBox
     {
         string name;
         string dialogue;
+        bool translated = false;
 
         public bool Read(BinaryReader br)
         {
@@ -48,11 +49,18 @@ namespace KPT.Parser.Elements
         public void GetStrings(StringCollection collection)
         {
             dialogue = collection.GetString(dialogue);
+            isTranslated = true; // We're assuming that the primary reason for the strings changing is loading translated strings - it's possible this may not be the case, but it is very unlikely
         }
 
         public List<CSVRecord> GetCSVRecords()
         {
             return new List<CSVRecord> { new CSVRecord(name, dialogue) };
+        }
+
+        public bool isTranslated
+        {
+            get { return isTranslated; }
+            set { isTranslated = value; }
         }
 
     }

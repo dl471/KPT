@@ -9,7 +9,7 @@ using KPT.Parser.Elements;
 
 namespace KPT.Parser.Instructions
 {
-    class BasicTextBox : IInstruction, IHasName, IHasStrings
+    class BasicTextBox : IInstruction, IHasName, IHasStrings, IDialogueBox
     {
         Opcode opcode;
         int voiceClip;
@@ -62,6 +62,12 @@ namespace KPT.Parser.Instructions
         public List<CSVRecord> GetCSVRecords()
         {
             return dialogueBox.GetCSVRecords();
+        }
+
+        public bool isTranslated
+        {
+            get { return dialogueBox.isTranslated; }
+            set { dialogueBox.isTranslated = value; }
         }
 
     }

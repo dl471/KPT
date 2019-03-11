@@ -16,7 +16,7 @@ namespace KPT.Parser
         /// <remarks>
         /// The line length should be 1 less than the actual intended length on screen so as to make space for new lines being added in
         /// </remarks>
-        const int LINE_LENGTH = 49;
+        const int LINE_LENGTH = 44;
         /// <summary>
         /// The number of lines that will fit in a box on the screen
         /// </summary>
@@ -27,7 +27,7 @@ namespace KPT.Parser
         /// <remarks>
         /// This is caused by the buffer being sized so as to be able to fit the maximum possible Japanese text on the screen. Since more Latin characters can be packed into one box, the buffer is too small to hold all of them and so the entire box cannot be utilized. Ideally this restriction will be lifted once I find a way to directly maniuplate the buffer size in a way that can be made permanent.
         /// </remarks>
-        const int BOX_MAX_LENGTH = 150;
+        const int BOX_MAX_LENGTH = 90;
         /// <summary>
         /// Character to use when attempting to split English text into words - currently based on _ since spaces will be replaced with _ at current due to technical limitations
         /// </summary>
@@ -99,7 +99,7 @@ namespace KPT.Parser
 
             foreach (string line in lines)
             {
-                string workingLine = line;
+                string workingLine = line; 
                 
                 if (workingLine.Last() == SEGMENT_SEPERATOR)
                 {

@@ -9,7 +9,7 @@ using KPT.Parser.Elements;
 
 namespace KPT.Parser.Instructions
 {
-    class U_502 : IInstruction, IHasName, IHasStrings
+    class U_502 : IInstruction, IHasName, IHasStrings, IDialogueBox
     {
         Opcode opcode;
         short unknown1;
@@ -17,9 +17,13 @@ namespace KPT.Parser.Instructions
         byte unknown3;
         int voiceClip;
         int unknown4;
-        string name;
-        string dialogue;
+        DialogueBox dialogueBox;
         int unknown5;
+
+        public U_502()
+        {
+            dialogueBox = new DialogueBox();
+        }
 
         public bool Read(BinaryReader br)
         {
@@ -29,8 +33,7 @@ namespace KPT.Parser.Instructions
             unknown3 = br.ReadByte();
             voiceClip = br.ReadInt32();
             unknown4 = br.ReadInt32();
-            name = FileIOHelper.ReadName(br);
-            dialogue = FileIOHelper.ReadDialogueString(br);
+            dialogueBox.Read(br);
             unknown5 = br.ReadInt32();
             return true;
         }
@@ -43,37 +46,40 @@ namespace KPT.Parser.Instructions
             bw.Write(unknown3);
             bw.Write(voiceClip);
             bw.Write(unknown4);
-            FileIOHelper.WriteFixedLengthString(bw, name, Constants.NAME_LENGTH);
-            FileIOHelper.WriteDialogueString(bw, dialogue);
+            dialogueBox.Write(bw);
             bw.Write(unknown5);
             return true;
         }
 
         public string GetName()
         {
-            return name;
+            return dialogueBox.GetName();
         }
 
         public void SetName(string newName)
         {
-            name = newName;
+            dialogueBox.SetName(newName);
         }
 
         public void AddStrings(StringCollection collection)
         {
-            string newID = collection.GenerateNewID();
-            collection.AddString(newID, dialogue);
-            dialogue = newID;
+            dialogueBox.AddStrings(collection);
         }
 
         public void GetStrings(StringCollection collection)
         {
-            dialogue = collection.GetString(dialogue);
+            dialogueBox.GetStrings(collection);
         }
 
         public List<CSVRecord> GetCSVRecords()
         {
-            return new List<CSVRecord> { new CSVRecord(name, dialogue) };
+            return dialogueBox.GetCSVRecords();
+        }
+
+        public bool isTranslated
+        {
+            get { return dialogueBox.isTranslated; }
+            set { dialogueBox.isTranslated = value; }
         }
 
     }

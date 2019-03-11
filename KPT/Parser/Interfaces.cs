@@ -76,4 +76,16 @@ namespace KPT.Parser
         List<CSVRecord> GetCSVRecords();
     }
 
+    /// <summary>
+    /// Interface providing information needed for dialogue boxes
+    /// </summary>
+    interface IDialogueBox
+    {
+        bool isTranslated
+        {
+            get;
+            set;
+        }
+    }
+
 }

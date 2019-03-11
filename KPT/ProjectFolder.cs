@@ -193,8 +193,9 @@ namespace KPT
                 FileStream fs = new FileStream(fileName, FileMode.Open);
                 BinaryReader br = new BinaryReader(fs);
 
-                var testParser = new FileParser();
-                var parsedFile = testParser.ParseFile(br, Path.GetFileName(file));
+                var parser = new FileParser();
+                var textWrapper = new DynamicTextBoxes();
+                var parsedFile = parser.ParseFile(br, Path.GetFileName(file));
 
                 foreach (IElement element in parsedFile.instructions)
                 {
@@ -211,13 +212,15 @@ namespace KPT
                     }
                 }
 
+                textWrapper.CheckTextboxes(parsedFile);
+
                 br.Close();
                 fs.Close();
 
                 if (fileStrings.NumberOfKeys > 0)
                 {
                     string outputFileName = Path.Combine(rootDir, reassembledGameFilesDir, GetSubPath(file, Path.Combine(rootDir, unpackedGameFilesDir)));
-                    testParser.WriteFile(parsedFile, outputFileName);
+                    parser.WriteFile(parsedFile, outputFileName);
                 }
 
             }

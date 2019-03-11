@@ -79,13 +79,17 @@ namespace KPT.Parser
     /// <summary>
     /// Interface providing information needed for dialogue boxes
     /// </summary>
-    interface IDialogueBox
+    interface IDialogueBox : IHasName
     {
         bool isTranslated
         {
             get;
             set;
         }
+
+        string GetDialogue();
+        void SetDialogue(string newDialogue);
+
     }
 
 }

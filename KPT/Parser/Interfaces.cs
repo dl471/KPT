@@ -79,7 +79,7 @@ namespace KPT.Parser
     /// <summary>
     /// Interface providing information needed for dialogue boxes
     /// </summary>
-    interface IDialogueBox
+    interface IDialogueBox : IHasName
     {
         bool isTranslated
         {

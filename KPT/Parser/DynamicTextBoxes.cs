@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using KPT.Parser.Instructions;
 
 namespace KPT.Parser
 {
@@ -84,11 +85,86 @@ namespace KPT.Parser
                 }
             }
 
+            public override string ToString()
+            {
+                return line1 + line2 + line3;
+            }
+
         }
 
         public void CheckTextboxes(KCFile file)
         {
 
+            LinkedList<IInstruction> processedInstructons = new LinkedList<IInstruction>();
+
+
+            foreach (var instruction in file.instructions)
+            {
+                if (instruction is IDialogueBox)
+                {
+                    var temp = instruction as IDialogueBox;
+                    string dialogue = temp.GetDialogue();
+                    var boxes = ProcessDialogue(dialogue);
+                    if (boxes.Length == 1)
+                    {
+                        processedInstructons.AddLast(instruction);
+                    }
+                    else
+                    {
+                       foreach (var newBox in BreakUpDialgoueBox(temp, boxes))
+                        {
+                            processedInstructons.AddLast(newBox);
+                        }
+                    }
+                }
+                else
+                {
+                    processedInstructons.AddLast(instruction);
+                }
+            }
+
+            file.instructions = processedInstructons.ToList();
+
+        }
+
+         /// <summary>
+         /// Take an IDialogueBox and break it down into multiple instructions as necessary
+         /// </summary>
+         /// <param name="input"></param>
+         /// <returns></returns>
+        public IInstruction[] BreakUpDialgoueBox(IDialogueBox input, BoxLines[] boxes)
+        {
+
+            if (boxes.Length == 1)
+            {
+                return new IInstruction[1] { input as IInstruction };
+            }
+
+            List<IInstruction> newBoxes = new List<IInstruction>();
+
+            input.SetDialogue(boxes[0].ToString());
+            newBoxes.Add(input as IInstruction);
+
+            for (int i = 1; i < boxes.Length; i++)
+            {
+                var workingBox = boxes[i];
+                BasicTextBox newDialogBox = new BasicTextBox();
+                newDialogBox.InitalizeDefault();
+                newDialogBox.SetDialogue(workingBox.ToString());
+                newDialogBox.SetName(input.GetName());
+                newBoxes.Add(newDialogBox);
+            }
+
+            return newBoxes.ToArray();
+        }
+
+        public BoxLines[] ProcessDialogue(string dialogue)
+        {
+            var segments = BreakIntoSegments(dialogue);
+            var lines = FitOntoLines(segments);
+            var boxes = FitOntoBoxes(lines);
+
+            return boxes;   
         }
 
         public BoxLines[] FitOntoBoxes(string[] lines)
@@ -99,16 +175,19 @@ namespace KPT.Parser
 
             foreach (string line in lines)
             {
-                string workingLine = line; 
-                
-                if (workingLine.Last() == SEGMENT_SEPERATOR)
-                {
-                    workingLine = workingLine.Substring(0, workingLine.Length - 1);
-                }
+                string workingLine = line;
 
-                if (workingLine.Last() != CHOSEN_NEWLINE)
+                if (workingLine.Length > 1)
                 {
-                    workingLine = workingLine + CHOSEN_NEWLINE;
+                    if (workingLine.Last() == SEGMENT_SEPERATOR)
+                    {
+                        workingLine = workingLine.Substring(0, workingLine.Length - 1);
+                    }
+
+                    if (workingLine.Last() != CHOSEN_NEWLINE)
+                    {
+                        workingLine = workingLine + CHOSEN_NEWLINE;
+                    }
                 }
 
                 if (workingBox.IsFull)

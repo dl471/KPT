@@ -21,6 +21,16 @@ namespace KPT.Parser.Instructions
             dialogueBox = new DialogueBox();
         }
 
+        /// <summary>
+        /// Fill with default contents - used for creating entirely new dialogue boxes
+        /// </summary>
+        public void InitalizeDefault()
+        {
+            opcode = Opcode.BASIC_TEXT_BOX;
+            voiceClip = 999999; // deliberately non-existent
+            unknown = 0;
+        }
+
         public bool Read(BinaryReader br)
         {
             opcode = FileIOHelper.ReadOpcode(br);

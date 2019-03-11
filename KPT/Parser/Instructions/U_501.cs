@@ -84,5 +84,15 @@ namespace KPT.Parser.Instructions
             set { dialogueBox.isTranslated = value; }
         }
 
+        public string GetDialogue()
+        {
+            return dialogueBox.GetDialogue();
+        }
+
+        public void SetDialogue(string newDialogue)
+        {
+            dialogueBox.SetDialogue(newDialogue);
+        }
+
     }
 }

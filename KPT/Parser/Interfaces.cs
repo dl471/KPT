@@ -86,6 +86,10 @@ namespace KPT.Parser
             get;
             set;
         }
+
+        string GetDialogue();
+        void SetDialogue(string newDialogue);
+
     }
 
 }

@@ -63,5 +63,15 @@ namespace KPT.Parser.Elements
             set { isTranslated = value; }
         }
 
+        public string GetDialogue()
+        {
+            return dialogue;
+        }
+
+        public void SetDialogue(string newDialogue)
+        {
+            dialogue = newDialogue;
+        }
+
     }
 }

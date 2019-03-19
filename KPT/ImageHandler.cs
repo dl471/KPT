@@ -50,6 +50,12 @@ namespace KPT
 
         public static string GetImagesDir()
         {
+
+            if (!initalized)
+            {
+                Initalize();
+            }
+
             return targetDir;
         }
 

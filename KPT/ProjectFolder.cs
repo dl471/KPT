@@ -354,7 +354,7 @@ namespace KPT
                 return false;
             }
 
-            ImageHandler.initalized = false; // necessary for if the rootDir changes, a bit weird to struture the program this way. think about changing it.
+            ImageHandler.initalized = false; // necessary for if the rootDir changes, a bit weird to struture the program this way. think about changing it. (update: just found a weird bug related to ImageHandler initialization, definitely needs changed)
 
             return true;
         }

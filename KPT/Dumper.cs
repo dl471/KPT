@@ -143,7 +143,6 @@ namespace KPT
 
         private CPKBuildObject FilterCPKFile(FileLocationMeta file, string sourceDirectoryPath, string targetDirectoryPath)
         {
-
             var cpkFile = new CPK(new Tools()); // this function gets a bit confusings since file, cpkFile and embeddedFile are all thrown around - i will need to fix that
             var filePath = Path.Combine(sourceDirectoryPath, file.subPath, file.fileName);
 

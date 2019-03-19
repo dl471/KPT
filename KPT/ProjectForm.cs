@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using KPT.Build_Objects;
+using System.Diagnostics;
 
 namespace KPT
 {
@@ -145,16 +146,19 @@ namespace KPT
             int counter = 0; // used to add a number to each image name, just in case disambiguation is required
 
             GenerateFileListFiltered(Path.Combine(ProjectFolder.GetRootDir(), ProjectFolder.unpackedGameFilesDir), imageFiles, filter);
-
+            
             foreach (var file in imageFiles)
             {
-
+                
                 string fileName = Path.GetFileNameWithoutExtension(file);
                 string targetFilePath = Path.Combine(ImageHandler.GetImagesDir(), fileName);
                 string targetFilePathPostFix = string.Format("_{0}.png", counter.ToString());
                 targetFilePath += targetFilePathPostFix;
 
                 counter++;
+
+
+                
 
                 if (worker != null)
                 {
@@ -168,7 +172,6 @@ namespace KPT
                 {
                     continue;
                 }
-                
 
                 var gimBuildInstructions = new GIMBuildObject();
                 gimBuildInstructions.originalFileLocation = Path.Combine(ProjectFolder.editableGameFiesDir, ImageHandler.imagesDir, Path.GetFileName(targetFilePath));
@@ -199,6 +202,7 @@ namespace KPT
 
                     worker.ReportProgress((int)progress);
                 }
+
             }            
 
         }
@@ -271,7 +275,7 @@ namespace KPT
                     }
                 }
 
-                string checksum; 
+                string checksum;
 
                 try
                 {

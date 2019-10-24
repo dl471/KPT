@@ -12,7 +12,7 @@ namespace KPT
     class FontHandler
     {
 
-        public static int DEFAULT_SPACE_SIZE = 500;
+        public static int DEFAULT_SPACE_SIZE = 5;
         public static string DEFAULT_FONT_FILE = @"PSP_GAME\USRDIR\SysFont\FontDat.pgf";
         
         PGFFont font;

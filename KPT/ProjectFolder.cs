@@ -188,6 +188,8 @@ namespace KPT
             FontHandler fontHandler = new FontHandler(); // we will sneak fixing the font size in here
             fontHandler.ChangeSpaceSize(FontHandler.DEFAULT_SPACE_SIZE);
 
+            var textWrapper = new DynamicTextBoxes();
+
             foreach (string file in fileList)
             {
                 string fileName = Path.Combine(dialogueFileDir, file);
@@ -197,7 +199,6 @@ namespace KPT
                 BinaryReader br = new BinaryReader(fs);
 
                 var parser = new FileParser();
-                var textWrapper = new DynamicTextBoxes();
                 var parsedFile = parser.ParseFile(br, Path.GetFileName(file));
 
                 foreach (IElement element in parsedFile.instructions)

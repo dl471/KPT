@@ -30,7 +30,7 @@ namespace KPT
             font = new PGFFont(fontSource);
 
             PGFGlyph space = font.GetGlyphByIndex(0x20);
-            space.width = DEFAULT_SPACE_SIZE;
+            space.width = newSize;
             space.SaveGylph();
 
             font.SaveFont(fontDestination);

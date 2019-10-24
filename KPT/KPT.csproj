@@ -180,7 +180,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(SolutionDir)Tools"  "$(TargetDir)Tools\" /E /Y
-</PostBuildEvent>
+copy "$(SolutionDir)lib\libpgfdll.dll" "$(TargetDir)libpgfdll.dll"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -14,6 +14,8 @@ namespace KPT
 
         public static int DEFAULT_SPACE_SIZE = 5;
         public static string DEFAULT_FONT_FILE = @"PSP_GAME\USRDIR\SysFont\FontDat.pgf";
+
+        private Dictionary<int, int> glyphWidths;
         
         PGFFont font;
         string fontSource;
@@ -23,6 +25,7 @@ namespace KPT
         {
             fontSource = Path.Combine(ProjectFolder.rootDir, ProjectFolder.unpackedGameFilesDir, DEFAULT_FONT_FILE);
             fontDestination = Path.Combine(ProjectFolder.rootDir, ProjectFolder.reassembledGameFilesDir, DEFAULT_FONT_FILE);
+            glyphWidths = BuildGlypthWidthDictionary();
         }
 
         public void ChangeSpaceSize(int newSize)
@@ -34,7 +37,43 @@ namespace KPT
             space.SaveGylph();
 
             font.SaveFont(fontDestination);
+        }
 
+        private Dictionary<int, int> BuildGlypthWidthDictionary()
+        {
+            Dictionary<int, int> dict = new Dictionary<int, int>();
+
+            font = new PGFFont(fontSource);
+
+            for (int i = 0; i < 65536; i++) // Maximum number of glyphs in PGF - this is contained in a property in libpgf-csharp but said property is not accessible outside its own assembly. May change this.
+            {
+
+                PGFGlyph glyph = font.GetGlyphByUcs(i);
+                if (glyph == null)
+                {
+                    dict[i] = DEFAULT_SPACE_SIZE;
+                }
+                else
+                {
+                    dict[i] = glyph.width;
+                }
+
+            }
+
+            return dict;
+        }
+        
+        public int CalcuateSegmentWidth(string segment)
+        {
+            int length = 0;
+
+            foreach (char letter in segment)
+            {
+                int ucs = Convert.ToInt32(letter);
+                length += glyphWidths[ucs];
+            }
+
+            return length;
         }
  
     }

@@ -185,6 +185,9 @@ namespace KPT
             var nameCollection = new StringCollection();
             Dictionary<string, StringCollection> stringFiles = new Dictionary<string, StringCollection>();
 
+            FontHandler fontHandler = new FontHandler(); // we will sneak fixing the font size in here
+            fontHandler.ChangeSpaceSize(FontHandler.DEFAULT_SPACE_SIZE);
+
             foreach (string file in fileList)
             {
                 string fileName = Path.Combine(dialogueFileDir, file);

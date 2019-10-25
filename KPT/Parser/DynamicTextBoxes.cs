@@ -17,7 +17,11 @@ namespace KPT.Parser
         /// <remarks>
         /// The line length should be 1 less than the actual intended length on screen so as to make space for new lines being added in
         /// </remarks>
-        const int LINE_LENGTH = 44;
+        const int LINE_LENGTH_CHARACTERS = 44;
+        /// <summary>
+        /// Approximate amount of pixels that can fit on screen
+        /// </summary>
+        const int LINE_LENGTH_WIDTH = LINE_LENGTH_CHARACTERS * 5;
         /// <summary>
         /// The number of lines that will fit in a box on the screen
         /// </summary>
@@ -34,6 +38,8 @@ namespace KPT.Parser
         /// </summary>
         const char SEGMENT_SEPERATOR = '_';
         const char CHOSEN_NEWLINE = '\n';
+
+        FontHandler fontHandler = new FontHandler();
 
         public class BoxLines
         {
@@ -228,8 +234,15 @@ namespace KPT.Parser
             foreach (string segment in segments)
             {
                 string workingSegment = segment;
+                int workingSegmentLength = GetSegmentLength(workingSegment);
 
-                if (newLine.Length + workingSegment.Length > LINE_LENGTH)
+                if (workingSegmentLength >= LINE_LENGTH_CHARACTERS)
+                {
+                    MessageBox.Show("Segment {0} is too large for a line - functionality for splitting segments is yet to be reimplemented");
+                    Environment.Exit(0);
+                }
+
+                if (newLine.Length + workingSegmentLength > LINE_LENGTH_CHARACTERS)
                 {
                     lines.Add(newLine);
                     newLine = string.Empty;
@@ -246,7 +259,7 @@ namespace KPT.Parser
         }
 
         /// <summary>
-        /// Break the text down into an array of words (while also breaking down extremely long words into mangable chunks)
+        /// Break the text down into an array of words
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -255,23 +268,14 @@ namespace KPT.Parser
             List<string> segments = new List<string>();
             string[] segmentArray = input.Split(SEGMENT_SEPERATOR);
 
-            // making sure there are no segments large enough they take up more than an entire line
-            foreach (string segment in segmentArray)
-            {
-                string workingSegment = segment + SEGMENT_SEPERATOR;
+            return segmentArray;
+        }
 
-                while (workingSegment.Length > LINE_LENGTH)
-                {
-                    string newLine = workingSegment.Substring(0, LINE_LENGTH);
-                    string remainingSegment = workingSegment.Substring(LINE_LENGTH, workingSegment.Length-LINE_LENGTH);
-                    segments.Add(newLine);
-                    workingSegment = remainingSegment;
-                }
-                segments.Add(workingSegment);
-            }
-
-            return segments.ToArray();
+        public int GetSegmentLength(string segment)
+        {
+            return fontHandler.CalcuateSegmentWidth(segment);
         }
 
     }
+
 }

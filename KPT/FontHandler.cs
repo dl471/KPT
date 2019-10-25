@@ -25,13 +25,11 @@ namespace KPT
         {
             fontSource = Path.Combine(ProjectFolder.rootDir, ProjectFolder.unpackedGameFilesDir, DEFAULT_FONT_FILE);
             fontDestination = Path.Combine(ProjectFolder.rootDir, ProjectFolder.reassembledGameFilesDir, DEFAULT_FONT_FILE);
-            glyphWidths = BuildGlypthWidthDictionary();
+            font = new PGFFont(fontSource);
         }
 
         public void ChangeSpaceSize(int newSize)
         {
-            font = new PGFFont(fontSource);
-
             PGFGlyph space = font.GetGlyphByIndex(0x20);
             space.width = DEFAULT_SPACE_SIZE;
             space.SaveGylph();
@@ -39,28 +37,30 @@ namespace KPT
             font.SaveFont(fontDestination);
         }
 
-        private Dictionary<int, int> BuildGlypthWidthDictionary()
+        public int GetGlyphWidthByUcs(int ucs)
         {
-            Dictionary<int, int> dict = new Dictionary<int, int>();
 
-            font = new PGFFont(fontSource);
+            int width = 0;
+            bool success;
 
-            for (int i = 0; i < 65536; i++) // Maximum number of glyphs in PGF - this is contained in a property in libpgf-csharp but said property is not accessible outside its own assembly. May change this.
+            success = glyphWidths.TryGetValue(ucs, out width);
+
+            if (success)
             {
-
-                PGFGlyph glyph = font.GetGlyphByUcs(i);
-                if (glyph == null)
-                {
-                    dict[i] = DEFAULT_SPACE_SIZE;
-                }
-                else
-                {
-                    dict[i] = glyph.width;
-                }
-
+                return width;
             }
 
-            return dict;
+            PGFGlyph glyph = font.GetGlyphByUcs(ucs);
+
+            if (glyph == null)
+            {
+                return DEFAULT_SPACE_SIZE;
+            }
+
+            glyphWidths[ucs] = width;
+
+            return width;
+
         }
         
         public int CalcuateSegmentWidth(string segment)
@@ -70,6 +70,8 @@ namespace KPT
             foreach (char letter in segment)
             {
                 int ucs = Convert.ToInt32(letter);
+
+               
                 length += glyphWidths[ucs];
             }
 

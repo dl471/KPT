@@ -26,6 +26,7 @@ namespace KPT
             fontSource = Path.Combine(ProjectFolder.rootDir, ProjectFolder.unpackedGameFilesDir, DEFAULT_FONT_FILE);
             fontDestination = Path.Combine(ProjectFolder.rootDir, ProjectFolder.reassembledGameFilesDir, DEFAULT_FONT_FILE);
             font = new PGFFont(fontSource);
+            glyphWidths = new Dictionary<int, int>();
         }
 
         public void ChangeSpaceSize(int newSize)
@@ -72,7 +73,7 @@ namespace KPT
                 int ucs = Convert.ToInt32(letter);
 
                
-                length += glyphWidths[ucs];
+                length += GetGlyphWidthByUcs(ucs);
             }
 
             return length;

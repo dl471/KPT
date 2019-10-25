@@ -36,7 +36,7 @@ namespace KPT.Parser
         /// <summary>
         /// Character to use when attempting to split English text into words - currently based on _ since spaces will be replaced with _ at current due to technical limitations
         /// </summary>
-        const char SEGMENT_SEPERATOR = '_';
+        const char SEGMENT_SEPERATOR = ' ';
         const char CHOSEN_NEWLINE = '\n';
 
         FontHandler fontHandler = new FontHandler();
@@ -268,7 +268,12 @@ namespace KPT.Parser
             List<string> segments = new List<string>();
             string[] segmentArray = input.Split(SEGMENT_SEPERATOR);
 
-            return segmentArray;
+            foreach (var segment in segmentArray)
+            {
+                segments.Add(segment + SEGMENT_SEPERATOR);
+            }
+
+            return segments.ToArray();
         }
 
         public int GetSegmentLength(string segment)

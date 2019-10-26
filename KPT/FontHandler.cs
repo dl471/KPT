@@ -58,6 +58,8 @@ namespace KPT
                 return DEFAULT_SPACE_SIZE;
             }
 
+            width = glyph.width;
+
             glyphWidths[ucs] = width;
 
             return width;
@@ -71,7 +73,6 @@ namespace KPT
             foreach (char letter in segment)
             {
                 int ucs = Convert.ToInt32(letter);
-
                
                 length += GetGlyphWidthByUcs(ucs);
             }

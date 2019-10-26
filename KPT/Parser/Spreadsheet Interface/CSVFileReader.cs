@@ -35,10 +35,6 @@ namespace KPT.Parser.Spreadsheet_Interface
                 {
                     translatedText = record.originalText; // replace translated text with original text if it's blank
                 }
-                else
-                {
-                    translatedText = translatedText.Replace(" ", "_"); // font does not support spaces at current
-                }
                 collection.AddString(id, translatedText);
             }            
 

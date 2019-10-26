@@ -14,6 +14,8 @@ namespace KPT
 
         public static int DEFAULT_SPACE_SIZE = 5;
         public static string DEFAULT_FONT_FILE = @"PSP_GAME\USRDIR\SysFont\FontDat.pgf";
+
+        private Dictionary<int, int> glyphWidths;
         
         PGFFont font;
         string fontSource;
@@ -23,18 +25,59 @@ namespace KPT
         {
             fontSource = Path.Combine(ProjectFolder.rootDir, ProjectFolder.unpackedGameFilesDir, DEFAULT_FONT_FILE);
             fontDestination = Path.Combine(ProjectFolder.rootDir, ProjectFolder.reassembledGameFilesDir, DEFAULT_FONT_FILE);
+            font = new PGFFont(fontSource);
+            glyphWidths = new Dictionary<int, int>();
         }
 
         public void ChangeSpaceSize(int newSize)
         {
-            font = new PGFFont(fontSource);
-
             PGFGlyph space = font.GetGlyphByIndex(0x20);
             space.width = newSize;
             space.SaveGylph();
 
             font.SaveFont(fontDestination);
+        }
 
+        public int GetGlyphWidthByUcs(int ucs)
+        {
+
+            int width = 0;
+            bool success;
+
+            success = glyphWidths.TryGetValue(ucs, out width);
+
+            if (success)
+            {
+                return width;
+            }
+
+            PGFGlyph glyph = font.GetGlyphByUcs(ucs);
+
+            if (glyph == null)
+            {
+                return DEFAULT_SPACE_SIZE;
+            }
+
+            width = glyph.width;
+
+            glyphWidths[ucs] = width;
+
+            return width;
+
+        }
+        
+        public int CalcuateSegmentWidth(string segment)
+        {
+            int length = 0;
+
+            foreach (char letter in segment)
+            {
+                int ucs = Convert.ToInt32(letter);
+               
+                length += GetGlyphWidthByUcs(ucs);
+            }
+
+            return length;
         }
  
     }

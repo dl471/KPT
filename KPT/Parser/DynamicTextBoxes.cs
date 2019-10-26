@@ -12,12 +12,9 @@ namespace KPT.Parser
     {
 
         /// <summary>
-        /// How many characters will fit on the screen (an approximation since the font does not have a uniform character size and cannot be readily examined at current)
+        /// Approximate amount of pixels that can fit on screen - a bit below what might realistically fit because BOX_MAX_LENGTH messes things up a bit. 
         /// </summary>
-        /// <remarks>
-        /// The line length should be 1 less than the actual intended length on screen so as to make space for new lines being added in
-        /// </remarks>
-        const int LINE_LENGTH = 44;
+        const int LINE_LENGTH_WIDTH = 280;
         /// <summary>
         /// The number of lines that will fit in a box on the screen
         /// </summary>
@@ -32,8 +29,10 @@ namespace KPT.Parser
         /// <summary>
         /// Character to use when attempting to split English text into words - currently based on _ since spaces will be replaced with _ at current due to technical limitations
         /// </summary>
-        const char SEGMENT_SEPERATOR = '_';
-        const char CHOSEN_NEWLINE = '\n';
+        const char SEGMENT_SEPERATOR = ' ';
+        const char CHOSEN_NEWLINE = '\n'; // not actually a choice at the moment - if this gets changed remeber that SplitIntoSegments will remove \r 
+
+        FontHandler fontHandler = new FontHandler();
 
         public class BoxLines
         {
@@ -224,17 +223,43 @@ namespace KPT.Parser
             List<string> lines = new List<string>();
 
             string newLine = string.Empty;
+            int newLineLength = 0;
 
             foreach (string segment in segments)
             {
                 string workingSegment = segment;
+                int workingSegmentLength = GetSegmentLength(workingSegment);
 
-                if (newLine.Length + workingSegment.Length > LINE_LENGTH)
+                if (workingSegmentLength >= LINE_LENGTH_WIDTH)
+                {
+                    if (!QuickEnglishTest(workingSegment)) // ignore Japanese segements - we're willing to allow them to be mangled
+                    {
+                        MessageBox.Show(string.Format("Segment {0} is too large for a line - functionality for splitting segments is yet to be reimplemented", workingSegment));
+                        Environment.Exit(0);
+                    }
+                }
+
+                if (newLineLength + workingSegmentLength > LINE_LENGTH_WIDTH)
                 {
                     lines.Add(newLine);
                     newLine = string.Empty;
+                    newLineLength = 0;
                 }
-                newLine += workingSegment;
+
+                if (segment == CHOSEN_NEWLINE.ToString())
+                {
+                    newLine += workingSegment;
+                    lines.Add(newLine);
+                    newLine = string.Empty;
+                    newLineLength = 0;
+                }
+                else
+                {
+                    newLine += workingSegment;
+                    newLineLength += workingSegmentLength;
+                }
+
+
             }
 
             if (newLine != string.Empty)
@@ -246,32 +271,68 @@ namespace KPT.Parser
         }
 
         /// <summary>
-        /// Break the text down into an array of words (while also breaking down extremely long words into mangable chunks)
+        /// Break the text down into an array of words
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         public string[] BreakIntoSegments(string input)
         {
+
+            input = input.Replace("\r", ""); // \r means nothing to us
+
             List<string> segments = new List<string>();
             string[] segmentArray = input.Split(SEGMENT_SEPERATOR);
 
-            // making sure there are no segments large enough they take up more than an entire line
-            foreach (string segment in segmentArray)
+            foreach (var segment in segmentArray)
             {
-                string workingSegment = segment + SEGMENT_SEPERATOR;
 
-                while (workingSegment.Length > LINE_LENGTH)
+                if (segment.Contains(CHOSEN_NEWLINE))
                 {
-                    string newLine = workingSegment.Substring(0, LINE_LENGTH);
-                    string remainingSegment = workingSegment.Substring(LINE_LENGTH, workingSegment.Length-LINE_LENGTH);
-                    segments.Add(newLine);
-                    workingSegment = remainingSegment;
+                    string[] subsegments = segment.Split(CHOSEN_NEWLINE);
+                    int numberOfSubSegments = subsegments.Length;
+                    for (int i = 0; i < numberOfSubSegments - 1; i++) // trying to deal with the newlines without adding an extra newline to the last element
+                    {
+                        segments.Add(subsegments[i] + SEGMENT_SEPERATOR);
+                        segments.Add(CHOSEN_NEWLINE.ToString());
+                    }
+                    segments.Add(subsegments[numberOfSubSegments - 1] + SEGMENT_SEPERATOR);
                 }
-                segments.Add(workingSegment);
+                else
+                {
+                    segments.Add(segment + SEGMENT_SEPERATOR);
+                }
             }
 
             return segments.ToArray();
         }
 
+        public int GetSegmentLength(string segment)
+        {
+            return fontHandler.CalcuateSegmentWidth(segment);
+        }
+
+        /// <summary>
+        /// Make a quick guess on whether or not something is English text or Japanese text by measuring the number of bytes in the a-zA-z ASCII range
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns>True on probably English, false on probably Japanese</returns>
+        private bool QuickEnglishTest(string input)
+        {
+            int count = 0;
+            int length = input.Length;
+
+            foreach (char letter in input)
+            {
+                if (letter > 0x40 && letter < 0x7B)
+                {
+                    count++;
+                }
+            }
+
+            return (count < length / 2);
+
+        }
+
     }
+
 }

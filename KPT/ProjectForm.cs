@@ -32,15 +32,24 @@ namespace KPT
 
         private void RebuildCPKs_Click(object sender, EventArgs e)
         {
-            if (ProjectFolder.RebuildCPKs())
+            if (DebugSettings.USE_BACKGROUND_WORKERS)
             {
-                MessageBox.Show("CPKs rebuilt!");
+                worker = new BackgroundWorker();
+                worker.WorkerReportsProgress = true;
+                worker.DoWork += ProjectFolder.RebuildCPKs;
+                worker.ProgressChanged += UpdateProgressBar;
+                worker.RunWorkerCompleted += RebuildCPKsCompleted;
+                worker.WorkerSupportsCancellation = true;
+                worker.RunWorkerAsync();
+
+                progressBar = new ProgressBar(worker);
+                progressBar.ShowDialog();
             }
             else
             {
-                MessageBox.Show("There was an error while rebuilding the CPKs.");
+                MessageBox.Show("RebuildCPKs no longer suppoerted without BackgroundWorker");
             }
-            
+
         }
 
         private void DumpStrings_Click(object sender, EventArgs e)
@@ -380,6 +389,22 @@ namespace KPT
             else
             {
                 MessageBox.Show("There was an error while loading strings.");
+            }
+        }
+
+        public void RebuildCPKsCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            progressBar.Close();
+
+            bool success = (bool)e.Result;
+
+            if (success)
+            {
+                MessageBox.Show("CPK rebuilt!");
+            }
+            else
+            {
+                MessageBox.Show("There was an error while rebuilding CPKs.");
             }
         }
 

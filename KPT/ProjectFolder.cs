@@ -79,21 +79,58 @@ namespace KPT
             return true;
         }
 
-        public static bool RebuildCPKs()
+        public static void RebuildCPKs(object sender, EventArgs e)
         {
+
+            BackgroundWorker worker = null;
+            DoWorkEventArgs eventArgs = null;
+
+            if (sender is BackgroundWorker)
+            {
+                worker = sender as BackgroundWorker;
+                eventArgs = e as DoWorkEventArgs;
+            }
+            else
+            {
+                worker = null;
+            }
+
             string buildDir = Path.Combine(rootDir, buildScriptsDir);
             
             if (!Directory.Exists(buildDir))
             {
                 string errorMessage = string.Format("Could not find build scripts directory at {0}.", buildDir);
                 MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                eventArgs.Result = false;
             }
 
             string[] fileList = Directory.GetFiles(buildDir);
 
+            int counter = 0;
+
             foreach (var file in fileList)
             {
+                counter++;
+
+                if (worker != null)
+                {
+                    double progress = ((double)counter / (double)fileList.Length) * 100;
+
+                    worker.ReportProgress((int)progress);
+
+                    Thread.Sleep(3); // these are aeshetic sleeps, there to make the progress bar grow steadily so the user doesn't think something might have went wrong
+                }
+
+                if (worker != null)
+                {
+                    if (worker.WorkerSupportsCancellation && worker.CancellationPending)
+                    {
+                        eventArgs.Result = false;
+                        MessageBox.Show("Rebuild CPKs cancelled");
+                        return;
+                    }
+                }
+
                 if (file.EndsWith(".cpk.yaml"))
                 {
                     if (file.EndsWith("movie-movie.cpk.yaml")) // doesn't work for some reason - manually blacklisting
@@ -103,12 +140,14 @@ namespace KPT
                     CPKBuildObject cpk = new CPKBuildObject();
                     if (!cpk.BuildCPK(file))
                     {
-                        return false;
+                        eventArgs.Result = false;
                     }
                 }
             }
 
-            return true;
+            Thread.Sleep(1000); // this is another aesthetic sleep, ensuring the the progress bar does not disappear before the user can see it completing
+
+            eventArgs.Result = true;
         }
 
         public static bool DumpStrings()

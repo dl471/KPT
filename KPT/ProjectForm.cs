@@ -57,14 +57,35 @@ namespace KPT
 
         private void LoadStrings_Click(object sender, EventArgs e)
         {
-            if (ProjectFolder.LoadStrings())
+            bool success = false;
+
+            if (DebugSettings.USE_BACKGROUND_WORKERS)
             {
-                MessageBox.Show("Strings loaded!");
+                worker = new BackgroundWorker();
+                worker.WorkerReportsProgress = true;
+                worker.DoWork += ProjectFolder.LoadStrings;
+                worker.ProgressChanged += UpdateProgressBar;
+                worker.RunWorkerCompleted += WorkCompleted;
+                worker.WorkerSupportsCancellation = true;
+                worker.RunWorkerAsync();
+
+                progressBar = new ProgressBar(worker);
+                progressBar.ShowDialog();
             }
             else
             {
-                MessageBox.Show("There was an error while loading strings.");
+                //success = ProjectFolder.LoadStrings(null, null);
             }
+
+            //if (success)
+            //{
+            //    MessageBox.Show("Strings loaded!");
+            //}
+            //else
+            //{
+            //    MessageBox.Show("There was an error while loading strings.");
+            //}
+
         }
 
         private void DumpISO_Click(object sender, EventArgs e)

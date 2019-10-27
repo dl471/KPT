@@ -10,6 +10,8 @@ using KPT.Parser;
 using KPT.Parser.Elements;
 using KPT.Parser.Instructions;
 using KPT.Parser.Spreadsheet_Interface;
+using System.ComponentModel;
+using System.Threading;
 
 namespace KPT
 {
@@ -168,8 +170,19 @@ namespace KPT
 
         // under ideal circumstances a large portion of DumpStrings and LoadStrings code would be seperated out into ProcessStrings - but that's more of goal for future refactoring
         // yeah this is just getting done to provide a quick beta and will have to be refactored later
-        public static bool LoadStrings()
+        public static void LoadStrings(object sender, EventArgs e)
         {
+
+            BackgroundWorker worker;
+
+            if (sender is BackgroundWorker)
+            {
+                worker = sender as BackgroundWorker;
+            }
+            else
+            {
+                worker = null;
+            }
 
             string dialogueFileDir = Path.Combine(rootDir, unpackedGameFilesDir, @"PSP_GAME\USRDIR\St000"); // at the moment there's only one directory with files that have strings and only files with strings in that directory, so this is a quick way of processing. if any non-string files are added to this directory or any string files are found in other directories more advanced filtering will be necessary.
             string[] fileList = Directory.GetFiles(dialogueFileDir);
@@ -179,7 +192,7 @@ namespace KPT
             {
                 string errorMessage = string.Format("Could not find directory {0}.", dialogueFileDir);
                 MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                //return false; // no longer returning bool, so we need another way of handling errors here
             }
 
             var nameCollection = new StringCollection();
@@ -190,8 +203,30 @@ namespace KPT
 
             var textWrapper = new DynamicTextBoxes();
 
+            int counter = 0;
+
             foreach (string file in fileList)
             {
+
+                counter++;
+
+                if (worker != null)
+                {
+                    double progress = ((double)counter / (double)fileList.Length) * 100;
+
+                    worker.ReportProgress((int)progress);
+
+                    Thread.Sleep(3); // these are aeshetic sleeps, there to make the progress bar grow steadily so the user doesn't think something might have went wrong
+                }
+
+                if (worker != null)
+                {
+                    if (worker.WorkerSupportsCancellation && worker.CancellationPending)
+                    {
+                        return;
+                    }
+                }
+
                 string fileName = Path.Combine(dialogueFileDir, file);
                 var fileStrings = new StringCollection(GetSubPath(file, Path.Combine(rootDir, unpackedGameFilesDir)));
 
@@ -225,11 +260,11 @@ namespace KPT
                 {
                     string outputFileName = Path.Combine(rootDir, reassembledGameFilesDir, GetSubPath(file, Path.Combine(rootDir, unpackedGameFilesDir)));
                     parser.WriteFile(parsedFile, outputFileName);
-                }
+                }                
 
             }
 
-            return true;
+            Thread.Sleep(1000); // this is another aesthetic sleep, ensuring the the progress bar does not disappear before the user can see it completing
         }
 
         public static bool DumpISO(string isoFileName)

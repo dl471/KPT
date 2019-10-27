@@ -57,7 +57,6 @@ namespace KPT
 
         private void LoadStrings_Click(object sender, EventArgs e)
         {
-            bool success = false;
 
             if (DebugSettings.USE_BACKGROUND_WORKERS)
             {
@@ -65,26 +64,22 @@ namespace KPT
                 worker.WorkerReportsProgress = true;
                 worker.DoWork += ProjectFolder.LoadStrings;
                 worker.ProgressChanged += UpdateProgressBar;
-                worker.RunWorkerCompleted += WorkCompleted;
+                worker.RunWorkerCompleted += LoadStringsCompleted;
                 worker.WorkerSupportsCancellation = true;
                 worker.RunWorkerAsync();
 
                 progressBar = new ProgressBar(worker);
                 progressBar.ShowDialog();
+
+
+
             }
             else
             {
-                //success = ProjectFolder.LoadStrings(null, null);
+                MessageBox.Show("LoadStrings no longer suppoerted without BackgroundWorker");
             }
 
-            //if (success)
-            //{
-            //    MessageBox.Show("Strings loaded!");
-            //}
-            //else
-            //{
-            //    MessageBox.Show("There was an error while loading strings.");
-            //}
+
 
         }
 
@@ -370,6 +365,22 @@ namespace KPT
         public void WorkCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             progressBar.Close();
+        }
+
+        public void LoadStringsCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            progressBar.Close();
+
+            bool success = (bool)e.Result;
+
+            if (success)
+            {
+                MessageBox.Show("Strings loaded!");
+            }
+            else
+            {
+                MessageBox.Show("There was an error while loading strings.");
+            }
         }
 
     }

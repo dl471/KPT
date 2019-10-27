@@ -173,11 +173,13 @@ namespace KPT
         public static void LoadStrings(object sender, EventArgs e)
         {
 
-            BackgroundWorker worker;
+            BackgroundWorker worker = null;
+            DoWorkEventArgs eventArgs = null;
 
             if (sender is BackgroundWorker)
             {
                 worker = sender as BackgroundWorker;
+                eventArgs = e as DoWorkEventArgs;
             }
             else
             {
@@ -192,7 +194,7 @@ namespace KPT
             {
                 string errorMessage = string.Format("Could not find directory {0}.", dialogueFileDir);
                 MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //return false; // no longer returning bool, so we need another way of handling errors here
+                eventArgs.Result = false;
             }
 
             var nameCollection = new StringCollection();
@@ -223,6 +225,8 @@ namespace KPT
                 {
                     if (worker.WorkerSupportsCancellation && worker.CancellationPending)
                     {
+                        eventArgs.Result = false;
+                        MessageBox.Show("Load strings cancelled");
                         return;
                     }
                 }
@@ -265,6 +269,7 @@ namespace KPT
             }
 
             Thread.Sleep(1000); // this is another aesthetic sleep, ensuring the the progress bar does not disappear before the user can see it completing
+            eventArgs.Result = true;
         }
 
         public static bool DumpISO(string isoFileName)

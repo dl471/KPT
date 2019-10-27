@@ -252,8 +252,6 @@ namespace KPT
             {
                 LoadImages(null, null);
             }
-
-            MessageBox.Show("Images loaded!");
         }
 
         public void LoadImages(object sender, EventArgs e)
@@ -296,6 +294,7 @@ namespace KPT
                 {
                     if (worker.WorkerSupportsCancellation && worker.CancellationPending)
                     {
+                        MessageBox.Show("Load images cancelled");
                         return;
                     }
                 }
@@ -330,6 +329,8 @@ namespace KPT
 
 
             }
+
+            MessageBox.Show("Images loaded!");
 
         }
 

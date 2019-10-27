@@ -47,7 +47,7 @@ namespace KPT
             }
             else
             {
-                MessageBox.Show("RebuildCPKs no longer suppoerted without BackgroundWorker");
+                MessageBox.Show("RebuildCPKs no longer supported without BackgroundWorker");
             }
 
         }
@@ -85,7 +85,7 @@ namespace KPT
             }
             else
             {
-                MessageBox.Show("LoadStrings no longer suppoerted without BackgroundWorker");
+                MessageBox.Show("LoadStrings no longer supported without BackgroundWorker");
             }
 
 

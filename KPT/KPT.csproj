@@ -102,7 +102,7 @@
     <Compile Include="Parser\Instructions\BasicTextBox.cs" />
     <Compile Include="Parser\Instructions\U_501.cs" />
     <Compile Include="Parser\Instructions\U_502.cs" />
-    <Compile Include="Parser\Instructions\U_504.cs" />
+    <Compile Include="Parser\Instructions\HideTextBox.cs" />
     <Compile Include="Parser\Instructions\ShowImage.cs" />
     <Compile Include="Parser\Interfaces.cs" />
     <Compile Include="Parser\OpcodeInfo.cs" />

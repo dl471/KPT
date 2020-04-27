@@ -19,7 +19,7 @@ namespace KPT.Parser
         U_191 = 0x191,
         U_303 = 0x303,
         U_501 = 0x501,
-        U_504 = 0x504,
+        HIDE_TEXT_BOX = 0x504,
 
         U_214 = 0x214,
         U_210 = 0x210,
@@ -189,7 +189,7 @@ namespace KPT.Parser
             { Opcode.BASIC_TEXT_BOX, typeof(BasicTextBox) },
             { Opcode.U_501, typeof(U_501) },
             { Opcode.U_502, typeof(U_502) },
-            { Opcode.U_504, typeof(U_504) },
+            { Opcode.HIDE_TEXT_BOX, typeof(HideTextBox) },
 
             { Opcode.SHOW_IMAGE, typeof(ShowImage) }, // a tentative name
 

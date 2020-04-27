@@ -59,7 +59,7 @@ namespace KPT.Parser
         U_401 = 0x401,
         WAIT = 0x402, // delay the execution of the next instruction for a few seconds
         U_403 = 0x403,
-        U_404 = 0x404,
+        ROTATE_CAMERA = 0x404, 
         U_405 = 0x405,
         U_406 = 0x406,
         U_407 = 0x407,
@@ -135,7 +135,7 @@ namespace KPT.Parser
             { Opcode.U_401, 4 },
             { Opcode.WAIT, 2 },
             { Opcode.U_403, 2 },
-            { Opcode.U_404, 7 },
+            { Opcode.ROTATE_CAMERA, 7 }, // short opcode, bool directionOfRotation, short extentOfRotation, short speedOfRotation
             { Opcode.U_405, 4 },
             { Opcode.U_406, 4 }, // i should be more confident of this than i actually am
             { Opcode.U_407, 2 },
@@ -192,7 +192,7 @@ namespace KPT.Parser
             { Opcode.U_401, typeof(InstructionBox) },
             { Opcode.WAIT, typeof(InstructionBox) },
             { Opcode.U_403, typeof(InstructionBox) },
-            { Opcode.U_404, typeof(InstructionBox) },
+            { Opcode.ROTATE_CAMERA, typeof(InstructionBox) },
             { Opcode.U_405, typeof(InstructionBox) },
             { Opcode.U_406, typeof(InstructionBox) },
             { Opcode.U_407, typeof(InstructionBox) },

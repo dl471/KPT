@@ -44,6 +44,35 @@ namespace KPT.DisassemblyView
                 bw.Write(parsedByte);
             }
 
+            ms.Seek(0, SeekOrigin.Begin);
+
+            // create a fake header and footer to emulate an St file for the parser
+            if (!headerFooterCheckbox.Checked)
+            {
+                int headerSize = 0x60; // constants and magic numbers like this should be exposed by the st_header class
+                int footerSize = 0x1E;
+
+                MemoryStream newMemoryStream = new MemoryStream(hexBytes.Length + headerSize + footerSize);
+                BinaryWriter newMSWriter = new BinaryWriter(newMemoryStream);
+                BinaryReader oldMSReader = new BinaryReader(ms);
+
+                for (int i = 0; i < headerSize; i++)
+                {
+                    newMSWriter.Write((byte)0x00);
+                }
+
+                byte[] oldMSContents = oldMSReader.ReadBytes(hexBytes.Length);
+                newMSWriter.Write(oldMSContents);
+
+                for (int i = 0; i < footerSize; i++)
+                {
+                    newMSWriter.Write((byte)0x88);
+                }
+
+                ms = newMemoryStream;
+                ms.Seek(0, SeekOrigin.Begin);
+            }
+
             BinaryReader br = new BinaryReader(ms);
 
             var parser = new KPT.Parser.FileParser();

@@ -57,7 +57,7 @@ namespace KPT.Parser
         U_30C = 0x30C,
 
         U_401 = 0x401,
-        U_402 = 0x402,
+        WAIT = 0x402, // delay the execution of the next instruction for a few seconds
         U_403 = 0x403,
         U_404 = 0x404,
         U_405 = 0x405,
@@ -133,7 +133,7 @@ namespace KPT.Parser
             { Opcode.U_30C, 2 }, // only had one example of this so far
 
             { Opcode.U_401, 4 },
-            { Opcode.U_402, 2 },
+            { Opcode.WAIT, 2 },
             { Opcode.U_403, 2 },
             { Opcode.U_404, 7 },
             { Opcode.U_405, 4 },
@@ -190,7 +190,7 @@ namespace KPT.Parser
             { Opcode.U_30C, typeof(InstructionBox) },
 
             { Opcode.U_401, typeof(InstructionBox) },
-            { Opcode.U_402, typeof(InstructionBox) },
+            { Opcode.WAIT, typeof(InstructionBox) },
             { Opcode.U_403, typeof(InstructionBox) },
             { Opcode.U_404, typeof(InstructionBox) },
             { Opcode.U_405, typeof(InstructionBox) },

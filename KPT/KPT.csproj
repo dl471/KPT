@@ -78,6 +78,12 @@
     <Compile Include="DebugSettings.cs" />
     <Compile Include="DirectoryGuard.cs" />
     <Compile Include="DirectoryReader.cs" />
+    <Compile Include="DisassemblyView\DisassemblyView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DisassemblyView\DisassemblyView.Designer.cs">
+      <DependentUpon>DisassemblyView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dumper.cs" />
     <Compile Include="FontHandler.cs" />
     <Compile Include="Form1.cs">
@@ -132,6 +138,9 @@
     <Compile Include="Version.cs" />
     <EmbeddedResource Include="About.resx">
       <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DisassemblyView\DisassemblyView.resx">
+      <DependentUpon>DisassemblyView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

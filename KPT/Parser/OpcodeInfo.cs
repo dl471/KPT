@@ -26,7 +26,7 @@ namespace KPT.Parser
 
         U_100 = 0x100,
         U_101 = 0x101,
-        U_111 = 0x111,
+        U_111 = 0x111, // purpose unclear - seems to almost exclusively (exclusively?) appear after jumps have been made but does not appear to actually function as a jump label
         U_112 = 0x112,
         U_113 = 0x113,
         U_120 = 0x120,

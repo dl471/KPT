@@ -27,8 +27,8 @@ namespace KPT.Parser
         U_100 = 0x100,
         U_101 = 0x101,
         U_111 = 0x111, // purpose unclear - seems to almost exclusively (exclusively?) appear after jumps have been made but does not appear to actually function as a jump label
-        IntraFileJump = 0x112,
-        InterFileJump = 0x113,
+        INTRA_FILE_JUMP = 0x112,
+        INTER_FILE_JUMP = 0x113,
         U_120 = 0x120,
         U_121 = 0x121,
         U_130 = 0x130,
@@ -158,8 +158,8 @@ namespace KPT.Parser
             { Opcode.U_100, typeof(InstructionBox) },
             { Opcode.U_101, typeof(InstructionBox) }, // save and exit? huh?
             { Opcode.U_111, typeof(InstructionBox) },
-            { Opcode.IntraFileJump, typeof(IntraFileJump) },
-            { Opcode.InterFileJump, typeof(InstructionBox) },
+            { Opcode.INTRA_FILE_JUMP, typeof(IntraFileJump) },
+            { Opcode.INTER_FILE_JUMP, typeof(InstructionBox) },
             { Opcode.U_120, typeof(InstructionBox) },
             { Opcode.U_121, typeof(InstructionBox) },
             { Opcode.U_130, typeof(InstructionBox) },

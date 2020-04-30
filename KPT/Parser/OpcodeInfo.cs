@@ -75,7 +75,7 @@ namespace KPT.Parser
 
         CHOICE_DIALOG = 0x701,
 
-        U_900 = 0x900,
+        PLAY_INTERRUPT = 0x900, // used to play the video files with the moving text and image for dramatic scenes 
 
         U_1000 = 0x1000,
         LOCATION_CARD = 0x1001,
@@ -141,7 +141,7 @@ namespace KPT.Parser
             { Opcode.U_601, 8 },
             { Opcode.U_603, 2 },
 
-            { Opcode.U_900, 6 }, // educated guess
+            { Opcode.PLAY_INTERRUPT, 6 }, // short opcode, short videofile, short unknown
 
             { Opcode.U_1000, 2 },
         };
@@ -207,7 +207,7 @@ namespace KPT.Parser
 
             { Opcode.CHOICE_DIALOG, typeof(ChoiceDialog) },
 
-            { Opcode.U_900, typeof(InstructionBox) },
+            { Opcode.PLAY_INTERRUPT, typeof(InstructionBox) },
 
             { Opcode.U_1000, typeof(InstructionBox) },
             { Opcode.LOCATION_CARD, typeof(LocationCard) },

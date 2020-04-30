@@ -98,6 +98,7 @@
     <Compile Include="Parser\Instructions\ChoiceDialog.cs" />
     <Compile Include="Parser\FileIOHelper.cs" />
     <Compile Include="Parser\Instructions\InstructionBox.cs" />
+    <Compile Include="Parser\Instructions\InterFileJump.cs" />
     <Compile Include="Parser\Instructions\IntraFileJump.cs" />
     <Compile Include="Parser\Instructions\LocationCard.cs" />
     <Compile Include="Parser\Instructions\BasicTextBox.cs" />

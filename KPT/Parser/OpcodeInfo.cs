@@ -159,7 +159,7 @@ namespace KPT.Parser
             { Opcode.U_101, typeof(InstructionBox) }, // save and exit? huh?
             { Opcode.U_111, typeof(InstructionBox) },
             { Opcode.INTRA_FILE_JUMP, typeof(IntraFileJump) },
-            { Opcode.INTER_FILE_JUMP, typeof(InstructionBox) },
+            { Opcode.INTER_FILE_JUMP, typeof(InterFileJump) },
             { Opcode.U_120, typeof(InstructionBox) },
             { Opcode.U_121, typeof(InstructionBox) },
             { Opcode.U_130, typeof(InstructionBox) },

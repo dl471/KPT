@@ -27,7 +27,7 @@ namespace KPT.Parser
         U_100 = 0x100,
         U_101 = 0x101,
         U_111 = 0x111, // purpose unclear - seems to almost exclusively (exclusively?) appear after jumps have been made but does not appear to actually function as a jump label
-        U_112 = 0x112,
+        IntraFileJump = 0x112,
         U_113 = 0x113,
         U_120 = 0x120,
         U_121 = 0x121,
@@ -103,7 +103,6 @@ namespace KPT.Parser
             { Opcode.U_100, 2 }, // educated guess
             { Opcode.U_101, 4 }, // i think this is correct but the fact it seems to be such an extreme instruction (see comments on this opcode in instruction parser map) makes it hard to see
             { Opcode.U_111, 4 }, // educated guess
-            { Opcode.U_112, 6 },
             { Opcode.U_113, 10 }, // educated guess, extremely unconfirmed
             { Opcode.U_120, 4 },
             { Opcode.U_121, 6 }, // educated guess, extremely unconfirmed
@@ -160,7 +159,7 @@ namespace KPT.Parser
             { Opcode.U_100, typeof(InstructionBox) },
             { Opcode.U_101, typeof(InstructionBox) }, // save and exit? huh?
             { Opcode.U_111, typeof(InstructionBox) },
-            { Opcode.U_112, typeof(InstructionBox) },
+            { Opcode.IntraFileJump, typeof(IntraFileJump) },
             { Opcode.U_113, typeof(InstructionBox) },
             { Opcode.U_120, typeof(InstructionBox) },
             { Opcode.U_121, typeof(InstructionBox) },

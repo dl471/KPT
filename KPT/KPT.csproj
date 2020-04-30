@@ -95,6 +95,7 @@
     <Compile Include="Parser\Elements\DataBox.cs" />
     <Compile Include="Parser\Elements\DialogueBox.cs" />
     <Compile Include="Parser\Elements\SpriteInfo.cs" />
+    <Compile Include="Parser\Elements\StCpNumber.cs" />
     <Compile Include="Parser\Instructions\ChoiceDialog.cs" />
     <Compile Include="Parser\FileIOHelper.cs" />
     <Compile Include="Parser\Instructions\InstructionBox.cs" />

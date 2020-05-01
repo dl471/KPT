@@ -97,6 +97,7 @@
     <Compile Include="Parser\Elements\DialogueBox.cs" />
     <Compile Include="Parser\Elements\SpriteInfo.cs" />
     <Compile Include="Parser\Footers\St_Footer.cs" />
+    <Compile Include="Parser\Headers\St_Header.cs" />
     <Compile Include="Parser\Instructions\ChoiceDialog.cs" />
     <Compile Include="Parser\FileIOHelper.cs" />
     <Compile Include="Parser\Instructions\InstructionBox.cs" />
@@ -109,7 +110,7 @@
     <Compile Include="Parser\Interfaces.cs" />
     <Compile Include="Parser\OpcodeInfo.cs" />
     <Compile Include="Parser\FileParser.cs" />
-    <Compile Include="Parser\Headers\St_Header.cs" />
+    <Compile Include="Parser\Headers\StCp_Header.cs" />
     <Compile Include="Parser\Spreadsheet Interface\CSVFileReader.cs" />
     <Compile Include="Parser\Spreadsheet Interface\CSVFileWriter.cs" />
     <Compile Include="Parser\Spreadsheet Interface\CSVRecord.cs" />

@@ -3,42 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using KPT.Parser.Instructions;
-using KPT.Parser.Elements;
 using System.IO;
 
 namespace KPT.Parser.Headers
 {
     /// <summary>
-    /// Used to read the header of files following the StXXX_CpXXXX naming convention.
+    /// A more generic header used by other members of the St000 family - its purpose is entirely unknown
     /// </summary>
     class St_Header : IHeader
     {
-
-        public const int HEADER_SIZE = 0x60;
-
-        StCpNumber fileNumber;
-        DataBox box1;
-
-        public St_Header()
-        {
-            fileNumber = new StCpNumber();
-        }
+        short unknown;
 
         public bool Read(BinaryReader br)
         {
-            fileNumber.Read(br);
-            box1 = new DataBox(0x5C); // header size minus size of StCp number
-            box1.Read(br);
+            unknown = br.ReadInt16();
             return true;
         }
 
         public bool Write(BinaryWriter bw)
         {
-            fileNumber.Write(bw);
-            box1.Write(bw);
+            bw.Write(unknown);
             return true;
         }
-
     }
+
 }

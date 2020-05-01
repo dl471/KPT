@@ -48,7 +48,6 @@ namespace KPT.Parser.Jump_Label_Manager
                 var nextEntry = new JumpTableEntry();
                 nextEntry.Read(br);
                 jumpTableEntries.Add(nextEntry);
-                System.Diagnostics.Debug.Write(br.BaseStream.Position.ToString("X"));
             }
 
             br.Close();

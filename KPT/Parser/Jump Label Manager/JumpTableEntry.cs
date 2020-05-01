@@ -18,11 +18,18 @@ namespace KPT.Parser.Jump_Label_Manager
         DataBox firstBlock; // this block contains stuff known to be related to the jumps and will be broken down into named variables shortly
         DataBox secondBlock; // this block is usually but is not always entirey 0xFF ands its purpose is not clear
 
+        public JumpTableEntry()
+        {
+            fileNumber = new StCpNumber();
+        }
+
         public bool Read(BinaryReader br)
         {
             fileNumber.Read(br);
-            firstBlock = new DataBox(0x12);
+            firstBlock = new DataBox(0x10);
+            firstBlock.Read(br);
             secondBlock = new DataBox(0x82);
+            secondBlock.Read(br);
             return true;
         }
 

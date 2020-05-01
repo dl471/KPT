@@ -91,6 +91,7 @@
     <Compile Include="ISOWriter.cs" />
     <Compile Include="Parser\Constants.cs" />
     <Compile Include="Parser\DynamicTextBoxes.cs" />
+    <Compile Include="Parser\ElementHelper.cs" />
     <Compile Include="Parser\Elements\ChoiceBar.cs" />
     <Compile Include="Parser\Elements\DataBox.cs" />
     <Compile Include="Parser\Elements\DialogueBox.cs" />

@@ -127,7 +127,7 @@ namespace KPT.Parser
 
         private IHeader ReadHeader(BinaryReader br)
         {
-            St_Header header = new St_Header();
+            StCp_Header header = new StCp_Header();
             if (!header.Read(br))
             {
                 string errorMessage = "Failed to read header of file {0}. Corrupt or invalid header?";

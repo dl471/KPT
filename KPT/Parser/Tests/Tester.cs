@@ -240,7 +240,7 @@ namespace KPT.Parser.Tests
 
             TestElement(typeof(ChoiceBar), "ChoiceBarTest.bin");
 
-            TestElement(typeof(St_Header), "St_HeaderTest.bin");
+            TestElement(typeof(StCp_Header), "StCp_HeaderTest.bin");
 
             TestElement(typeof(SpriteInfo), "SpriteInfoTest.bin");
 

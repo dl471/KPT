@@ -8,6 +8,7 @@ using KPT.Parser.Elements;
 using KPT.Parser.Instructions;
 using KPT.Parser.Headers;
 using KPT.Parser.Footers;
+using KPT.Parser.Elements;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 
@@ -37,20 +38,6 @@ namespace KPT.Parser
         public FileParser()
         {
 
-        }
-
-        /// <summary>
-        /// A helper function for creating Boxes
-        /// </summary>
-        /// <param name="opcode"></param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Intended to make Box creating code cleaner by delegating the getting of instruction size and construction of object to a seperate function
-        /// </remarks>
-        private InstructionBox MakeInstructionBox(Opcode opcode)
-        {
-            int instructionSize = OpcodeInfo.GetInstructionSize(opcode);
-            return new InstructionBox(instructionSize);
         }
 
         /// <summary>
@@ -86,7 +73,7 @@ namespace KPT.Parser
                 
                 if (instructionParserType == typeof(InstructionBox))
                 {
-                    newInstruction = MakeInstructionBox(opcode);
+                    newInstruction = ElementHelper.MakeInstructionBox(opcode);
                     newInstruction.Read(br);
                 }
                 else

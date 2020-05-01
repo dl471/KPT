@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KPT.Parser.Elements;
+using KPT.Parser.Instructions;
 using System.IO;
 
 namespace KPT.Parser
@@ -23,6 +24,20 @@ namespace KPT.Parser
             bufferWriter.BaseStream.Seek(0, SeekOrigin.Begin);
             element.Write(bufferWriter);
             return bufferWriter.BaseStream.Position;
+        }
+
+        /// <summary>
+        /// A helper function for creating Boxes
+        /// </summary>
+        /// <param name="opcode"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Intended to make Box creating code cleaner by delegating the getting of instruction size and construction of object to a seperate function
+        /// </remarks>
+        internal static InstructionBox MakeInstructionBox(Opcode opcode)
+        {
+            int instructionSize = OpcodeInfo.GetInstructionSize(opcode);
+            return new InstructionBox(instructionSize);
         }
     }
 }

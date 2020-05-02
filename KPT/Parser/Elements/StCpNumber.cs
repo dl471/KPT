@@ -28,5 +28,10 @@ namespace KPT.Parser.Elements
             return true;
         }
 
+        public override string ToString()
+        {
+            return stNumber.ToString() + cpNumber.ToString();
+        }
+
     }
 }

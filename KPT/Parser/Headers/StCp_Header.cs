@@ -40,5 +40,10 @@ namespace KPT.Parser.Headers
             return true;
         }
 
+        public StCpNumber GetFileNumber()
+        {
+            return fileNumber;
+        }
+
     }
 }

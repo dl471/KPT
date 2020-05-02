@@ -45,7 +45,7 @@ namespace KPT.Parser.Jump_Label_Manager
             return jumpLabelMap.Keys.Contains(tempLabel);
         }
 
-        public static JumpTargetInstructionWrapper wrapInstruction(StCpNumber fileNumber, int address, IInstruction instruction)
+        public static VirtualLabel CreateVirtualLabel(StCpNumber fileNumber, int address)
         {
             if (!initalized)
             {
@@ -54,7 +54,7 @@ namespace KPT.Parser.Jump_Label_Manager
 
             var jumpLabel = JumpTableEntry.GenerateJumpID(fileNumber, address);
             var jumpTableEntry = jumpLabelMap[jumpLabel];
-            var wrappedInstruction = new JumpTargetInstructionWrapper(instruction, jumpTableEntry);
+            var wrappedInstruction = new VirtualLabel(jumpTableEntry);
             return wrappedInstruction;
         }
 

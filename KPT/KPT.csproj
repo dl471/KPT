@@ -114,7 +114,7 @@
     <Compile Include="Parser\Jump Label Manager\JumpLabelManager.cs" />
     <Compile Include="Parser\Jump Label Manager\JumpTableEntry.cs" />
     <Compile Include="Parser\Jump Label Manager\JumpTableInterface.cs" />
-    <Compile Include="Parser\Jump Label Manager\JumpTargetInstructionWrapper.cs" />
+    <Compile Include="Parser\Jump Label Manager\VirtualLabel.cs" />
     <Compile Include="Parser\OpcodeInfo.cs" />
     <Compile Include="Parser\FileParser.cs" />
     <Compile Include="Parser\Headers\StCp_Header.cs" />

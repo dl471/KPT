@@ -9,27 +9,24 @@ using KPT.Parser.Elements;
 namespace KPT.Parser.Jump_Label_Manager
 {
     /// <summary>
-    /// Class that contains an instruction which is the target of a jump
+    /// A fake instruction representing the target of a jump
     /// </summary>
     /// <remarks>
-    /// Slotted into instruction lists as a replacement for instructions which are the targets of jumps. Allows the jump table to updated as Write calls are made.
+    /// Slotted into instruction lists in front of instructions that are targets of jumps. Allows the jump table to updated as Write calls are made.
     /// </remarks>
-    class JumpTargetInstructionWrapper : IInstruction
+    class VirtualLabel : IInstruction
     {
         int currentAddress;
-        IInstruction wrappedInstruction;
         JumpTableEntry pairedEntry;
 
-        public JumpTargetInstructionWrapper(IInstruction toWrap, JumpTableEntry toPair)
+        public VirtualLabel(JumpTableEntry toPair)
         {
-            wrappedInstruction = toWrap;
             pairedEntry = toPair;
         }
 
         public bool Read(BinaryReader br)
         {
             currentAddress = (int)br.BaseStream.Position;
-            wrappedInstruction.Read(br);
             return true;
         }
 
@@ -37,7 +34,6 @@ namespace KPT.Parser.Jump_Label_Manager
         {
             currentAddress = (int)bw.BaseStream.Position;
             pairedEntry.UpdateOffset((short)currentAddress);
-            wrappedInstruction.Write(bw);
             return true;
         }
 

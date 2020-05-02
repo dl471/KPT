@@ -89,7 +89,8 @@ namespace KPT.Parser
 
                 if (JumpLabelManager.IsJumpTarget(fileNumber, (int)currentAddress))
                 {
-                    newInstruction = JumpLabelManager.wrapInstruction(fileNumber, (int)currentAddress, newInstruction);
+                    var virtualLabel = JumpLabelManager.CreateVirtualLabel(fileNumber, (int)currentAddress);
+                    instructions.Add(virtualLabel);
                 }
 
                 instructions.Add(newInstruction);

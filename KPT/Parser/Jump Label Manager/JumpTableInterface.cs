@@ -72,5 +72,11 @@ namespace KPT.Parser.Jump_Label_Manager
             bw.Close();
 
         }
+
+        public List<JumpTableEntry> GetJumpTableEntries()
+        {
+            return jumpTableEntries;
+        }
+
     }
 }

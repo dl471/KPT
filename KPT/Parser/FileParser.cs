@@ -9,6 +9,7 @@ using KPT.Parser.Instructions;
 using KPT.Parser.Headers;
 using KPT.Parser.Footers;
 using KPT.Parser.Elements;
+using KPT.Parser.Jump_Label_Manager;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 
@@ -54,6 +55,8 @@ namespace KPT.Parser
             workingFile.footer = ReadFooter(br);
             workingFile.header = ReadHeader(br);
 
+            StCpNumber fileNumber = (workingFile.header as StCp_Header).GetFileNumber(); // more than anything else this basically cements that this function reads only StCp files which should really be clarified at some point
+
             long streamEnd = br.BaseStream.Length - ElementHelper.GetElementSize(workingFile.footer);
 
             while (br.BaseStream.Position != streamEnd) // will need to check this for accuracy as it has been unreliable in some cases in the past
@@ -80,6 +83,13 @@ namespace KPT.Parser
                 {
                     newInstruction = (IInstruction)Activator.CreateInstance(instructionParserType);
                     newInstruction.Read(br);
+                }
+
+                long currentAddress = br.BaseStream.Position;
+
+                if (JumpLabelManager.IsJumpTarget(fileNumber, (int)currentAddress))
+                {
+                    newInstruction = JumpLabelManager.wrapInstruction(fileNumber, (int)currentAddress, newInstruction);
                 }
 
                 instructions.Add(newInstruction);

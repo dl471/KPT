@@ -74,5 +74,20 @@ namespace KPT.Parser.Jump_Label_Manager
            return (short)(offset - StCp_Header.HEADER_SIZE);
         }
 
+        public static string GenerateJumpID(StCpNumber fileNumber, int jumpTargetAddress)
+        {
+            return fileNumber.ToString() + ":" + jumpTargetAddress.ToString("X");
+        }
+
+        public string GetJumpID()
+        {
+            return GenerateJumpID(fileNumber, offset);
+        }
+
+        public void UpdateOffset(short newOffset)
+        {
+            offset = newOffset;
+        }
+
     }
 }

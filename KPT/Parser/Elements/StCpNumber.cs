@@ -30,7 +30,7 @@ namespace KPT.Parser.Elements
 
         public override string ToString()
         {
-            return stNumber.ToString() + cpNumber.ToString();
+            return "St" + stNumber.ToString() + "Cp" + cpNumber.ToString();
         }
 
     }

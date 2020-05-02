@@ -167,6 +167,10 @@ namespace KPT
             var nameCollection = new StringCollection();
             Dictionary<string, StringCollection> stringFiles = new Dictionary<string, StringCollection>();
 
+            var jumpTable = new KPT.Parser.Jump_Label_Manager.JumpTableInterface();
+            jumpTable.LoadJumpTable(); 
+            JumpLabelManager.Initalize(jumpTable.GetJumpTableEntries()); // we need to load and initalize the jump label manager while dumping strings too
+
             foreach (string file in fileList)
             {
                 string fileName = Path.Combine(dialogueFileDir, file);

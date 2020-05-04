@@ -41,8 +41,8 @@ namespace KPT.Parser.Jump_Label_Manager
         {
             var jumpLabel = JumpTableEntry.GenerateJumpID(fileNumber, address);
             var jumpTableEntry = jumpLabelMap[jumpLabel];
-            var wrappedInstruction = new VirtualLabel(jumpTableEntry);
-            return wrappedInstruction;
+            var virtualLabel = new VirtualLabel(jumpTableEntry);
+            return virtualLabel;
         }
 
     }

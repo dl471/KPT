@@ -167,10 +167,6 @@ namespace KPT
             var nameCollection = new StringCollection();
             Dictionary<string, StringCollection> stringFiles = new Dictionary<string, StringCollection>();
 
-            var jumpTable = new KPT.Parser.Jump_Label_Manager.JumpTableInterface();
-            jumpTable.LoadJumpTable(); 
-            JumpLabelManager.Initalize(jumpTable.GetJumpTableEntries()); // we need to load and initalize the jump label manager while dumping strings too
-
             foreach (string file in fileList)
             {
                 string fileName = Path.Combine(dialogueFileDir, file);
@@ -180,7 +176,7 @@ namespace KPT
                 BinaryReader br = new BinaryReader(fs);
 
                 var testParser = new FileParser();
-                var parsedFile = testParser.ParseFile(br, Path.GetFileName(file));
+                var parsedFile = testParser.ParseFile(br, Path.GetFileName(file), null);
 
                 foreach (IElement element in parsedFile.instructions)
                 {
@@ -250,7 +246,7 @@ namespace KPT
             var textWrapper = new DynamicTextBoxes();
             var jumpTable = new KPT.Parser.Jump_Label_Manager.JumpTableInterface();
             jumpTable.LoadJumpTable(); // changing the size of instructions with new dialogue will mess up file offsets so we will need to load the jump table and make sure it's updated as we go
-            JumpLabelManager.Initalize(jumpTable.GetJumpTableEntries());
+            var jumpLabelManager = new JumpLabelManager(jumpTable.GetJumpTableEntries());
 
             int counter = 0;
 
@@ -285,7 +281,7 @@ namespace KPT
                 BinaryReader br = new BinaryReader(fs);
 
                 var parser = new FileParser();
-                var parsedFile = parser.ParseFile(br, Path.GetFileName(file));
+                var parsedFile = parser.ParseFile(br, Path.GetFileName(file), jumpLabelManager);
 
                 foreach (IElement element in parsedFile.instructions)
                 {

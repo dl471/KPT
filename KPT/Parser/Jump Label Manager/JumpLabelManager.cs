@@ -11,17 +11,16 @@ namespace KPT.Parser.Jump_Label_Manager
     /// <summary>
     /// Class to help manage jump labels
     /// </summary>
-    static class JumpLabelManager
+    class JumpLabelManager
     {
         /// <summary>
         /// Map jump ids to entries in the jump table
         /// </summary>
-        private static Dictionary<string, JumpTableEntry> jumpLabelMap;
+        private Dictionary<string, JumpTableEntry> jumpLabelMap;
 
-        private static bool initalized = false;
-
-        public static void Initalize(List<JumpTableEntry> jumpTableEntries)
+        public JumpLabelManager(List<JumpTableEntry> jumpTableEntries)
         {
+
             jumpLabelMap = new Dictionary<string, JumpTableEntry>();
 
             foreach (var entry in jumpTableEntries)
@@ -29,29 +28,17 @@ namespace KPT.Parser.Jump_Label_Manager
                 string jumpID = entry.GetJumpID();
                 jumpLabelMap[jumpID] = entry;
             }
-
-            initalized = true;
         
         }
 
-        public static bool IsJumpTarget(StCpNumber fileNumber, int address)
+        public bool IsJumpTarget(StCpNumber fileNumber, int address)
         {
-            if (!initalized)
-            {
-                throw new Exception("JumpLabelManager not initalized");
-            }
-
             var tempLabel = JumpTableEntry.GenerateJumpID(fileNumber, address);
             return jumpLabelMap.Keys.Contains(tempLabel);
         }
 
-        public static VirtualLabel CreateVirtualLabel(StCpNumber fileNumber, int address)
+        public VirtualLabel CreateVirtualLabel(StCpNumber fileNumber, int address)
         {
-            if (!initalized)
-            {
-                throw new Exception("JumpLabelManager not initalized");
-            }
-
             var jumpLabel = JumpTableEntry.GenerateJumpID(fileNumber, address);
             var jumpTableEntry = jumpLabelMap[jumpLabel];
             var wrappedInstruction = new VirtualLabel(jumpTableEntry);

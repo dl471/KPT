@@ -46,8 +46,9 @@ namespace KPT.Parser
         /// </summary>
         /// <param name="br">The file to process</param>
         /// <param name="fileName">The name of the file to be processed (used only for displaying error messages)</param>
+        /// <param name="jumpLabelManager">The jump label manager to use when processing file (pass null to disable jump tracking)</param>
         /// <returns>A class containing the processed file data</returns>
-        public KCFile ParseFile(BinaryReader br, string fileName)
+        public KCFile ParseFile(BinaryReader br, string fileName, JumpLabelManager jumpLabelManager)
         {
             KCFile workingFile = new KCFile();
             List<IInstruction> instructions = new List<IInstruction>();
@@ -71,12 +72,17 @@ namespace KPT.Parser
                     Environment.Exit(1);
                 }
 
-                long currentAddress = br.BaseStream.Position;
-
-                if (JumpLabelManager.IsJumpTarget(fileNumber, (int)currentAddress))
+                if (jumpLabelManager != null) // we want to support running this without a jumplabelmanager just in case
                 {
-                    var virtualLabel = JumpLabelManager.CreateVirtualLabel(fileNumber, (int)currentAddress);
-                    instructions.Add(virtualLabel);
+
+                    long currentAddress = br.BaseStream.Position;
+
+                    if (jumpLabelManager.IsJumpTarget(fileNumber, (int)currentAddress))
+                    {
+                        var virtualLabel = jumpLabelManager.CreateVirtualLabel(fileNumber, (int)currentAddress);
+                        instructions.Add(virtualLabel);
+                    }
+
                 }
 
                 IInstruction newInstruction;

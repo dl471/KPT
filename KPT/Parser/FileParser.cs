@@ -8,6 +8,8 @@ using KPT.Parser.Elements;
 using KPT.Parser.Instructions;
 using KPT.Parser.Headers;
 using KPT.Parser.Footers;
+using KPT.Parser.Elements;
+using KPT.Parser.Jump_Label_Manager;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 
@@ -40,32 +42,21 @@ namespace KPT.Parser
         }
 
         /// <summary>
-        /// A helper function for creating Boxes
-        /// </summary>
-        /// <param name="opcode"></param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Intended to make Box creating code cleaner by delegating the getting of instruction size and construction of object to a seperate function
-        /// </remarks>
-        private InstructionBox MakeInstructionBox(Opcode opcode)
-        {
-            int instructionSize = OpcodeInfo.GetInstructionSize(opcode);
-            return new InstructionBox(instructionSize);
-        }
-
-        /// <summary>
         /// Takes a file and breaks it down into IElements then returns it in a structured format
         /// </summary>
         /// <param name="br">The file to process</param>
         /// <param name="fileName">The name of the file to be processed (used only for displaying error messages)</param>
+        /// <param name="jumpLabelManager">The jump label manager to use when processing file (pass null to disable jump tracking)</param>
         /// <returns>A class containing the processed file data</returns>
-        public KCFile ParseFile(BinaryReader br, string fileName)
+        public KCFile ParseFile(BinaryReader br, string fileName, JumpLabelManager jumpLabelManager)
         {
             KCFile workingFile = new KCFile();
             List<IInstruction> instructions = new List<IInstruction>();
 
             workingFile.footer = ReadFooter(br);
             workingFile.header = ReadHeader(br);
+
+            StCpNumber fileNumber = (workingFile.header as StCp_Header).GetFileNumber(); // more than anything else this basically cements that this function reads only StCp files which should really be clarified at some point
 
             long streamEnd = br.BaseStream.Length - ElementHelper.GetElementSize(workingFile.footer);
 
@@ -81,12 +72,25 @@ namespace KPT.Parser
                     Environment.Exit(1);
                 }
 
+                if (jumpLabelManager != null) // we want to support running this without a jumplabelmanager just in case
+                {
+
+                    long currentAddress = br.BaseStream.Position;
+
+                    if (jumpLabelManager.IsJumpTarget(fileNumber, (int)currentAddress))
+                    {
+                        var virtualLabel = jumpLabelManager.CreateVirtualLabel(fileNumber, (int)currentAddress);
+                        instructions.Add(virtualLabel);
+                    }
+
+                }
+
                 IInstruction newInstruction;
                 Type instructionParserType = OpcodeInfo.GetInstructionParserType(opcode);
                 
                 if (instructionParserType == typeof(InstructionBox))
                 {
-                    newInstruction = MakeInstructionBox(opcode);
+                    newInstruction = ElementHelper.MakeInstructionBox(opcode);
                     newInstruction.Read(br);
                 }
                 else

@@ -96,6 +96,7 @@
     <Compile Include="Parser\Elements\DataBox.cs" />
     <Compile Include="Parser\Elements\DialogueBox.cs" />
     <Compile Include="Parser\Elements\SpriteInfo.cs" />
+    <Compile Include="Parser\Elements\StCpNumber.cs" />
     <Compile Include="Parser\Footers\St_Footer.cs" />
     <Compile Include="Parser\Headers\St_Header.cs" />
     <Compile Include="Parser\Instructions\ChoiceDialog.cs" />
@@ -110,6 +111,10 @@
     <Compile Include="Parser\Instructions\HideTextBox.cs" />
     <Compile Include="Parser\Instructions\ShowImage.cs" />
     <Compile Include="Parser\Interfaces.cs" />
+    <Compile Include="Parser\Jump Label Manager\JumpLabelManager.cs" />
+    <Compile Include="Parser\Jump Label Manager\JumpTableEntry.cs" />
+    <Compile Include="Parser\Jump Label Manager\JumpTableInterface.cs" />
+    <Compile Include="Parser\Jump Label Manager\VirtualLabel.cs" />
     <Compile Include="Parser\OpcodeInfo.cs" />
     <Compile Include="Parser\FileParser.cs" />
     <Compile Include="Parser\Headers\StCp_Header.cs" />

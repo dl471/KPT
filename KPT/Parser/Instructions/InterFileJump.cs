@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using KPT.Parser.Elements;
 
 namespace KPT.Parser.Instructions
 {
@@ -11,17 +12,20 @@ namespace KPT.Parser.Instructions
     {
         // make a jump to a different file - possibly also uses lookup table in St000_SldtDat.bin
         Opcode opcode;
-        short cpNumber;
-        short stNumber;
+        StCpNumber fileNumber;
         // same deal as the look up codes in InterFileJump
         short firstLookUpCode;
         short secondLookUpCode;
 
+        public InterFileJump()
+        {
+            fileNumber = new StCpNumber();
+        }
+
         public bool Read(BinaryReader br)
         {
             opcode = FileIOHelper.ReadOpcode(br);
-            stNumber = br.ReadInt16();
-            cpNumber = br.ReadInt16();
+            fileNumber.Read(br);
             firstLookUpCode = br.ReadInt16();
             secondLookUpCode = br.ReadInt16();
             return true;
@@ -30,8 +34,7 @@ namespace KPT.Parser.Instructions
         public bool Write(BinaryWriter bw)
         {
             bw.Write((short)opcode);
-            bw.Write(cpNumber);
-            bw.Write(stNumber);
+            fileNumber.Write(bw);
             bw.Write(firstLookUpCode);
             bw.Write(secondLookUpCode);
             return true;

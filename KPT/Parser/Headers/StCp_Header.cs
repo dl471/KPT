@@ -14,23 +14,36 @@ namespace KPT.Parser.Headers
     /// </summary>
     class StCp_Header : IHeader
     {
-        short fileNumber;
-        short stNumber; // second uint16, not currently handled
+
+        public const int HEADER_SIZE = 0x60;
+
+        StCpNumber fileNumber;
         DataBox box1;
+
+        public StCp_Header()
+        {
+            fileNumber = new StCpNumber();
+        }
 
         public bool Read(BinaryReader br)
         {
-            fileNumber = br.ReadInt16();
-            box1 = new DataBox(0x5E); // Header size seems to be 0x60 overall, so we read the first int16 then shove the rest in a Box. There seems to be a bit more to the header that can be used to validate but I'm skipping that at the moment.
+            fileNumber.Read(br);
+            box1 = new DataBox(0x5C); // header size minus size of StCp number
             box1.Read(br);
             return true;
         }
 
         public bool Write(BinaryWriter bw)
         {
-            bw.Write(fileNumber);
+            fileNumber.Write(bw);
             box1.Write(bw);
             return true;
         }
+
+        public StCpNumber GetFileNumber()
+        {
+            return fileNumber;
+        }
+
     }
 }

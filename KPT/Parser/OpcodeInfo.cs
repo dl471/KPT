@@ -71,6 +71,7 @@ namespace KPT.Parser
 
         SHOW_IMAGE = 0x600,
         U_601 = 0x601,
+        U_602 = 0x602,
         U_603 = 0x603,
 
         CHOICE_DIALOG = 0x701,
@@ -139,6 +140,7 @@ namespace KPT.Parser
             { Opcode.U_407, 2 },
 
             { Opcode.U_601, 8 },
+            { Opcode.U_602, 8 }, // eye balled so not 100% confirmed
             { Opcode.U_603, 2 },
 
             { Opcode.PLAY_INTERRUPT, 6 }, // short opcode, short videofile, short unknown
@@ -203,6 +205,7 @@ namespace KPT.Parser
             { Opcode.SHOW_IMAGE, typeof(ShowImage) }, // a tentative name
 
             { Opcode.U_601, typeof(InstructionBox) },
+            { Opcode.U_602, typeof(InstructionBox) },
             { Opcode.U_603, typeof(InstructionBox) },
 
             { Opcode.CHOICE_DIALOG, typeof(ChoiceDialog) },

@@ -22,6 +22,7 @@ namespace KPT.Parser
         U_00C = 0x00C,
         U_00F = 0x00F,
         U_01E = 0x01E,
+        U_0B4 = 0x0B4,
         U_03C = 0x03C,
 
         U_100 = 0x100,
@@ -99,6 +100,7 @@ namespace KPT.Parser
             { Opcode.U_00C, 2 },
             { Opcode.U_00F, 2 },
             { Opcode.U_01E, 2 }, // educated guess
+            { Opcode.U_0B4, 2 }, // eye balled so not 100% confirmed
             { Opcode.U_03C, 2 },
 
             { Opcode.U_100, 2 }, // educated guess
@@ -155,6 +157,7 @@ namespace KPT.Parser
             { Opcode.U_00C, typeof(InstructionBox) },
             { Opcode.U_00F, typeof(InstructionBox) },
             { Opcode.U_01E, typeof(InstructionBox) },
+            { Opcode.U_0B4, typeof(InstructionBox) },
             { Opcode.U_03C, typeof(InstructionBox) },
 
             { Opcode.U_100, typeof(InstructionBox) },

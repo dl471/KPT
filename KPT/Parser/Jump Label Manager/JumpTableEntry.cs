@@ -26,6 +26,21 @@ namespace KPT.Parser.Jump_Label_Manager
         short unknown5;
         DataBox trailingBlock; // this block is usually but is not always entirey 0xFF ands its purpose is not clear
 
+        public short SequentialChoiceNumber
+        {
+            get => sequentialChoiceNumber;
+        }
+
+        public short LookUpCode
+        {
+            get => lookupCode;
+        }
+
+        public short Offset
+        {
+            get => offset;
+        }
+
         public JumpTableEntry()
         {
             fileNumber = new StCpNumber();

@@ -105,7 +105,6 @@ namespace KPT.Parser
 
             { Opcode.U_100, 2 }, // educated guess
             { Opcode.U_101, 4 }, // i think this is correct but the fact it seems to be such an extreme instruction (see comments on this opcode in instruction parser map) makes it hard to see
-            { Opcode.U_111, 4 }, // educated guess
             { Opcode.U_120, 4 },
             { Opcode.U_121, 6 }, // educated guess, extremely unconfirmed
             { Opcode.U_130, 4 },
@@ -162,7 +161,7 @@ namespace KPT.Parser
 
             { Opcode.U_100, typeof(InstructionBox) },
             { Opcode.U_101, typeof(InstructionBox) }, // save and exit? huh?
-            { Opcode.U_111, typeof(InstructionBox) },
+            { Opcode.U_111, typeof(U_111) },
             { Opcode.INTRA_FILE_JUMP, typeof(IntraFileJump) },
             { Opcode.INTER_FILE_JUMP, typeof(InterFileJump) },
             { Opcode.U_120, typeof(InstructionBox) },

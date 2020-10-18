@@ -11,7 +11,7 @@ namespace KPT.Parser.Instructions
     {
         // seems to be related to jumps, but the exact purpose is still unclear
         Opcode opcode;
-        short lookUpCode; // most likely, this will tie into a lookup code in the jumptable
+        public short lookUpCode { get; private set; } // most likely, this will tie into a lookup code in the jumptable
 
         public bool Read(BinaryReader br)
         {

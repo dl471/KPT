@@ -12,10 +12,10 @@ namespace KPT.Parser.Instructions
     {
         // make a jump to a different file - possibly also uses lookup table in St000_SldtDat.bin
         Opcode opcode;
-        StCpNumber fileNumber;
+        public StCpNumber fileNumber { get; private set; }
         // same deal as the look up codes in InterFileJump
-        short firstLookUpCode;
-        short secondLookUpCode;
+        public short firstLookUpCode { get; private set; }
+        public short secondLookUpCode { get; private set; }
 
         public InterFileJump()
         {

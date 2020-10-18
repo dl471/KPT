@@ -12,8 +12,8 @@ namespace KPT.Parser.Instructions
         // make a jump within the same file - appears to use a lookup table in St000_SldtDat.bin
         Opcode opcode;
         // one of these shorts is a look up code and the other is unknown. sometimes they are the same and sometimes they are different. so there is some currently unknown logic that may affect branching in an unpredictable way.
-        short firstLookUpCode;
-        short secondLookUpCode;
+        public short firstLookUpCode { get; private set; }
+        public short secondLookUpCode { get; private set; }
 
         public bool Read(BinaryReader br)
         {

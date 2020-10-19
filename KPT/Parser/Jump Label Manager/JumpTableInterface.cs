@@ -124,25 +124,5 @@ namespace KPT.Parser.Jump_Label_Manager
             return jumpTableEntries;
         }
 
-        /// <summary>
-        /// Iterate through the jump table entries and verify that each global look up code is unique
-        /// </summary>
-        public void VerifyJumpTableGlobalCodes()
-        {
-            HashSet<int> lookUpCodes = new HashSet<int>();
-
-            foreach (var entry in jumpTableEntries)
-            {
-                var lookupCode = entry.LookUpCode;
-                if (lookUpCodes.Contains(lookupCode))
-                {
-                    throw new Exception(string.Format("Non-unique lookup code: lookup code {0} has been reused", lookupCode));
-                }
-                lookUpCodes.Add(lookupCode);
-
-            }
-
-        }
-
     }
 }

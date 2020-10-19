@@ -97,6 +97,7 @@
     <Compile Include="ImageHandler.cs" />
     <Compile Include="ISOReader.cs" />
     <Compile Include="ISOWriter.cs" />
+    <Compile Include="Parser\Analysis.cs" />
     <Compile Include="Parser\Constants.cs" />
     <Compile Include="Parser\DynamicTextBoxes.cs" />
     <Compile Include="Parser\ElementHelper.cs" />

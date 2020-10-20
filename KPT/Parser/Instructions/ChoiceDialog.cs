@@ -17,6 +17,11 @@ namespace KPT.Parser.Instructions
         int numberOfChoices;
         List<ChoiceBar> choices;
 
+        public int NumberOfChoices
+        {
+            get => numberOfChoices;
+        }
+
         public ChoiceDialog()
         {
             choices = new List<ChoiceBar>();

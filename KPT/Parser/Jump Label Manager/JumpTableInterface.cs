@@ -20,6 +20,7 @@ namespace KPT.Parser.Jump_Label_Manager
     class JumpTableInterface
     {
         private string jumpTablePath = string.Empty;
+        private Dictionary<int, JumpTableEntry> globalLookUpCodeLookUpTable;
 
         St_Header header;
         List<JumpTableEntry> jumpTableEntries;
@@ -30,6 +31,7 @@ namespace KPT.Parser.Jump_Label_Manager
             header = new St_Header();
             footer = new St_Footer();
             jumpTableEntries = new List<JumpTableEntry>();
+            globalLookUpCodeLookUpTable = new Dictionary<int, JumpTableEntry>();
 
             if (IsJumpTable(jumpTableLocation))
             {
@@ -94,6 +96,16 @@ namespace KPT.Parser.Jump_Label_Manager
                 var nextEntry = new JumpTableEntry();
                 nextEntry.Read(br);
                 jumpTableEntries.Add(nextEntry);
+
+                int globalLookupCode = nextEntry.LookUpCode;
+
+                if (globalLookUpCodeLookUpTable.ContainsKey(globalLookupCode))
+                {
+                    throw new Exception(string.Format("Non-unique lookup code: lookup code {0} has been reused", globalLookupCode));
+                }
+
+                globalLookUpCodeLookUpTable[globalLookupCode] = nextEntry;
+
             }
 
             br.Close();
@@ -122,6 +134,20 @@ namespace KPT.Parser.Jump_Label_Manager
         public List<JumpTableEntry> GetJumpTableEntries()
         {
             return jumpTableEntries;
+        }
+
+        public JumpTableEntry GetJumpTableEntryByGlobalLookupCode(int lookupCode)
+        {
+            JumpTableEntry requestedEntry;
+
+            bool success = globalLookUpCodeLookUpTable.TryGetValue(lookupCode, out requestedEntry);
+
+            if (!success)
+            {
+                throw new Exception(string.Format("Could not find global lookup code {0} in jump table", lookupCode));
+            }
+
+            return requestedEntry;
         }
 
     }

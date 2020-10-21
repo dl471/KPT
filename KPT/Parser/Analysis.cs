@@ -34,7 +34,6 @@ namespace KPT.Parser
 
             }
 
-            MessageBox.Show(lookUpCodes.Count.ToString());
 
         }
     }

@@ -82,5 +82,10 @@ namespace KPT.Parser.Instructions
             return records;
         }
 
+        public List<ChoiceBar> GetChoices()
+        {
+            return choices;
+        }
+
     }
 }

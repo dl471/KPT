@@ -54,12 +54,12 @@ namespace KPT.Parser.Jump_Label_Manager
         public bool Read(BinaryReader br)
         {
             fileNumber.Read(br);
-            sequentialChoiceNumber = br.ReadInt16();
+            sequentialJumpNumber = br.ReadInt16();
             unknown1 = br.ReadInt16();
             offset = br.ReadInt16();
             offset = HandleOffsetOnRead(offset); // since the offset is counted from the end of the header not the start of the file we make our own adjustment to it to turn into a real offset from the start of the file. since we will be dealing with full file streams this makes it easier to reason about and recalcuate the offets.
             unknown2 = br.ReadInt16();
-            unknown3 = br.ReadInt16();
+            jumpFileNumber = br.ReadInt16();
             lookupCode = br.ReadInt16();
             unknown4 = br.ReadInt16();
             unknown5 = br.ReadInt16();
@@ -71,12 +71,12 @@ namespace KPT.Parser.Jump_Label_Manager
         public bool Write(BinaryWriter bw)
         {
             fileNumber.Write(bw);
-            bw.Write(sequentialChoiceNumber);
+            bw.Write(sequentialJumpNumber);
             bw.Write(unknown1);
             offset = HandleOffsetOnWrite(offset);
             bw.Write(offset);
             bw.Write(unknown2);
-            bw.Write(unknown3);
+            bw.Write(jumpFileNumber);
             bw.Write(lookupCode);
             bw.Write(unknown4);
             bw.Write(unknown5);

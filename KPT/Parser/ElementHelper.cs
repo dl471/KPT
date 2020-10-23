@@ -22,6 +22,10 @@ namespace KPT.Parser
         internal static long GetElementSize(this IElement element)
         {
             bufferWriter.BaseStream.Seek(0, SeekOrigin.Begin);
+            if (element is Jump_Label_Manager.VirtualLabel)
+            {
+                return 0; // remember when i decided it would be a cool idea to have the virtuallabels update the offset of their paired jumptableentry automatically on write? turns out calling getelementsize on it causes it to zero the offsets, which is bad if you're trying to figure out what they are after calling a function that uses getelementsize.
+            }
             element.Write(bufferWriter);
             return bufferWriter.BaseStream.Position;
         }

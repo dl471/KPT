@@ -109,9 +109,9 @@ namespace KPT.Parser
             
             foreach (var node in wrappedInstructionList.wrappedInstructions)
             {
-                if (node.wrappedInstruction is U_111)
+                if (node.wrappedInstruction is JumpLabel)
                 {
-                    var jumpLabel = node.wrappedInstruction as U_111;
+                    var jumpLabel = node.wrappedInstruction as JumpLabel;
                     long labelOffset = node.address;
                     var jumpTableEntry = jumpTable.GetJumpTableEntryByGlobalLookupCode(jumpLabel.lookUpCode);
                     short expectedOffset = jumpTableEntry.Offset;

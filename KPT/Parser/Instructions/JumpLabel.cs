@@ -7,11 +7,11 @@ using System.IO;
 
 namespace KPT.Parser.Instructions
 {
-    class U_111 : IInstruction
+    class JumpLabel : IInstruction
     {
-        // seems to be related to jumps, but the exact purpose is still unclear
+        // makes a position in a file where a jump may target
         Opcode opcode;
-        public short lookUpCode { get; private set; } // most likely, this will tie into a lookup code in the jumptable
+        public short lookUpCode { get; private set; } // lookup code for the jump table to find file number, offset, etc. to actually jump to
 
         public bool Read(BinaryReader br)
         {

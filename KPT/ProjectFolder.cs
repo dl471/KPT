@@ -307,8 +307,9 @@ namespace KPT
                 {
                     string outputFileName = Path.Combine(rootDir, reassembledGameFilesDir, GetSubPath(file, Path.Combine(rootDir, unpackedGameFilesDir)));
                     parser.WriteFile(parsedFile, outputFileName);
-                }                
+                }
 
+                Analysis.VerifyJumpTableOffsets(parsedFile, jumpTable);
             }
 
             jumpTable.SaveJumpTable();

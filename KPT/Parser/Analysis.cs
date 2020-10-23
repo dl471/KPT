@@ -8,6 +8,7 @@ using KPT.Parser.Instructions;
 using KPT.Parser.Elements;
 using KPT.Parser.Jump_Label_Manager;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace KPT.Parser
 {
@@ -96,8 +97,33 @@ namespace KPT.Parser
                 lookUpCodes.Add(lookupCode);
 
             }
+         
+        }
 
+        /// <summary>
+        /// Interate through a file a verify that the addresses of the jump labels in the file and the jump address in the label's associated JumpTableEntry match
+        /// </summary>
+        public static void VerifyJumpTableOffsets(KCFile file, JumpTableInterface jumpTable)
+        {
+            var wrappedInstructionList = new WrappedInstructionList(file.instructions);
+            
+            foreach (var node in wrappedInstructionList.wrappedInstructions)
+            {
+                if (node.wrappedInstruction is U_111)
+                {
+                    var jumpLabel = node.wrappedInstruction as U_111;
+                    long labelOffset = node.address;
+                    var jumpTableEntry = jumpTable.GetJumpTableEntryByGlobalLookupCode(jumpLabel.lookUpCode);
+                    short expectedOffset = jumpTableEntry.Offset;
 
+                    if (labelOffset != expectedOffset)
+                    {
+                        Debug.WriteLine("wrong jump " + "expected " + expectedOffset.ToString() + " actual " + node.address.ToString());
+                        throw new Exception("Jump table miscallibrated");
+
+                    }
+                }
+            }
         }
     }
 }

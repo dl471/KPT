@@ -244,7 +244,7 @@ namespace KPT
             fontHandler.ChangeSpaceSize(FontHandler.DEFAULT_SPACE_SIZE);
 
             var textWrapper = new DynamicTextBoxes();
-            var jumpTable = new KPT.Parser.Jump_Label_Manager.JumpTableInterface();
+            var jumpTable = new KPT.Parser.Jump_Label_Manager.JumpTableInterface(Path.Combine(rootDir, unpackedGameFilesDir, @"PSP_GAME\USRDIR\St000\St000\St000_SldtDat.bin"));
             jumpTable.LoadJumpTable(); // changing the size of instructions with new dialogue will mess up file offsets so we will need to load the jump table and make sure it's updated as we go
             var jumpLabelManager = new JumpLabelManager(jumpTable.GetJumpTableEntries());
 

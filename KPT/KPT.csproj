@@ -98,6 +98,9 @@
     <Compile Include="ISOReader.cs" />
     <Compile Include="ISOWriter.cs" />
     <Compile Include="Parser\Analysis.cs" />
+    <Compile Include="Parser\Branch Mapper\BranchMapper.cs" />
+    <Compile Include="Parser\Branch Mapper\InstructionBlock.cs" />
+    <Compile Include="Parser\Branch Mapper\JumpLabelMeta.cs" />
     <Compile Include="Parser\Constants.cs" />
     <Compile Include="Parser\DynamicTextBoxes.cs" />
     <Compile Include="Parser\ElementHelper.cs" />

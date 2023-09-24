@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using KPT.Parser.Headers;
 
 namespace KPT.DisassemblyView
 {
@@ -49,8 +50,8 @@ namespace KPT.DisassemblyView
             // create a fake header and footer to emulate an St file for the parser
             if (!headerFooterCheckbox.Checked)
             {
-                int headerSize = 0x60; // constants and magic numbers like this should be exposed by the st_header class
-                int footerSize = 0x1E;
+                int headerSize = St_Header.HEADER_SIZE; 
+                int footerSize = 0x1E; // footer does not have its own element?
 
                 MemoryStream newMemoryStream = new MemoryStream(hexBytes.Length + headerSize + footerSize);
                 BinaryWriter newMSWriter = new BinaryWriter(newMemoryStream);
@@ -80,7 +81,7 @@ namespace KPT.DisassemblyView
 
             br.Close();
 
-            MemoryStream tempBuffer = new MemoryStream(4096);
+            MemoryStream tempBuffer = new MemoryStream(4096); // why 4096?
             BinaryWriter tbWriter = new BinaryWriter(tempBuffer);
             BinaryReader tbReader = new BinaryReader(tempBuffer);
 

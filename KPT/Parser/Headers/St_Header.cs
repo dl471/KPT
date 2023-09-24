@@ -14,6 +14,9 @@ namespace KPT.Parser.Headers
     /// </summary>
     class St_Header : IHeader
     {
+
+        public const int HEADER_SIZE = 0x60;
+
         short fileNumber;
         short stNumber; // second uint16, not currently handled
         DataBox box1;
@@ -21,7 +24,7 @@ namespace KPT.Parser.Headers
         public bool Read(BinaryReader br)
         {
             fileNumber = br.ReadInt16();
-            box1 = new DataBox(0x5E); // Header size seems to be 0x60 overall, so we read the first int16 then shove the rest in a Box. There seems to be a bit more to the header that can be used to validate but I'm skipping that at the moment.
+            box1 = new DataBox(HEADER_SIZE-2); // Header size seems to be 0x60 overall, so we read the first int16 then shove the rest in a Box. There seems to be a bit more to the header that can be used to validate but I'm skipping that at the moment.
             box1.Read(br);
             return true;
         }

@@ -171,16 +171,33 @@ namespace KPT
             jumpTable.LoadJumpTable(); // changing the size of instructions with new dialogue will mess up file offsets so we will need to load the jump table and make sure it's updated as we go
             var jumpLabelManager = new JumpLabelManager(jumpTable.GetJumpTableEntries());
 
+            Dictionary<string, KCFile> parsedDictionary = new Dictionary<string, KCFile>();
+
             foreach (string file in fileList)
             {
+
                 string fileName = Path.Combine(dialogueFileDir, file);
-                var fileStrings = new StringCollection(GetSubPath(file, Path.Combine(rootDir, unpackedGameFilesDir)));                
+                var fileStrings = new StringCollection(GetSubPath(file, Path.Combine(rootDir, unpackedGameFilesDir)));
 
                 FileStream fs = new FileStream(fileName, FileMode.Open);
                 BinaryReader br = new BinaryReader(fs);
 
                 var testParser = new FileParser();
                 var parsedFile = testParser.ParseFile(br, Path.GetFileName(file), jumpLabelManager);
+
+                parsedDictionary[file] = parsedFile;
+
+                br.Close();
+                fs.Close();
+
+            }
+
+            foreach (string file in fileList)
+            {
+
+                var parsedFile = parsedDictionary[file];
+                string fileName = Path.Combine(dialogueFileDir, file);
+                var fileStrings = new StringCollection(GetSubPath(file, Path.Combine(rootDir, unpackedGameFilesDir)));                
 
                 foreach (IElement element in parsedFile.instructions)
                 {
@@ -195,9 +212,6 @@ namespace KPT
                         temp.AddStrings(fileStrings);
                     }
                 }
-
-                br.Close();
-                fs.Close();
                 
                 if (fileStrings.NumberOfKeys > 0)
                 {

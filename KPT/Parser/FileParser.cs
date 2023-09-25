@@ -72,22 +72,11 @@ namespace KPT.Parser
                     Environment.Exit(1);
                 }
 
-                if (jumpLabelManager != null) // we want to support running this without a jumplabelmanager just in case
-                {
-
-                    long currentAddress = br.BaseStream.Position;
-
-                    if (jumpLabelManager.IsJumpTarget(fileNumber, (int)currentAddress))
-                    {
-                        var virtualLabel = jumpLabelManager.CreateVirtualLabel(fileNumber, (int)currentAddress);
-                        instructions.Add(virtualLabel);
-                    }
-
-                }
 
                 IInstruction newInstruction;
                 Type instructionParserType = OpcodeInfo.GetInstructionParserType(opcode);
-                
+                long currentAddress = br.BaseStream.Position;
+
                 if (instructionParserType == typeof(InstructionBox))
                 {
                     newInstruction = ElementHelper.MakeInstructionBox(opcode);
@@ -97,6 +86,18 @@ namespace KPT.Parser
                 {
                     newInstruction = (IInstruction)Activator.CreateInstance(instructionParserType);
                     newInstruction.Read(br);
+                }
+
+                if (jumpLabelManager != null) // we want to support running this without a jumplabelmanager just in case
+                {
+
+                    if (opcode == Opcode.JUMP_LABEL)
+                    {
+                        var jumpLabel = newInstruction as JumpLabel;
+                        var virtualLabel = jumpLabelManager.CreateVirtualLabel(fileNumber, (int)currentAddress, jumpLabel.lookUpCode);
+                        instructions.Add(virtualLabel);
+                    }
+
                 }
 
                 instructions.Add(newInstruction);

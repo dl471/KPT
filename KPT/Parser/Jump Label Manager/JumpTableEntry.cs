@@ -21,7 +21,7 @@ namespace KPT.Parser.Jump_Label_Manager
         short offset; // jump to this offset within the file - note that this is the offset from the end of the header not the start of the file
         short unknown2; // this appears to also always be zero
         short jumpFileNumber; // increments by one with each file registered in the jump table, which means every file has its own unique ID - St000Cp0001 = 0, St000Cp0101 = 1, St000Cp02A1 = 2 , etc. - whether or not this genericizes outside of the domain of the jump table is unknown
-        short lookupCode; // increments by one with each jump registered in the jump table, giving each jumpTableEntry its own unique ID - the look up code used by IntraFileJump and possibly also InterFileJump 
+        short lookupCode { get; set;  } // increments by one with each jump registered in the jump table, giving each jumpTableEntry its own unique ID - the look up code used by IntraFileJump and possibly also InterFileJump 
         short unknown4;
         short unknown5;
         DataBox trailingBlock; // this block is usually but is not always entirey 0xFF ands its purpose is not clear

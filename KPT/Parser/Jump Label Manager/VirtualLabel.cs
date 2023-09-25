@@ -19,6 +19,7 @@ namespace KPT.Parser.Jump_Label_Manager
     {
         int currentAddress;
         JumpTableEntry pairedEntry;
+        int globalJumpLookupCode;
 
         StCpNumber fileNumber { get; set; } // the file the jump belongs to
         int fileJumpNumber { get; set; } // the order in which this jump apppears in its file
@@ -28,6 +29,7 @@ namespace KPT.Parser.Jump_Label_Manager
             this.pairedEntry = toPair;
             this.fileNumber = fileNumber;
             this.fileJumpNumber = fileJumpNumber;
+            this.globalJumpLookupCode = pairedEntry.LookUpCode;
         }
 
         public bool Read(BinaryReader br)

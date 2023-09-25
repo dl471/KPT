@@ -41,7 +41,10 @@ namespace KPT.Parser.Spreadsheet_Interface
                         }
                         if (record.speaker != lastSpeaker)
                         {
-                            lastSpeaker = record.speaker;
+                            if (record.speaker != "[disasm]")
+                            {
+                                lastSpeaker = record.speaker;
+                            }
                         }
                         else
                         {

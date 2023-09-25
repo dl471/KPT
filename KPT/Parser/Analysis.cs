@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using KPT.Parser;
 using KPT.Parser.Instructions;
+using KPT.Parser.Headers;
 using KPT.Parser.Elements;
 using KPT.Parser.Jump_Label_Manager;
 using System.Windows.Forms;
@@ -58,7 +59,7 @@ namespace KPT.Parser
 
             private void WrapInstructions(List<IInstruction> instructionList)
             {
-                long currentFileOffset = 0x60; // starting at 0x60 to account for StCp header
+                long currentFileOffset = StCp_Header.HEADER_SIZE; // starting at 0x60 to account for StCp header
                 long instructionCounter = 0;
 
                 foreach (var instruction in instructionList)

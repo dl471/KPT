@@ -173,6 +173,8 @@ namespace KPT
 
             Dictionary<string, KCFile> parsedDictionary = new Dictionary<string, KCFile>();
 
+            // why is dump strings doing this by itself? surely the parser should be able to just take the directory and produce the processed intstruction list intstead of... this?
+            // and i am farrly sure this is not the only place where this kind of thing is done
             foreach (string file in fileList)
             {
 

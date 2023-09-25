@@ -14,6 +14,9 @@ namespace KPT.Parser.Elements
         short cpNumber;
         short stNumber;
 
+        short ST_NUM_LEN = 3;
+        short CP_NUM_LEN = 4;
+
         public bool Read(BinaryReader br)
         {
             cpNumber = br.ReadInt16();
@@ -28,9 +31,39 @@ namespace KPT.Parser.Elements
             return true;
         }
 
+        private string formatStNumber()
+        {
+            string stNumString = stNumber.ToString("X");
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < ST_NUM_LEN - stNumString.Length; i++)
+            {
+                sb.Append("0");
+            }
+
+            sb.Append(stNumString);
+
+            return sb.ToString();
+        }
+
+        private string formatCpNumber()
+        {
+            string cpNumString = cpNumber.ToString("X");
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < CP_NUM_LEN - cpNumString.Length; i++)
+            {
+                sb.Append("0");
+            }
+
+            sb.Append(cpNumString);
+
+            return sb.ToString();
+        }
+
         public override string ToString()
         {
-            return "St" + stNumber.ToString("X") + "Cp" + cpNumber.ToString("X");
+            return "St" + formatStNumber() + "Cp" + formatCpNumber();
         }
 
         public override bool Equals(Object obj)

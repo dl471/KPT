@@ -17,7 +17,7 @@ namespace KPT.Parser.Instructions
         SpriteInfo firstSprite;
         SpriteInfo secondSprite;
         SpriteInfo thirdSprite;
-        int voiceClip;
+        int soundClip;
         int unknown;
         DialogueBox dialogueBox;
 
@@ -35,7 +35,7 @@ namespace KPT.Parser.Instructions
             secondSprite.Read(br);
             thirdSprite = new SpriteInfo();
             thirdSprite.Read(br);
-            voiceClip = br.ReadInt32();
+            soundClip = br.ReadInt32();
             unknown = br.ReadInt32();
             dialogueBox.Read(br);
             return true;
@@ -47,7 +47,7 @@ namespace KPT.Parser.Instructions
             firstSprite.Write(bw);
             secondSprite.Write(bw);
             thirdSprite.Write(bw);
-            bw.Write(voiceClip);
+            bw.Write(soundClip);
             bw.Write(unknown);
             dialogueBox.Write(bw);
             return true;

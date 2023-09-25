@@ -48,6 +48,10 @@ namespace KPT.Parser.Elements
         }
 
 
+        public override int GetHashCode()
+        {
+            return stNumber << 16 + cpNumber;
+        }
 
     }
 }

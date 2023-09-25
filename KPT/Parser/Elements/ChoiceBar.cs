@@ -47,5 +47,16 @@ namespace KPT.Parser.Elements
         {
             return new List<CSVRecord> { new CSVRecord("Choice", choiceText) };
         }
+
+        public int GetChoiceNumber()
+        {
+            return choiceNumber;
+        }
+
+        public string GetChoiceText()
+        {
+            return choiceText;
+        }
+
     }
 }

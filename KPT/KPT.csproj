@@ -55,6 +55,12 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.FileSystem, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -95,6 +101,7 @@
     <Compile Include="ImageHandler.cs" />
     <Compile Include="ISOReader.cs" />
     <Compile Include="ISOWriter.cs" />
+    <Compile Include="Parser\Analysis.cs" />
     <Compile Include="Parser\Constants.cs" />
     <Compile Include="Parser\DynamicTextBoxes.cs" />
     <Compile Include="Parser\ElementHelper.cs" />
@@ -110,6 +117,7 @@
     <Compile Include="Parser\Instructions\InstructionBox.cs" />
     <Compile Include="Parser\Instructions\InterFileJump.cs" />
     <Compile Include="Parser\Instructions\IntraFileJump.cs" />
+    <Compile Include="Parser\Instructions\JumpLabel.cs" />
     <Compile Include="Parser\Instructions\LocationCard.cs" />
     <Compile Include="Parser\Instructions\BasicTextBox.cs" />
     <Compile Include="Parser\Instructions\U_501.cs" />
@@ -126,6 +134,8 @@
     <Compile Include="Parser\Headers\StCp_Header.cs" />
     <Compile Include="Parser\Spreadsheet Interface\CSVFileReader.cs" />
     <Compile Include="Parser\Spreadsheet Interface\CSVFileWriter.cs" />
+    <Compile Include="Parser\Branch Mapper\BranchMapper.cs" />
+    <Compile Include="Parser\Branch Mapper\JumpLabelMeta.cs" />
     <Compile Include="Parser\Spreadsheet Interface\CSVRecord.cs" />
     <Compile Include="Parser\StringCollection.cs" />
     <Compile Include="Parser\Tests\Tester.cs" />

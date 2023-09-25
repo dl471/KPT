@@ -33,5 +33,21 @@ namespace KPT.Parser.Elements
             return "St" + stNumber.ToString("X") + "Cp" + cpNumber.ToString("X");
         }
 
+        public override bool Equals(Object obj)
+        {
+            //Check for null and compare run-time types - modified from https://docs.microsoft.com/en-us/dotnet/api/system.object.equals?view=net-6.0
+            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                StCpNumber number = (StCpNumber)obj;
+                return (stNumber == number.stNumber) && (cpNumber == number.cpNumber);
+            }
+        }
+
+
+
     }
 }

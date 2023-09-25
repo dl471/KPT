@@ -35,7 +35,10 @@ namespace KPT.Parser.Spreadsheet_Interface
                     List<CSVRecord> csvRecords = temp.GetCSVRecords();
                     foreach (var record in csvRecords)
                     {
-                        record.originalText = fileStrings.GetString(record.stringID);
+                        if (!(record.speaker == "[disasm]"))
+                        {
+                            record.originalText = fileStrings.GetString(record.stringID);
+                        }
                         if (record.speaker != lastSpeaker)
                         {
                             lastSpeaker = record.speaker;

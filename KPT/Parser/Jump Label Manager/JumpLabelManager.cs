@@ -17,11 +17,16 @@ namespace KPT.Parser.Jump_Label_Manager
         /// Map jump ids to entries in the jump table
         /// </summary>
         private Dictionary<string, JumpTableEntry> jumpLabelMap;
+        /// <summary>
+        /// Track the labels in a specific file
+        /// </summary>
+        private Dictionary<StCpNumber, List<VirtualLabel>> fileJumpTargets;
 
         public JumpLabelManager(List<JumpTableEntry> jumpTableEntries)
         {
 
             jumpLabelMap = new Dictionary<string, JumpTableEntry>();
+            fileJumpTargets = new Dictionary<StCpNumber, List<VirtualLabel>>();
 
             foreach (var entry in jumpTableEntries)
             {
@@ -39,9 +44,25 @@ namespace KPT.Parser.Jump_Label_Manager
 
         public VirtualLabel CreateVirtualLabel(StCpNumber fileNumber, int address)
         {
+            // so that we can rebuild the games jump table wit ths info
             var jumpLabel = JumpTableEntry.GenerateJumpID(fileNumber, address);
             var jumpTableEntry = jumpLabelMap[jumpLabel];
-            var virtualLabel = new VirtualLabel(jumpTableEntry);
+
+            // so that we can replace the global lookup code with a local label in disassembly and CSV
+            // e.g. INTERFILE_JUMP 111 => INTERFILE_JUMP StCpSt006_Cp0701.LABEL_5 (fake, not the translaton)
+            List<VirtualLabel> labelList = null;
+            bool success = fileJumpTargets.TryGetValue(fileNumber, out labelList);
+
+            if (!success)
+            {
+                labelList = new List<VirtualLabel>();
+                fileJumpTargets[fileNumber] = labelList;
+            }
+
+            var jumpNumber = labelList.Count + 1;
+            var virtualLabel = new VirtualLabel(jumpTableEntry, fileNumber, jumpNumber);
+            labelList.Add(virtualLabel);
+
             return virtualLabel;
         }
 

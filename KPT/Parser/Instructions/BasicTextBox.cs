@@ -12,7 +12,7 @@ namespace KPT.Parser.Instructions
     class BasicTextBox : IInstruction, IHasName, IHasStrings, IDialogueBox
     {
         Opcode opcode;
-        int voiceClip;
+        int soundClip;
         int unknown;
         DialogueBox dialogueBox;
 
@@ -27,14 +27,14 @@ namespace KPT.Parser.Instructions
         public void InitalizeDefault()
         {
             opcode = Opcode.BASIC_TEXT_BOX;
-            voiceClip = 999999; // deliberately non-existent
+            soundClip = 999999; // deliberately non-existent
             unknown = 0;
         }
 
         public bool Read(BinaryReader br)
         {
             opcode = FileIOHelper.ReadOpcode(br);
-            voiceClip = br.ReadInt32();
+            soundClip = br.ReadInt32();
             unknown = br.ReadInt32();
             dialogueBox.Read(br);
             return true;
@@ -43,7 +43,7 @@ namespace KPT.Parser.Instructions
         public bool Write(BinaryWriter bw)
         {
             bw.Write((short)opcode);
-            bw.Write(voiceClip);
+            bw.Write(soundClip);
             bw.Write(unknown);
             dialogueBox.Write(bw);
             return true;

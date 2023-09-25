@@ -15,7 +15,7 @@ namespace KPT.Parser.Instructions
         short unknown1;
         byte unknown2;
         byte unknown3;
-        int voiceClip;
+        int soundClip;
         int unknown4;
         DialogueBox dialogueBox;
         int unknown5;
@@ -31,7 +31,7 @@ namespace KPT.Parser.Instructions
             unknown1 = br.ReadInt16();
             unknown2 = br.ReadByte();
             unknown3 = br.ReadByte();
-            voiceClip = br.ReadInt32();
+            soundClip = br.ReadInt32();
             unknown4 = br.ReadInt32();
             dialogueBox.Read(br);
             unknown5 = br.ReadInt32();
@@ -44,7 +44,7 @@ namespace KPT.Parser.Instructions
             bw.Write(unknown1);
             bw.Write(unknown2);
             bw.Write(unknown3);
-            bw.Write(voiceClip);
+            bw.Write(soundClip);
             bw.Write(unknown4);
             dialogueBox.Write(bw);
             bw.Write(unknown5);

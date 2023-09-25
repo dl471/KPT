@@ -50,7 +50,7 @@ namespace KPT.DisassemblyView
             // create a fake header and footer to emulate an St file for the parser
             if (!headerFooterCheckbox.Checked)
             {
-                int headerSize = St_Header.HEADER_SIZE; 
+                int headerSize = StCp_Header.HEADER_SIZE; 
                 int footerSize = 0x1E; // footer does not have its own element?
 
                 MemoryStream newMemoryStream = new MemoryStream(hexBytes.Length + headerSize + footerSize);
@@ -77,7 +77,7 @@ namespace KPT.DisassemblyView
             BinaryReader br = new BinaryReader(ms);
 
             var parser = new KPT.Parser.FileParser();
-            var file = parser.ParseFile(br, "[DISASSEMBLY INPUT]");
+            var file = parser.ParseFile(br, "[DISASSEMBLY INPUT]", null);
 
             br.Close();
 

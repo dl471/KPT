@@ -85,9 +85,9 @@
             this.headerFooterCheckbox.AutoSize = true;
             this.headerFooterCheckbox.Location = new System.Drawing.Point(31, 365);
             this.headerFooterCheckbox.Name = "headerFooterCheckbox";
-            this.headerFooterCheckbox.Size = new System.Drawing.Size(167, 17);
+            this.headerFooterCheckbox.Size = new System.Drawing.Size(180, 17);
             this.headerFooterCheckbox.TabIndex = 5;
-            this.headerFooterCheckbox.Text = "Contains St header and footer";
+            this.headerFooterCheckbox.Text = "Contains StCp header and footer";
             this.headerFooterCheckbox.UseVisualStyleBackColor = true;
             // 
             // DisassemblyView

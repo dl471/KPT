@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using KPT.Parser;
+using KPT.Parser.Instructions;
 using KPT.Parser.Headers;
 
 namespace KPT.DisassemblyView
@@ -93,8 +95,12 @@ namespace KPT.DisassemblyView
                 instruction.Write(tbWriter);
                 long bytesWritten = tbWriter.BaseStream.Position;
                 tbWriter.BaseStream.Seek(0, SeekOrigin.Begin);
-                
-                for (int i = 0; i < bytesWritten; i++)
+
+                Opcode opcode = FileIOHelper.ReadOpcode(tbReader);
+                sb.Append(opcode.ToString());
+                sb.Append(" ");
+
+                for (int i = OpcodeInfo.OPCODE_SIZE; i < bytesWritten; i++)
                 {
                     byte currentByte = tbReader.ReadByte();
                     string currentHex = currentByte.ToString("X");

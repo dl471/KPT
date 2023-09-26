@@ -21,12 +21,17 @@ namespace KPT.Parser.Jump_Label_Manager
         /// Track the labels in a specific file
         /// </summary>
         private Dictionary<StCpNumber, List<VirtualLabel>> fileJumpTargets;
+        /// <summary>
+        /// Maps a global lookup code to a specific virtual label in an already processed file
+        /// </summary>
+        private Dictionary<int, VirtualLabel> globalLookUpCodeMap;
 
         public JumpLabelManager(List<JumpTableEntry> jumpTableEntries)
         {
 
             jumpLabelMap = new Dictionary<string, JumpTableEntry>();
             fileJumpTargets = new Dictionary<StCpNumber, List<VirtualLabel>>();
+            globalLookUpCodeMap = new Dictionary<int, VirtualLabel>();
 
             foreach (var entry in jumpTableEntries)
             {
@@ -42,8 +47,9 @@ namespace KPT.Parser.Jump_Label_Manager
             return jumpLabelMap.Keys.Contains(tempLabel);
         }
 
-        public VirtualLabel CreateVirtualLabel(StCpNumber fileNumber, int address)
+        public VirtualLabel CreateVirtualLabel(StCpNumber fileNumber, int address, short lookUpCode)
         {
+
             // so that we can rebuild the games jump table wit ths info
             var jumpLabel = JumpTableEntry.GenerateJumpID(fileNumber, address);
             var jumpTableEntry = jumpLabelMap[jumpLabel];
@@ -58,10 +64,24 @@ namespace KPT.Parser.Jump_Label_Manager
                 labelList = new List<VirtualLabel>();
                 fileJumpTargets[fileNumber] = labelList;
             }
-
             var jumpNumber = labelList.Count + 1;
             var virtualLabel = new VirtualLabel(jumpTableEntry, fileNumber, jumpNumber);
             labelList.Add(virtualLabel);
+            globalLookUpCodeMap[lookUpCode] = virtualLabel;          
+
+            return virtualLabel;
+        }
+
+        public VirtualLabel GetVirtualLabelByGlobalLookUpCode(int globalLookUpCode)
+        {
+
+            VirtualLabel virtualLabel = null;
+            bool success = globalLookUpCodeMap.TryGetValue(globalLookUpCode, out virtualLabel);
+
+            if(!success && globalLookUpCode != -1)
+            {
+                Console.WriteLine(String.Format("Virtual label with global lookup code {0} not be found", globalLookUpCode));
+            }
 
             return virtualLabel;
         }

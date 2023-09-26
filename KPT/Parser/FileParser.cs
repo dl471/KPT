@@ -72,22 +72,11 @@ namespace KPT.Parser
                     Environment.Exit(1);
                 }
 
-                if (jumpLabelManager != null) // we want to support running this without a jumplabelmanager just in case
-                {
-
-                    long currentAddress = br.BaseStream.Position;
-
-                    if (jumpLabelManager.IsJumpTarget(fileNumber, (int)currentAddress))
-                    {
-                        var virtualLabel = jumpLabelManager.CreateVirtualLabel(fileNumber, (int)currentAddress);
-                        instructions.Add(virtualLabel);
-                    }
-
-                }
 
                 IInstruction newInstruction;
                 Type instructionParserType = OpcodeInfo.GetInstructionParserType(opcode);
-                
+                long currentAddress = br.BaseStream.Position;
+
                 if (instructionParserType == typeof(InstructionBox))
                 {
                     newInstruction = ElementHelper.MakeInstructionBox(opcode);
@@ -97,6 +86,18 @@ namespace KPT.Parser
                 {
                     newInstruction = (IInstruction)Activator.CreateInstance(instructionParserType);
                     newInstruction.Read(br);
+                }
+
+                if (jumpLabelManager != null) // we want to support running this without a jumplabelmanager just in case
+                {
+
+                    if (opcode == Opcode.JUMP_LABEL)
+                    {
+                        var jumpLabel = newInstruction as JumpLabel;
+                        var virtualLabel = jumpLabelManager.CreateVirtualLabel(fileNumber, (int)currentAddress, jumpLabel.lookUpCode);
+                        instructions.Add(virtualLabel);
+                    }
+
                 }
 
                 instructions.Add(newInstruction);
@@ -109,6 +110,34 @@ namespace KPT.Parser
             workingFile.instructions = instructions;
             return workingFile;
             
+        }
+
+        /// <summary>
+        /// Take an already parsed file and a populated jump label manager and update the target field of the InterFileJumps using the jump label manager
+        /// </summary>
+        /// <param name="file">The parsed file o process</param>
+        /// <param name="jumpLabelManager">The jump label manager to use</param>
+        /// <remarks>
+        /// This is very much a function for a a second pass, so make sure you have thoroughly populated the jump label manager first 
+        /// </remarks>
+        public void UpdateInterFileJumpTargets(KCFile file, JumpLabelManager jumpLabelManager)
+        {
+
+            if (jumpLabelManager == null)
+            {
+                throw new Exception("Jump label manager is null");
+            }
+
+            for (int i = 0; i < file.instructions.Count; i++) {
+                var instruction = file.instructions[i];
+                if (instruction is IntraFileJump)
+                {
+                    var jump = instruction as IntraFileJump;
+                    var globalLookUpCode = jump.secondLookUpCode;
+                    jump.target = jumpLabelManager.GetVirtualLabelByGlobalLookUpCode(jump.secondLookUpCode);
+                }
+            }
+
         }
 
         public void WriteFile(KCFile file, string filename)

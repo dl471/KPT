@@ -184,7 +184,7 @@ namespace KPT
                 FileStream fs = new FileStream(fileName, FileMode.Open);
                 BinaryReader br = new BinaryReader(fs);
 
-                var testParser = new FileParser();
+                var testParser = new FileParser(); // why we are creating a new parser every time?
                 var parsedFile = testParser.ParseFile(br, Path.GetFileName(file), jumpLabelManager);
 
                 parsedDictionary[file] = parsedFile;
@@ -194,10 +194,15 @@ namespace KPT
 
             }
 
+
+
             foreach (string file in fileList)
             {
 
                 var parsedFile = parsedDictionary[file];
+                var parser = new FileParser();
+                parser.UpdateInterFileJumpTargets(parsedFile, jumpLabelManager);
+                
                 string fileName = Path.Combine(dialogueFileDir, file);
                 var fileStrings = new StringCollection(GetSubPath(file, Path.Combine(rootDir, unpackedGameFilesDir)));                
 
